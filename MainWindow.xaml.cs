@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Windows;
+using System.Windows.Input;
 using Npgsql;
 
 namespace FinancialTracker
@@ -42,6 +43,19 @@ namespace FinancialTracker
                         expenseList.Add(expense);
                     }
                 }
+            }
+        }
+
+        private void TransactionListViewModify(object sender, MouseButtonEventArgs e)
+        {
+            if (TransactionListView.SelectedItem != null)
+            {
+                ExpenseItem selectedExpense = (ExpenseItem)TransactionListView.SelectedItem;
+
+                ModifyExpenseWindow modifyExpenseWindow = new ModifyExpenseWindow(selectedExpense);
+                modifyExpenseWindow.ShowDialog();
+
+                // After editing or deleting, you might want to update the list or UI here
             }
         }
 
