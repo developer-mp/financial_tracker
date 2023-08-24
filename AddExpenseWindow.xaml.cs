@@ -16,7 +16,7 @@ namespace FinancialTracker
             // Set up the UI elements for editing the selectedExpense
         }
 
-        private void AddButtonClick(object sender, RoutedEventArgs e)
+        private void SaveButtonClick(object sender, RoutedEventArgs e)
         {
             ExpenseItem newExpense = new ExpenseItem
             {
@@ -46,6 +46,11 @@ namespace FinancialTracker
 
             _mainWindow.expenseList.Add(newExpense);
 
+            Close();
+        }
+
+        private void CancelButtonClick(object sender, RoutedEventArgs e)
+        {
             Close();
         }
     }
