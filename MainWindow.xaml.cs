@@ -46,14 +46,14 @@ namespace FinancialTracker
             }
         }
 
-        private void TransactionListViewModify(object sender, MouseButtonEventArgs e)
+        private void TransactionListViewEdit(object sender, MouseButtonEventArgs e)
         {
             if (TransactionListView.SelectedItem != null)
             {
                 ExpenseItem selectedExpense = (ExpenseItem)TransactionListView.SelectedItem;
 
-                ModifyExpenseWindow modifyExpenseWindow = new ModifyExpenseWindow(selectedExpense);
-                modifyExpenseWindow.ShowDialog();
+                EditExpenseWindow editExpenseWindow = new EditExpenseWindow(selectedExpense);
+                editExpenseWindow.ShowDialog();
 
                 // After editing or deleting, you might want to update the list or UI here
             }

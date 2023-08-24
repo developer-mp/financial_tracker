@@ -2,11 +2,11 @@
 
 namespace FinancialTracker
 {
-    public partial class ModifyExpenseWindow : Window
+    public partial class EditExpenseWindow : Window
     {
         private ExpenseItem _selectedExpense;
 
-        public ModifyExpenseWindow(ExpenseItem selectedExpense)
+        public EditExpenseWindow(ExpenseItem selectedExpense)
         {
             InitializeComponent();
             _selectedExpense = selectedExpense;

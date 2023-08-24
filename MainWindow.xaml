@@ -60,7 +60,7 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left">
-            <Button Content="Add Expense" Click="AddButtonClick" 
+            <Button Content="Add Record" Click="AddButtonClick" 
                     Style="{StaticResource AddButtonStyle}"/>
 
             <Button Content="Create Report" Click="ReportButtonClick"
@@ -72,7 +72,9 @@
                 <TextBlock Text="This is the summary tab content" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Black"/>
             </TabItem>
             <TabItem Header="Transactions" Style="{StaticResource TabItemStyle}">
-                <ListView Name="TransactionListView" MouseDoubleClick="TransactionListViewModify" BorderThickness="0" Margin="0,10,0,0">
+                <StackPanel>
+                    <TextBlock Text="Double-click a row to edit" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Gray" FontSize="10"/>
+                <ListView Name="TransactionListView" MouseDoubleClick="TransactionListViewEdit" BorderThickness="0" Margin="0,10,0,0">
                     <ListView.ItemContainerStyle>
                         <Style TargetType="ListViewItem">
                             <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -88,6 +90,7 @@
                         </GridView>
                     </ListView.View>
                 </ListView>
+                    </StackPanel>
             </TabItem>
         </TabControl>
 
