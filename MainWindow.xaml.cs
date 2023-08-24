@@ -61,17 +61,11 @@ namespace FinancialTracker
 
         private void AddButtonClick(object sender, RoutedEventArgs e)
         {
-            // Create a new expense item
-            ExpenseItem newExpense = new ExpenseItem
-            {
-                Date = DateTime.Now,
-                Expense = "Expense",
-                Category = "Category",
-                Amount = 100.00,
-            };
+            AddExpenseWindow addExpenseWindow = new AddExpenseWindow(this);
+            addExpenseWindow.ShowDialog();
 
-            // Add the expense item to the collection
-            expenseList.Add(newExpense);
+            // After the AddExpenseWindow is closed, you can refresh the UI to display the new data.
+            // You might need to reload data or update the list here.
         }
 
         private void ReportButtonClick(object sender, RoutedEventArgs e)
