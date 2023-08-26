@@ -4,7 +4,6 @@ using System.Windows;
 using System.Windows.Input;
 using Npgsql;
 
-
 namespace FinancialTracker
 {
     public partial class MainWindow : Window

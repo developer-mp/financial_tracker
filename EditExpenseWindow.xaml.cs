@@ -25,6 +25,7 @@ namespace FinancialTracker
 
         private async void UpdateButtonClick(object sender, RoutedEventArgs e)
         {
+
             _selectedExpense.Date = DatePicker.SelectedDate ?? DateTime.Now;
             _selectedExpense.Expense = ExpenseTextBox.Text;
             _selectedExpense.Category = CategoryTextBox.Text;
@@ -56,7 +57,7 @@ namespace FinancialTracker
 
         private void DeleteButtonClick(object sender, RoutedEventArgs e)
         {
-            string connString = "Host=localhost;Username=admin;Password=admin;Database=finance";
+            string connString = _configManager.GetConnectionString();
 
             using (var conn = new NpgsqlConnection(connString))
             {
