@@ -27,17 +27,18 @@ namespace FinancialTracker
             {
                 conn.Open();
 
-                using (var cmd = new NpgsqlCommand("SELECT date, expense, category, amount FROM finance", conn))
+                using (var cmd = new NpgsqlCommand("SELECT id, date, expense, category, amount FROM finance", conn))
                 using (var reader = cmd.ExecuteReader())
                 {
                     while (reader.Read())
                     {
                         ExpenseItem expense = new ExpenseItem
                         {
-                            Date = reader.GetDateTime(0),
-                            Expense = reader.GetString(1),
-                            Category = reader.GetString(2),
-                            Amount = reader.GetDouble(3)
+                            Id = reader.GetInt32(0),
+                            Date = reader.GetDateTime(1),
+                            Expense = reader.GetString(2),
+                            Category = reader.GetString(3),
+                            Amount = reader.GetDouble(4)
                         };
 
                         expenseList.Add(expense);
@@ -53,10 +54,18 @@ namespace FinancialTracker
                 ExpenseItem selectedExpense = (ExpenseItem)TransactionListView.SelectedItem;
 
                 EditExpenseWindow editExpenseWindow = new EditExpenseWindow(selectedExpense);
+                editExpenseWindow.DataUpdated += EditExpenseWindow_DataUpdated;
                 editExpenseWindow.ShowDialog();
 
                 // After editing or deleting, you might want to update the list or UI here
             }
+        }
+
+        private void EditExpenseWindow_DataUpdated(object sender, EventArgs e)
+        {
+            // Refresh data here, you might need to clear and reload the expenseList
+            expenseList.Clear();
+            LoadData();
         }
 
         private void AddButtonClick(object sender, RoutedEventArgs e)
@@ -76,6 +85,7 @@ namespace FinancialTracker
 
     public class ExpenseItem
     {
+        public int Id { get; set; }
         public DateTime Date { get; set; }
         public string Expense { get; set; }
         public string Category { get; set; }

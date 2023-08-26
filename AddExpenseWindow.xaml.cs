@@ -13,7 +13,6 @@ namespace FinancialTracker
             InitializeComponent();
             _mainWindow = mainWindow;
 
-            // Set up the UI elements for editing the selectedExpense
         }
 
         private void SaveButtonClick(object sender, RoutedEventArgs e)
@@ -26,7 +25,6 @@ namespace FinancialTracker
                 Amount = Convert.ToDouble(AmountTextBox.Text)
             };
 
-            // Save the new expense to the database
             string connString = "Host=localhost;Username=admin;Password=admin;Database=finance";
 
             using (var conn = new NpgsqlConnection(connString))
