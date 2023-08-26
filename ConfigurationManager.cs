@@ -4,7 +4,7 @@ using System.IO;
 
 namespace FinancialTracker
 {
-    public class ConfigurationManager : IDisposable
+    public class ConfigurationManager
     {
         private IConfiguration Configuration { get; }
 
@@ -32,11 +32,6 @@ namespace FinancialTracker
         {
             var dbSettings = GetDbSettings();
             return $"Host={dbSettings.Host};Username={dbSettings.Username};Password={dbSettings.Password};Database={dbSettings.DbName}";
-        }
-
-        public void Dispose()
-        {
-            // Add any cleanup code here
         }
     }
 }

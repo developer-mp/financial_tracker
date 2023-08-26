@@ -44,11 +44,9 @@ namespace FinancialTracker
                     cmd.Parameters.AddWithValue("Amount", _selectedExpense.Amount);
                     cmd.Parameters.AddWithValue("ID", _selectedExpense.Id);
 
-                    await cmd.ExecuteNonQueryAsync(); // Use async version for non-blocking execution
+                    await cmd.ExecuteNonQueryAsync();
                 }
             }
-
-            // Update the UI and notify the MainWindow if necessary
 
             DataUpdated?.Invoke(this, EventArgs.Empty);
 

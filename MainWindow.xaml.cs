@@ -12,17 +12,13 @@ namespace FinancialTracker
         private ConfigurationManager _configManager;
 
         public ObservableCollection<ExpenseItem> expenseList = new ObservableCollection<ExpenseItem>();
-
         public MainWindow()
         {
             InitializeComponent();
             _configManager = new ConfigurationManager();
-
             TransactionListView.ItemsSource = expenseList;
-
             LoadData();
         }
-
         private void LoadData()
         {
             string connString = _configManager.GetConnectionString();
@@ -58,16 +54,13 @@ namespace FinancialTracker
                 ExpenseItem selectedExpense = (ExpenseItem)TransactionListView.SelectedItem;
 
                 EditExpenseWindow editExpenseWindow = new EditExpenseWindow(selectedExpense);
-                editExpenseWindow.DataUpdated += EditExpenseWindow_DataUpdated;
+                editExpenseWindow.DataUpdated += EditExpenseWindowDataUpdated;
                 editExpenseWindow.ShowDialog();
-
-                // After editing or deleting, you might want to update the list or UI here
             }
         }
 
-        private void EditExpenseWindow_DataUpdated(object sender, EventArgs e)
+        private void EditExpenseWindowDataUpdated(object sender, EventArgs e)
         {
-            // Refresh data here, you might need to clear and reload the expenseList
             expenseList.Clear();
             LoadData();
         }
@@ -76,9 +69,6 @@ namespace FinancialTracker
         {
             AddExpenseWindow addExpenseWindow = new AddExpenseWindow(this);
             addExpenseWindow.ShowDialog();
-
-            // After the AddExpenseWindow is closed, you can refresh the UI to display the new data.
-            // You might need to reload data or update the list here.
         }
 
         private void ReportButtonClick(object sender, RoutedEventArgs e)
