@@ -7,10 +7,12 @@ namespace FinancialTracker
     public partial class EditExpenseWindow : Window
     {
         private ExpenseItem _selectedExpense;
+        private ConfigurationManager _configManager;
 
         public EditExpenseWindow(ExpenseItem selectedExpense)
         {
             InitializeComponent();
+            _configManager = new ConfigurationManager();
             _selectedExpense = selectedExpense;
 
             DatePicker.SelectedDate = _selectedExpense.Date;
@@ -21,14 +23,14 @@ namespace FinancialTracker
 
         public event EventHandler DataUpdated;
 
-        private void UpdateButtonClick(object sender, RoutedEventArgs e)
+        private async void UpdateButtonClick(object sender, RoutedEventArgs e)
         {
             _selectedExpense.Date = DatePicker.SelectedDate ?? DateTime.Now;
             _selectedExpense.Expense = ExpenseTextBox.Text;
             _selectedExpense.Category = CategoryTextBox.Text;
             _selectedExpense.Amount = Convert.ToDouble(AmountTextBox.Text);
 
-            string connString = "Host=localhost;Username=admin;Password=admin;Database=finance";
+            string connString = _configManager.GetConnectionString();
 
             using (var conn = new NpgsqlConnection(connString))
             {
@@ -42,7 +44,7 @@ namespace FinancialTracker
                     cmd.Parameters.AddWithValue("Amount", _selectedExpense.Amount);
                     cmd.Parameters.AddWithValue("ID", _selectedExpense.Id);
 
-                    cmd.ExecuteNonQuery();
+                    await cmd.ExecuteNonQueryAsync(); // Use async version for non-blocking execution
                 }
             }
 
@@ -52,6 +54,7 @@ namespace FinancialTracker
 
             Close();
         }
+
 
         private void DeleteButtonClick(object sender, RoutedEventArgs e)
         {

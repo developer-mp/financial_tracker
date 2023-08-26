@@ -4,15 +4,19 @@ using System.Windows;
 using System.Windows.Input;
 using Npgsql;
 
+
 namespace FinancialTracker
 {
     public partial class MainWindow : Window
     {
+        private ConfigurationManager _configManager;
+
         public ObservableCollection<ExpenseItem> expenseList = new ObservableCollection<ExpenseItem>();
 
         public MainWindow()
         {
             InitializeComponent();
+            _configManager = new ConfigurationManager();
 
             TransactionListView.ItemsSource = expenseList;
 
@@ -21,7 +25,7 @@ namespace FinancialTracker
 
         private void LoadData()
         {
-            string connString = "Host=localhost;Username=admin;Password=admin;Database=finance";
+            string connString = _configManager.GetConnectionString();
 
             using (var conn = new NpgsqlConnection(connString))
             {

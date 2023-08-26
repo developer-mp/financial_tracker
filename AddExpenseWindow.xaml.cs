@@ -7,10 +7,12 @@ namespace FinancialTracker
     public partial class AddExpenseWindow : Window
     {
         private MainWindow _mainWindow;
+        private ConfigurationManager _configManager;
 
         public AddExpenseWindow(MainWindow mainWindow)
         {
             InitializeComponent();
+            _configManager = new ConfigurationManager();
             _mainWindow = mainWindow;
 
         }
@@ -25,7 +27,7 @@ namespace FinancialTracker
                 Amount = Convert.ToDouble(AmountTextBox.Text)
             };
 
-            string connString = "Host=localhost;Username=admin;Password=admin;Database=finance";
+            string connString = _configManager.GetConnectionString();
 
             using (var conn = new NpgsqlConnection(connString))
             {
