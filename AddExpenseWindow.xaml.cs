@@ -19,8 +19,12 @@ namespace FinancialTracker
 
         private void SaveButtonClick(object sender, RoutedEventArgs e)
         {
+            Guid newGuid = Guid.NewGuid();
+            string newId = newGuid.ToString();
+
             ExpenseItem newExpense = new ExpenseItem
             {
+                Id = newId,
                 Date = DatePicker.SelectedDate ?? DateTime.Now,
                 Expense = ExpenseTextBox.Text,
                 Category = CategoryTextBox.Text,
@@ -33,8 +37,9 @@ namespace FinancialTracker
             {
                 conn.Open();
 
-                using (var cmd = new NpgsqlCommand("INSERT INTO finance (date, expense, category, amount) VALUES (@Date, @Expense, @Category, @Amount)", conn))
+                using (var cmd = new NpgsqlCommand("INSERT INTO finance (id, date, expense, category, amount) VALUES (@Id, @Date, @Expense, @Category, @Amount)", conn))
                 {
+                    cmd.Parameters.AddWithValue("Id", newExpense.Id);
                     cmd.Parameters.AddWithValue("Date", newExpense.Date);
                     cmd.Parameters.AddWithValue("Expense", newExpense.Expense);
                     cmd.Parameters.AddWithValue("Category", newExpense.Category);

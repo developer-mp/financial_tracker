@@ -33,7 +33,7 @@ namespace FinancialTracker
                     {
                         ExpenseItem expense = new ExpenseItem
                         {
-                            Id = reader.GetInt32(0),
+                            Id = reader.GetString(0),
                             Date = reader.GetDateTime(1),
                             Expense = reader.GetString(2),
                             Category = reader.GetString(3),
@@ -78,7 +78,7 @@ namespace FinancialTracker
 
     public class ExpenseItem
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
         public DateTime Date { get; set; }
         public string Expense { get; set; }
         public string Category { get; set; }

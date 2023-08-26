@@ -37,13 +37,13 @@ namespace FinancialTracker
             {
                 conn.Open();
 
-                using (var cmd = new NpgsqlCommand("UPDATE finance SET date = @Date, expense = @Expense, category = @Category, amount = @Amount WHERE id = @ID", conn))
+                using (var cmd = new NpgsqlCommand("UPDATE finance SET date = @Date, expense = @Expense, category = @Category, amount = @Amount WHERE id = @Id", conn))
                 {
                     cmd.Parameters.AddWithValue("Date", _selectedExpense.Date);
                     cmd.Parameters.AddWithValue("Expense", _selectedExpense.Expense);
                     cmd.Parameters.AddWithValue("Category", _selectedExpense.Category);
                     cmd.Parameters.AddWithValue("Amount", _selectedExpense.Amount);
-                    cmd.Parameters.AddWithValue("ID", _selectedExpense.Id);
+                    cmd.Parameters.AddWithValue("Id", _selectedExpense.Id);
 
                     await cmd.ExecuteNonQueryAsync();
                 }
@@ -55,7 +55,7 @@ namespace FinancialTracker
         }
 
 
-        private void DeleteButtonClick(object sender, RoutedEventArgs e)
+        private async void DeleteButtonClick(object sender, RoutedEventArgs e)
         {
             string connString = _configManager.GetConnectionString();
 
@@ -63,11 +63,11 @@ namespace FinancialTracker
             {
                 conn.Open();
 
-                using (var cmd = new NpgsqlCommand("DELETE FROM finance WHERE id = @ID", conn))
+                using (var cmd = new NpgsqlCommand("DELETE FROM finance WHERE id = @Id", conn))
                 {
-                    cmd.Parameters.AddWithValue("ID", _selectedExpense.Id);
+                    cmd.Parameters.AddWithValue("Id", _selectedExpense.Id);
 
-                    cmd.ExecuteNonQuery();
+                   await cmd.ExecuteNonQueryAsync();
                 }
             }
 
