@@ -9,7 +9,7 @@
         Title="Financial Tracker" Height="450" Width="400">
 
     <Window.DataContext>
-        <local:ViewModel />
+        <local:Chart />
     </Window.DataContext>
     
     <Window.Resources>
