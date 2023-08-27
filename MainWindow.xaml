@@ -75,8 +75,7 @@
 
         <TabControl Grid.Row="1">
             <TabItem Header="Summary" Style="{StaticResource TabItemStyle}">
-                <lvc:PieChart Series="{Binding Series}" EasingFunction="{x:Null}" LegendPosition="Left" LegendTextSize="10">
-                </lvc:PieChart>
+                <lvc:PieChart Series="{Binding Series}" EasingFunction="{x:Null}" LegendPosition="Left" LegendTextSize="10"/>
                 <!--<TextBlock Text="This is the summary tab content" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Black"/>-->
             </TabItem>
             <TabItem Header="Transactions" Style="{StaticResource TabItemStyle}">

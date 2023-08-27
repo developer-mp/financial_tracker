@@ -17,7 +17,6 @@ namespace FinancialTracker
             _configManager = new ConfigurationManager();
             TransactionListView.ItemsSource = expenseList;
             LoadData();
-            //DataContext = new ViewModel(expenseList);
         }
         private void LoadData()
         {

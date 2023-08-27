@@ -1,42 +1,78 @@
 ﻿using LiveChartsCore;
-using LiveChartsCore.SkiaSharpView;
-using System.Linq;
 using System.Collections.Generic;
 using CommunityToolkit.Mvvm.ComponentModel;
-using System.Collections.ObjectModel;
 using LiveChartsCore.SkiaSharpView.Extensions;
 
 namespace FinancialTracker
 {
     public partial class Chart : ObservableObject
     {
-            // you can convert any array, list or IEnumerable<T> to a pie series collection:
-            public IEnumerable<ISeries> Series { get; set; } =
-                new[] { 2, 4, 1, 4, 3 }.AsPieSeries((value, series) =>
-                {
-                    series.InnerRadius = 50;
-                });
+        private int _groceries = 200; 
+        private int _transportation = 100; 
+        private int _entertainment = 300;
+        private int _housing = 300;
+        private int _utilities = 50;
+        private int _healthcare = 300;
+        private int _clothing = 300;
+        private int _miscellaneous = 70;
+
+        public int Groceries
+        {
+            get => _groceries;
+            set => SetProperty(ref _groceries, value);
         }
-        //    public ISeries[] Series { get; set; }
 
-        //    public ViewModel(ObservableCollection<ExpenseItem> expenses)
-        //    {
-        //        var categoryTotals = expenses.GroupBy(expense => expense.Category)
-        //                                     .Select(group => new
-        //                                     {
-        //                                         Category = group.Key,
-        //                                         TotalAmount = group.Sum(expense => expense.Amount)
-        //                                     })
-        //                                     .ToList();
+        public int Transportation
+        {
+            get => _transportation;
+            set => SetProperty(ref _transportation, value);
+        }
 
-        //        // Create a list of PieSeries with data
-        //        var pieSeries = categoryTotals.Select(item =>
-        //            new PieSeries<double>
-        //            {
-        //                Values = new List<double> { item.TotalAmount },
-        //            }).ToArray();
+        public int Entertainment
+        {
+            get => _entertainment;
+            set => SetProperty(ref _entertainment, value);
+        }
 
-        //        Series = pieSeries;
-        //    }
-        //}
+        public int Housing
+        {
+            get => _housing;
+            set => SetProperty(ref _housing, value);
+        }
+
+        public int Utilities
+        {
+            get => _utilities;
+            set => SetProperty(ref _utilities, value);
+        }
+
+        public int Healthcare
+        {
+            get => _healthcare;
+            set => SetProperty(ref _healthcare, value);
+        }
+
+        public int Clothing
+        {
+            get => _clothing;
+            set => SetProperty(ref _clothing, value);
+        }
+
+        public int Miscellaneous
+        {
+            get => _miscellaneous;
+            set => SetProperty(ref _miscellaneous, value);
+        }
+
+        public IEnumerable<ISeries> Series { get; set; }
+
+        public Chart()
+        {
+
+            Series = new[] { Groceries, Transportation, Entertainment, Housing, Utilities, Healthcare, Clothing, Miscellaneous }.AsPieSeries((value, series) =>
+            {
+                series.InnerRadius = 50;
+            });
+        }
     }
+}
