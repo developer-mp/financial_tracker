@@ -72,6 +72,7 @@ namespace FinancialTracker
             Series = new[] { Groceries, Transportation, Entertainment, Housing, Utilities, Healthcare, Clothing, Miscellaneous }.AsPieSeries((value, series) =>
             {
                 series.InnerRadius = 50;
+                series.Name = "Food";
             });
         }
     }
