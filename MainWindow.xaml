@@ -14,14 +14,9 @@
     
     <Window.Resources>
         
-        <Style x:Key="AddButtonStyle" BasedOn="{StaticResource ButtonStyle}" TargetType="Button">
+        <Style x:Key="MainButtonStyle" BasedOn="{StaticResource ButtonStyle}" TargetType="Button">
             <Setter Property="Background" Value="#524675"/>
             <Setter Property="HorizontalAlignment" Value="Left"/>
-        </Style>
-
-        <Style x:Key="ReportButtonStyle" BasedOn="{StaticResource ButtonStyle}" TargetType="Button">
-            <Setter Property="Background" Value="#178A83"/>
-            <Setter Property="HorizontalAlignment" Value="Right"/>
         </Style>
 
         <Style x:Key="GridHeader" TargetType="{x:Type GridViewColumnHeader}">
@@ -66,14 +61,35 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left">
-            <Button Content="Add Record" Click="AddButtonClick" 
-                    Style="{StaticResource AddButtonStyle}"/>
+            <Button Content="Add Record" Click="AddButtonClick">
+                <Button.Style>
+                    <Style TargetType="Button" BasedOn="{StaticResource MainButtonStyle}">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding SelectedIndex, ElementName=TabControlName}" Value="1">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
 
-            <Button Content="Create Report" Click="ReportButtonClick"
-                    Style="{StaticResource ReportButtonStyle}"/>
+            <Button Content="Print Report" Click="ReportButtonClick" >
+                <Button.Style>
+                    <Style TargetType="Button" BasedOn="{StaticResource MainButtonStyle}">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding SelectedIndex, ElementName=TabControlName}" Value="0">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+            
         </StackPanel>
 
-        <TabControl Grid.Row="1">
+        <TabControl Name="TabControlName" Grid.Row="1">
             <TabItem Header="Summary" Style="{StaticResource TabItemStyle}">
                 <lvc:PieChart Series="{Binding Series}" EasingFunction="{x:Null}" LegendPosition="Left" LegendTextSize="10"/>
 
