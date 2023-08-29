@@ -11,12 +11,30 @@ namespace FinancialTracker
         private ConfigurationManager _configManager;
 
         public ObservableCollection<ExpenseItem> expenseList = new ObservableCollection<ExpenseItem>();
+
+        private double CalculateTotalExpenses()
+        {
+            double totalExpenses = 0;
+            foreach (ExpenseItem expense in expenseList)
+            {
+                totalExpenses += expense.Amount;
+            }
+            return totalExpenses;
+        }
+
+        private void UpdateTotalExpensesTextBlock()
+        {
+            double totalExpenses = CalculateTotalExpenses();
+            TotalExpensesTextBlock.Text = $"{totalExpenses:N2}";
+        }
         public MainWindow()
         {
             InitializeComponent();
             _configManager = new ConfigurationManager();
             TransactionListView.ItemsSource = expenseList;
             LoadData();
+            DataContext = this;
+            UpdateTotalExpensesTextBlock();
         }
         private void LoadData()
         {
@@ -62,12 +80,14 @@ namespace FinancialTracker
         {
             expenseList.Clear();
             LoadData();
+            UpdateTotalExpensesTextBlock();
         }
 
         private void AddButtonClick(object sender, RoutedEventArgs e)
         {
             AddExpenseWindow addExpenseWindow = new AddExpenseWindow(this);
             addExpenseWindow.ShowDialog();
+            UpdateTotalExpensesTextBlock();
         }
 
         private void ReportButtonClick(object sender, RoutedEventArgs e)

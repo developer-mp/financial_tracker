@@ -1,21 +1,17 @@
 ﻿using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
 
 namespace FinancialTracker
 {
-    public class TotalExpenses
+    public class TotalExpensesCalculator
     {
-        private ObservableCollection<ExpenseItem> _expenseList;
-
-        public TotalExpenses(ObservableCollection<ExpenseItem> expenseList)
+        public static double CalculateTotalExpenses(ObservableCollection<ExpenseItem> expenses)
         {
-            _expenseList = expenseList;
-        }
-
-        public double CalculateTotalExpenses()
-        {
-            return _expenseList.Sum(expense => expense.Amount);
+            double totalExpenses = 0;
+            foreach (ExpenseItem expense in expenses)
+            {
+                totalExpenses += expense.Amount;
+            }
+            return totalExpenses;
         }
     }
 }
