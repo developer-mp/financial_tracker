@@ -100,7 +100,8 @@
                         <TextBlock x:Name="TotalExpensesTitle" Text="Total Expenses: $" FontWeight="Bold" Foreground="Black" Margin="0,10,0,0"/>
                         <TextBlock x:Name="TotalExpensesTextBlock" FontWeight="Bold" Foreground="Black" Margin="0,10,0,0" Grid.Column="1"/>
                     </Grid>
-                    <lvc:PieChart Series="{Binding Series}" EasingFunction="{x:Null}" LegendPosition="Left" LegendTextSize="10"/>
+                    <TextBlock Text="Chart" HorizontalAlignment="Center" FontWeight="Bold" Foreground="Black" Margin="0,150,0,0"/>
+                    <!--<lvc:PieChart Series="{Binding Series}" EasingFunction="{x:Null}" LegendPosition="Left" LegendTextSize="10"/>-->
                 </StackPanel>
             </TabItem>
             <TabItem Header="Transactions" Style="{StaticResource TabItemStyle}">
