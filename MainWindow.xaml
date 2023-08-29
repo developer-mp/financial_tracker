@@ -8,9 +8,9 @@
         mc:Ignorable="d"
         Title="Financial Tracker" Height="450" Width="400">
 
-    <!--<Window.DataContext>
-        <local:MainWindow />
-    </Window.DataContext>-->
+    <Window.DataContext>
+        <local:Chart />
+    </Window.DataContext>
     
     <Window.Resources>
         
@@ -91,9 +91,11 @@
 
         <TabControl Name="TabControlName" Grid.Row="1">
             <TabItem Header="Summary" Style="{StaticResource TabItemStyle}">
-                <!--<TextBlock Text="Total Expenses: $" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" FontSize="14"/>-->
-                <TextBlock x:Name="TotalExpensesTextBlock" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" FontSize="16" Foreground="Black"/>
-                <!--<lvc:PieChart Series="{Binding Series}" EasingFunction="{x:Null}" LegendPosition="Left" LegendTextSize="10"/>-->
+                <StackPanel>
+                    <TextBlock x:Name="TotalExpensesTitle" Text="Total Expenses: $" HorizontalAlignment="Center" VerticalAlignment="Top" FontWeight="Bold" Foreground="Black" Margin="10"/>
+                    <TextBlock x:Name="TotalExpensesTextBlock" HorizontalAlignment="Center" VerticalAlignment="Top" FontWeight="Bold" Foreground="Black" Margin="10"/>
+                    <lvc:PieChart Series="{Binding Series}" EasingFunction="{x:Null}" LegendPosition="Left" LegendTextSize="10"/>
+                </StackPanel>
             </TabItem>
             <TabItem Header="Transactions" Style="{StaticResource TabItemStyle}">
                 <StackPanel>

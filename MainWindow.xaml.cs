@@ -12,19 +12,9 @@ namespace FinancialTracker
 
         public ObservableCollection<ExpenseItem> expenseList = new ObservableCollection<ExpenseItem>();
 
-        private double CalculateTotalExpenses()
-        {
-            double totalExpenses = 0;
-            foreach (ExpenseItem expense in expenseList)
-            {
-                totalExpenses += expense.Amount;
-            }
-            return totalExpenses;
-        }
-
         private void UpdateTotalExpensesTextBlock()
         {
-            double totalExpenses = CalculateTotalExpenses();
+            double totalExpenses = TotalExpensesCalculator.CalculateTotalExpenses(expenseList);
             TotalExpensesTextBlock.Text = $"{totalExpenses:N2}";
         }
         public MainWindow()
