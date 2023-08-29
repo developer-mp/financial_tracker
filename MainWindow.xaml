@@ -9,7 +9,7 @@
         Title="Financial Tracker" Height="450" Width="400">
 
     <Window.DataContext>
-        <local:Chart />
+        <local:MainWindow />
     </Window.DataContext>
     
     <Window.Resources>
@@ -91,9 +91,7 @@
 
         <TabControl Name="TabControlName" Grid.Row="1">
             <TabItem Header="Summary" Style="{StaticResource TabItemStyle}">
-                <lvc:PieChart Series="{Binding Series}" EasingFunction="{x:Null}" LegendPosition="Left" LegendTextSize="10"/>
-
-                <!--<TextBlock Text="This is the summary tab content" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Black"/>-->
+                <!--<lvc:PieChart Series="{Binding Series}" EasingFunction="{x:Null}" LegendPosition="Left" LegendTextSize="10"/>-->
             </TabItem>
             <TabItem Header="Transactions" Style="{StaticResource TabItemStyle}">
                 <StackPanel>
