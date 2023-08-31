@@ -15,11 +15,6 @@ namespace FinancialTracker
 
         public ObservableCollection<ExpenseItem> expenseList = new ObservableCollection<ExpenseItem>();
 
-        private void UpdateTotalExpensesTextBlock()
-        {
-            double totalExpenses = TotalExpensesCalculator.CalculateTotalExpenses(expenseList);
-            TotalExpensesTextBlock.Text = $"{totalExpenses:N2}";
-        }
         public MainWindow()
         {
             InitializeComponent();
@@ -28,8 +23,8 @@ namespace FinancialTracker
             _dataLoadingService = new DataLoadingService();
             TransactionListView.ItemsSource = expenseList;
             LoadData();
+            LoadTotalExpenses();
             DataContext = this;
-            UpdateTotalExpensesTextBlock();
         }
         private void LoadData()
         {
@@ -42,6 +37,14 @@ namespace FinancialTracker
             {
                 expenseList.Add(expense);
             }
+        }
+
+        private void LoadTotalExpenses()
+        {
+            QuerySettings querySettings = _configManager.GetQuerySettings("LoadTotalExpensesData");
+            double totalExpenses = _dataLoadingService.ExecuteScalarQuery(_connectionString, querySettings);
+
+            TotalExpensesTextBlock.Text = $"{totalExpenses:N2}";
         }
 
 
@@ -61,14 +64,14 @@ namespace FinancialTracker
         {
             expenseList.Clear();
             LoadData();
-            UpdateTotalExpensesTextBlock();
+            LoadTotalExpenses();
         }
 
         private void AddButtonClick(object sender, RoutedEventArgs e)
         {
             AddExpenseWindow addExpenseWindow = new AddExpenseWindow(this);
             addExpenseWindow.ShowDialog();
-            UpdateTotalExpensesTextBlock();
+            LoadTotalExpenses();
         }
 
         private void ReportButtonClick(object sender, RoutedEventArgs e)
