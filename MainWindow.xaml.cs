@@ -11,6 +11,8 @@ namespace FinancialTracker
 
         private DataLoadingService _dataLoadingService;
 
+        private string _connectionString;
+
         public ObservableCollection<ExpenseItem> expenseList = new ObservableCollection<ExpenseItem>();
 
         private void UpdateTotalExpensesTextBlock()
@@ -22,7 +24,8 @@ namespace FinancialTracker
         {
             InitializeComponent();
             _configManager = new ConfigurationManager();
-            _dataLoadingService = new DataLoadingService(_configManager);
+            _connectionString = _configManager.GetConnectionString();
+            _dataLoadingService = new DataLoadingService();
             TransactionListView.ItemsSource = expenseList;
             LoadData();
             DataContext = this;
@@ -31,7 +34,7 @@ namespace FinancialTracker
         private void LoadData()
         {
             expenseList.Clear();
-            ObservableCollection<ExpenseItem> loadedData = _dataLoadingService.LoadData();
+            ObservableCollection<ExpenseItem> loadedData = _dataLoadingService.LoadData(_connectionString);
             foreach (var expense in loadedData)
             {
                 expenseList.Add(expense);

@@ -5,20 +5,11 @@ namespace FinancialTracker
 {
     public class DataLoadingService
     {
-        private ConfigurationManager _configManager;
-
-        public DataLoadingService(ConfigurationManager configManager)
-        {
-            _configManager = configManager;
-        }
-
-        public ObservableCollection<ExpenseItem> LoadData()
+        public ObservableCollection<ExpenseItem> LoadData(string connectionString)
         {
             ObservableCollection<ExpenseItem> expenseList = new ObservableCollection<ExpenseItem>();
 
-            string connString = _configManager.GetConnectionString();
-
-            using (var conn = new NpgsqlConnection(connString))
+            using (var conn = new NpgsqlConnection(connectionString))
             {
                 conn.Open();
 
