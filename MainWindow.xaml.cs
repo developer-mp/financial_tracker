@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
+using System.Linq;
 
 namespace FinancialTracker
 {
@@ -24,6 +26,7 @@ namespace FinancialTracker
             TransactionListView.ItemsSource = expenseList;
             LoadData();
             LoadTotalExpenses();
+            LoadTotalExpensesByCategory();
             DataContext = this;
         }
 
@@ -48,6 +51,14 @@ namespace FinancialTracker
             TotalExpensesTextBlock.Text = $"{totalExpenses:N2}";
         }
 
+        private void LoadTotalExpensesByCategory()
+        {
+            QuerySettings querySettings = _configManager.GetQuerySettings("LoadExpensesByCategoryData");
+            List<ExpenseByCategory> expensesByCategory = _dataLoadingService.LoadExpensesByCategory(_connectionString, querySettings);
+
+            TotalExpensesByCategoryListView.ItemsSource = expensesByCategory;
+        }
+
 
         private void TransactionListViewEdit(object sender, MouseButtonEventArgs e)
         {
@@ -66,6 +77,7 @@ namespace FinancialTracker
             expenseList.Clear();
             LoadData();
             LoadTotalExpenses();
+            LoadTotalExpensesByCategory();
         }
 
         private void AddButtonClick(object sender, RoutedEventArgs e)
@@ -73,6 +85,7 @@ namespace FinancialTracker
             AddExpenseWindow addExpenseWindow = new AddExpenseWindow(this);
             addExpenseWindow.ShowDialog();
             LoadTotalExpenses();
+            LoadTotalExpensesByCategory();
         }
 
         private void ReportButtonClick(object sender, RoutedEventArgs e)
@@ -88,5 +101,11 @@ namespace FinancialTracker
         public string Expense { get; set; }
         public string Category { get; set; }
         public double Amount { get; set; }
+    }
+
+    public class ExpenseByCategory
+    {
+        public string Category { get; set; }
+        public double TotalAmount { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using FinancialTracker;
 using Npgsql;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 public class DataLoadingService
@@ -60,5 +61,30 @@ public class DataLoadingService
         });
 
         return totalExpenses;
+    }
+
+    public List<ExpenseByCategory> LoadExpensesByCategory(string connectionString, QuerySettings querySettings)
+    {
+        List<ExpenseByCategory> expensesByCategory = new List<ExpenseByCategory>();
+
+        ExecuteDbCommand(connectionString, (conn, cmd) =>
+        {
+            cmd.CommandText = querySettings.Query;
+            using (var reader = cmd.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    ExpenseByCategory expense = new ExpenseByCategory
+                    {
+                        Category = reader.GetString(0),
+                        TotalAmount = reader.GetDouble(1)
+                    };
+
+                    expensesByCategory.Add(expense);
+                }
+            }
+        });
+
+        return expensesByCategory;
     }
 }
