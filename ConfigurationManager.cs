@@ -32,5 +32,14 @@ namespace FinancialTracker
             var dbSettings = GetDbSettings();
             return $"Host={dbSettings.Host};Username={dbSettings.Username};Password={dbSettings.Password};Database={dbSettings.DbName}";
         }
+
+        public QuerySettings GetQuerySettings(string queryName)
+        {
+            var querySettingsSection = Configuration.GetSection($"Queries:{queryName}");
+            return new QuerySettings
+            {
+                Query = querySettingsSection["Query"]
+            };
+        }
     }
 }

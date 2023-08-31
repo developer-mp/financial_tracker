@@ -34,12 +34,16 @@ namespace FinancialTracker
         private void LoadData()
         {
             expenseList.Clear();
-            ObservableCollection<ExpenseItem> loadedData = _dataLoadingService.LoadData(_connectionString);
+
+            QuerySettings querySettings = _configManager.GetQuerySettings("LoadFinanceData");
+
+            ObservableCollection<ExpenseItem> loadedData = _dataLoadingService.LoadData(_connectionString, querySettings);
             foreach (var expense in loadedData)
             {
                 expenseList.Add(expense);
             }
         }
+
 
         private void TransactionListViewEdit(object sender, MouseButtonEventArgs e)
         {

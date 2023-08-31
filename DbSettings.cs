@@ -8,4 +8,9 @@ namespace FinancialTracker
         public string Password { get; set; }
         public string DbName { get; set; }
     }
+
+    public class QuerySettings
+    {
+        public string Query { get; set; }
+    }
 }
