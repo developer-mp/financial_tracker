@@ -1,11 +1,16 @@
-﻿import json
+﻿import matplotlib.pyplot as plt
 
-categories = ['Food', 'Transport', 'Entertainment', 'Utilities']
-expenses = [300, 150, 80, 200]
+# Sample data, replace this with your actual data
+categories = ['Category A', 'Category B', 'Category C']
+expenses = [1000, 2000, 1500]
 
-pie_chart_data = {
-    "categories": categories,
-    "expenses": expenses
-}
+# Create the pie chart
+plt.figure(figsize=(8, 8))
+plt.pie(expenses, labels=categories, autopct='%1.1f%%', startangle=140)
+plt.axis('equal')
 
-print(json.dumps(pie_chart_data))
+# Save the pie chart as an image file
+plt.savefig('pie_chart.png')
+
+# Close the figure to free up resources
+plt.close()

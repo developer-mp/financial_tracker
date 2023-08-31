@@ -4,6 +4,12 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
 using System.Linq;
+using System.IO;
+using System.Runtime.CompilerServices;
+using System.Windows.Media.Imaging;
+using Python.Included;
+using Python.Runtime;
+using SkiaSharp;
 
 namespace FinancialTracker
 {
@@ -88,9 +94,39 @@ namespace FinancialTracker
             LoadTotalExpensesByCategory();
         }
 
-        private void ReportButtonClick(object sender, RoutedEventArgs e)
-        {
+        //private void PrintButtonClick(object sender, RoutedEventArgs e)
+        //{
+        //    System.Diagnostics.Process.Start("python", "GeneratePieChart.py");
+        //}
 
+        private void PrintButtonClick(object sender, RoutedEventArgs e)
+        {
+            string pythonDllPath = _configManager.GetPythonDLLPath();
+
+            if (!string.IsNullOrEmpty(pythonDllPath))
+            {
+                Environment.SetEnvironmentVariable("PYTHONNET_PYDLL", pythonDllPath);
+                PythonEngine.Initialize();
+
+                using (Py.GIL())
+                {
+                    dynamic np = Py.Import("numpy");
+                    dynamic plt = Py.Import("matplotlib.pyplot");
+
+                    dynamic x = np.linspace(0, 10, 100);
+                    dynamic y = np.sin(x);
+
+                    plt.plot(x, y);
+                    plt.xlabel("X-axis");
+                    plt.ylabel("Y-axis");
+                    plt.title("Simple Line Chart");
+                    plt.show();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Python DLL path not configured");
+            }
         }
     }
 

@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:FinancialTracker"
         mc:Ignorable="d"
         Title="Financial Tracker" Height="450" Width="400">
 
@@ -69,7 +68,7 @@
                 </Button.Style>
             </Button>
 
-            <Button Content="Print Report" Click="ReportButtonClick" >
+            <Button Content="Print Report" Click="PrintButtonClick" >
                 <Button.Style>
                     <Style TargetType="Button" BasedOn="{StaticResource MainButtonStyle}">
                         <Setter Property="Visibility" Value="Collapsed"/>
@@ -104,6 +103,7 @@
                             </GridView>
                         </ListView.View>
                     </ListView>
+                    <Image x:Name="ChartImage" HorizontalAlignment="Center" VerticalAlignment="Top" />
                 </StackPanel>
             </TabItem>
             <TabItem Header="Transactions" Style="{StaticResource TabItemStyle}">

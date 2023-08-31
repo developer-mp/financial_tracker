@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System.IO;
+using System.Runtime;
 
 namespace FinancialTracker
 {
@@ -40,6 +41,12 @@ namespace FinancialTracker
             {
                 Query = querySettingsSection["Query"]
             };
+        }
+
+        public string GetPythonDLLPath()
+        {
+            var pythonDLLPath = Configuration.GetSection("Python");
+            return pythonDLLPath["DLLPath"];
         }
     }
 }
