@@ -3,11 +3,11 @@ using System.Collections.ObjectModel;
 
 namespace FinancialTracker
 {
-    public class DataLoader
+    public class DataLoadingService
     {
         private ConfigurationManager _configManager;
 
-        public DataLoader(ConfigurationManager configManager)
+        public DataLoadingService(ConfigurationManager configManager)
         {
             _configManager = configManager;
         }

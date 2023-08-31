@@ -4,14 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FinancialTracker"
-        xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
         mc:Ignorable="d"
         Title="Financial Tracker" Height="450" Width="400">
 
-    <Window.DataContext>
-        <local:Chart />
-    </Window.DataContext>
-    
     <Window.Resources>
         
         <Style x:Key="MainButtonStyle" BasedOn="{StaticResource ButtonStyle}" TargetType="Button">
@@ -100,8 +95,7 @@
                         <TextBlock x:Name="TotalExpensesTitle" Text="Total Expenses: $" FontWeight="Bold" Foreground="Black" Margin="0,10,0,0"/>
                         <TextBlock x:Name="TotalExpensesTextBlock" FontWeight="Bold" Foreground="Black" Margin="0,10,0,0" Grid.Column="1"/>
                     </Grid>
-                    <TextBlock Text="Chart" HorizontalAlignment="Center" FontWeight="Bold" Foreground="Black" Margin="0,150,0,0"/>
-                    <!--<lvc:PieChart Series="{Binding Series}" EasingFunction="{x:Null}" LegendPosition="Left" LegendTextSize="10"/>-->
+                    <TextBlock x:Name="ReportTextBlock" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </StackPanel>
             </TabItem>
             <TabItem Header="Transactions" Style="{StaticResource TabItemStyle}">

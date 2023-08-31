@@ -2,13 +2,14 @@
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
-using Npgsql;
 
 namespace FinancialTracker
 {
     public partial class MainWindow : Window
     {
         private ConfigurationManager _configManager;
+
+        private DataLoadingService _dataLoadingService;
 
         public ObservableCollection<ExpenseItem> expenseList = new ObservableCollection<ExpenseItem>();
 
@@ -21,6 +22,7 @@ namespace FinancialTracker
         {
             InitializeComponent();
             _configManager = new ConfigurationManager();
+            _dataLoadingService = new DataLoadingService(_configManager);
             TransactionListView.ItemsSource = expenseList;
             LoadData();
             DataContext = this;
@@ -28,29 +30,11 @@ namespace FinancialTracker
         }
         private void LoadData()
         {
-            string connString = _configManager.GetConnectionString();
-
-            using (var conn = new NpgsqlConnection(connString))
+            expenseList.Clear();
+            ObservableCollection<ExpenseItem> loadedData = _dataLoadingService.LoadData();
+            foreach (var expense in loadedData)
             {
-                conn.Open();
-
-                using (var cmd = new NpgsqlCommand("SELECT id, date, expense, category, amount FROM finance", conn))
-                using (var reader = cmd.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        ExpenseItem expense = new ExpenseItem
-                        {
-                            Id = reader.GetString(0),
-                            Date = reader.GetDateTime(1),
-                            Expense = reader.GetString(2),
-                            Category = reader.GetString(3),
-                            Amount = reader.GetDouble(4)
-                        };
-
-                        expenseList.Add(expense);
-                    }
-                }
+                expenseList.Add(expense);
             }
         }
 
