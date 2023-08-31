@@ -26,6 +26,7 @@ namespace FinancialTracker
             LoadTotalExpenses();
             DataContext = this;
         }
+
         private void LoadData()
         {
             expenseList.Clear();
@@ -42,7 +43,7 @@ namespace FinancialTracker
         private void LoadTotalExpenses()
         {
             QuerySettings querySettings = _configManager.GetQuerySettings("LoadTotalExpensesData");
-            double totalExpenses = _dataLoadingService.ExecuteScalarQuery(_connectionString, querySettings);
+            double totalExpenses = _dataLoadingService.LoadTotalExpenses(_connectionString, querySettings);
 
             TotalExpensesTextBlock.Text = $"{totalExpenses:N2}";
         }

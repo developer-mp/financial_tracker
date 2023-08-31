@@ -5,15 +5,25 @@ using System.Collections.ObjectModel;
 
 public class DataLoadingService
 {
+    private void ExecuteDbCommand(string connectionString, Action<NpgsqlConnection, NpgsqlCommand> commandAction)
+    {
+        using (var conn = new NpgsqlConnection(connectionString))
+        {
+            conn.Open();
+            using (var cmd = new NpgsqlCommand())
+            {
+                cmd.Connection = conn;
+                commandAction(conn, cmd);
+            }
+        }
+    }
     public ObservableCollection<ExpenseItem> LoadData(string connectionString, QuerySettings querySettings)
     {
         ObservableCollection<ExpenseItem> expenseList = new ObservableCollection<ExpenseItem>();
 
-        using (var conn = new NpgsqlConnection(connectionString))
+        ExecuteDbCommand(connectionString, (conn, cmd) =>
         {
-            conn.Open();
-
-            using (var cmd = new NpgsqlCommand(querySettings.Query, conn))
+            cmd.CommandText = querySettings.Query;
             using (var reader = cmd.ExecuteReader())
             {
                 while (reader.Read())
@@ -30,28 +40,25 @@ public class DataLoadingService
                     expenseList.Add(expense);
                 }
             }
-        }
+        });
 
         return expenseList;
     }
 
-    public double ExecuteScalarQuery(string connectionString, QuerySettings querySettings)
+    public double LoadTotalExpenses(string connectionString, QuerySettings querySettings)
     {
-        using (var conn = new NpgsqlConnection(connectionString))
+        double totalExpenses = 0;
+
+        ExecuteDbCommand(connectionString, (conn, cmd) =>
         {
-            conn.Open();
-
-            using (var cmd = new NpgsqlCommand(querySettings.Query, conn))
+            cmd.CommandText = querySettings.Query;
+            var result = cmd.ExecuteScalar();
+            if (result != null && result != DBNull.Value)
             {
-                var result = cmd.ExecuteScalar();
-                if (result != null && result != DBNull.Value)
-                {
-                    return Convert.ToDouble(result);
-                }
+                totalExpenses = Convert.ToDouble(result);
             }
-        }
+        });
 
-        return 0;
+        return totalExpenses;
     }
 }
-
