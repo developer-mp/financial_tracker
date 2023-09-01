@@ -10,6 +10,8 @@ using System.Windows.Media.Imaging;
 using Python.Included;
 using Python.Runtime;
 using SkiaSharp;
+using System.DirectoryServices.ActiveDirectory;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace FinancialTracker
 {
@@ -120,7 +122,24 @@ namespace FinancialTracker
                     plt.xlabel("X-axis");
                     plt.ylabel("Y-axis");
                     plt.title("Simple Line Chart");
-                    plt.show();
+
+                    // Save the chart to a BytesIO object
+                    dynamic io = Py.Import("io");
+                    dynamic buf = io.BytesIO();
+                    plt.savefig(buf, format: "png");
+                    buf.seek(0);
+
+                    // Convert BytesIO to a byte array
+                    byte[] chartBytes = buf.getvalue();
+
+                    // Create a BitmapImage from the byte array
+                    BitmapImage bitmapImage = new BitmapImage();
+                    bitmapImage.BeginInit();
+                    bitmapImage.StreamSource = new MemoryStream(chartBytes);
+                    bitmapImage.EndInit();
+
+                    // Display the chart in the Image control
+                    ChartImage.Source = bitmapImage;
                 }
             }
             else
