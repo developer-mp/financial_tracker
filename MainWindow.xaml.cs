@@ -6,6 +6,8 @@ using System.Windows.Input;
 using System.IO;
 using System.Windows.Media.Imaging;
 using Python.Runtime;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Windows.Markup;
 
 namespace FinancialTracker
 {
@@ -113,8 +115,14 @@ namespace FinancialTracker
                     dynamic labels = new List<string> { "A", "B", "C", "D" };
                     dynamic colors = new List<string> { "gold", "yellowgreen", "lightcoral", "lightskyblue" };
 
-                    plt.pie(sizes, labels: labels, colors: colors, autopct: "%1.1f%%", startangle: 140);
-                    plt.title("Simple Pie Chart");
+                    dynamic wedges;
+                    dynamic texts;
+                    plt.pie(sizes, colors: colors, startangle: 140);
+                    dynamic result = plt.pie(sizes, colors: colors, autopct: "%1.0f%%", startangle: 140);
+                    wedges = result[0];
+                    texts = result[1];
+
+                    plt.legend(wedges, labels, loc: "center left", bbox_to_anchor: new double[] { 1, 0.5 });
 
                     dynamic io = Py.Import("io");
                     dynamic buf = io.BytesIO();

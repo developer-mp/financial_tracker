@@ -94,15 +94,7 @@
                         <TextBlock x:Name="TotalExpensesTitle" Text="Total Expenses: $" FontWeight="Bold" Foreground="Black" Margin="0,10,0,0"/>
                         <TextBlock x:Name="TotalExpensesTextBlock" FontWeight="Bold" Foreground="Black" Margin="0,10,0,0" Grid.Column="1"/>
                     </Grid>
-                    <!--<TextBlock x:Name="TotalExpensesByCategoryTitle" Text="Total Expenses by Category:" FontWeight="Bold" Foreground="Black" Margin="0,10,0,0"/>
-                    <ListView x:Name="TotalExpensesByCategoryListView">
-                        <ListView.View>
-                            <GridView ColumnHeaderContainerStyle="{StaticResource GridHeader}">
-                                <GridViewColumn Header="Category" DisplayMemberBinding="{Binding Category}"/>
-                                <GridViewColumn Header="Total Amount" DisplayMemberBinding="{Binding TotalAmount, StringFormat={}{0:C2}}"/>
-                            </GridView>
-                        </ListView.View>
-                    </ListView>-->
+                    <TextBlock x:Name="ChartTitle" Text="TOTAL EXPENSES BY CATEGORY" HorizontalAlignment="Center" FontSize="10" Foreground="Black" Margin="0,10,0,0"/>
                     <Image x:Name="ChartImage" HorizontalAlignment="Center" VerticalAlignment="Top"/>
                 </StackPanel>
             </TabItem>
