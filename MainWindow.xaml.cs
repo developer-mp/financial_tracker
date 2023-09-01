@@ -29,6 +29,7 @@ namespace FinancialTracker
             LoadData();
             LoadTotalExpenses();
             //LoadTotalExpensesByCategory();
+            GenerateChart();
             DataContext = this;
         }
 
@@ -90,11 +91,11 @@ namespace FinancialTracker
             //LoadTotalExpensesByCategory();
         }
 
-        //private void PrintButtonClick(object sender, RoutedEventArgs e)
-        //{
-        //}
-
         private void PrintButtonClick(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private void GenerateChart()
         {
             string pythonDllPath = _configManager.GetPythonDLLPath();
 
