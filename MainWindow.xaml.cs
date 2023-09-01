@@ -3,15 +3,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
-using System.Linq;
 using System.IO;
-using System.Runtime.CompilerServices;
 using System.Windows.Media.Imaging;
-using Python.Included;
 using Python.Runtime;
-using SkiaSharp;
-using System.DirectoryServices.ActiveDirectory;
-using static System.Formats.Asn1.AsnWriter;
 
 namespace FinancialTracker
 {
@@ -34,7 +28,7 @@ namespace FinancialTracker
             TransactionListView.ItemsSource = expenseList;
             LoadData();
             LoadTotalExpenses();
-            LoadTotalExpensesByCategory();
+            //LoadTotalExpensesByCategory();
             DataContext = this;
         }
 
@@ -59,13 +53,13 @@ namespace FinancialTracker
             TotalExpensesTextBlock.Text = $"{totalExpenses:N2}";
         }
 
-        private void LoadTotalExpensesByCategory()
-        {
-            QuerySettings querySettings = _configManager.GetQuerySettings("LoadExpensesByCategoryData");
-            List<ExpenseByCategory> expensesByCategory = _dataLoadingService.LoadExpensesByCategory(_connectionString, querySettings);
+        //private void LoadTotalExpensesByCategory()
+        //{
+        //    QuerySettings querySettings = _configManager.GetQuerySettings("LoadExpensesByCategoryData");
+        //    List<ExpenseByCategory> expensesByCategory = _dataLoadingService.LoadExpensesByCategory(_connectionString, querySettings);
 
-            TotalExpensesByCategoryListView.ItemsSource = expensesByCategory;
-        }
+        //    TotalExpensesByCategoryListView.ItemsSource = expensesByCategory;
+        //}
 
 
         private void TransactionListViewEdit(object sender, MouseButtonEventArgs e)
@@ -85,7 +79,7 @@ namespace FinancialTracker
             expenseList.Clear();
             LoadData();
             LoadTotalExpenses();
-            LoadTotalExpensesByCategory();
+            //LoadTotalExpensesByCategory();
         }
 
         private void AddButtonClick(object sender, RoutedEventArgs e)
@@ -93,7 +87,7 @@ namespace FinancialTracker
             AddExpenseWindow addExpenseWindow = new AddExpenseWindow(this);
             addExpenseWindow.ShowDialog();
             LoadTotalExpenses();
-            LoadTotalExpensesByCategory();
+            //LoadTotalExpensesByCategory();
         }
 
         //private void PrintButtonClick(object sender, RoutedEventArgs e)
@@ -115,30 +109,25 @@ namespace FinancialTracker
                     dynamic np = Py.Import("numpy");
                     dynamic plt = Py.Import("matplotlib.pyplot");
 
-                    dynamic x = np.linspace(0, 10, 100);
-                    dynamic y = np.sin(x);
+                    dynamic sizes = np.array(new double[] { 15, 30, 45, 10 });
+                    dynamic labels = new List<string> { "A", "B", "C", "D" };
+                    dynamic colors = new List<string> { "gold", "yellowgreen", "lightcoral", "lightskyblue" };
 
-                    plt.plot(x, y);
-                    plt.xlabel("X-axis");
-                    plt.ylabel("Y-axis");
-                    plt.title("Simple Line Chart");
+                    plt.pie(sizes, labels: labels, colors: colors, autopct: "%1.1f%%", startangle: 140);
+                    plt.title("Simple Pie Chart");
 
-                    // Save the chart to a BytesIO object
                     dynamic io = Py.Import("io");
                     dynamic buf = io.BytesIO();
                     plt.savefig(buf, format: "png");
                     buf.seek(0);
 
-                    // Convert BytesIO to a byte array
                     byte[] chartBytes = buf.getvalue();
 
-                    // Create a BitmapImage from the byte array
                     BitmapImage bitmapImage = new BitmapImage();
                     bitmapImage.BeginInit();
                     bitmapImage.StreamSource = new MemoryStream(chartBytes);
                     bitmapImage.EndInit();
 
-                    // Display the chart in the Image control
                     ChartImage.Source = bitmapImage;
                 }
             }
