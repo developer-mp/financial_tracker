@@ -6,8 +6,6 @@ using System.Windows.Input;
 using System.IO;
 using System.Windows.Media.Imaging;
 using Python.Runtime;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using System.Windows.Markup;
 
 namespace FinancialTracker
 {
@@ -94,7 +92,6 @@ namespace FinancialTracker
 
         //private void PrintButtonClick(object sender, RoutedEventArgs e)
         //{
-        //    System.Diagnostics.Process.Start("python", "GeneratePieChart.py");
         //}
 
         private void PrintButtonClick(object sender, RoutedEventArgs e)

@@ -1,0 +1,22 @@
+{
+  "Db": {
+    "Host": "localhost",
+    "Username": "admin",
+    "Password": "admin",
+    "DbName": "finance"
+  },
+  "Queries": {
+    "LoadFinanceData": {
+      "Query": "SELECT id, date, expense, category, amount FROM finance"
+    },
+    "LoadExpensesByCategoryData": {
+      "Query": "SELECT category, SUM(amount) AS totalAmount FROM finance GROUP BY category"
+    },
+    "LoadTotalExpensesData": {
+      "Query": "SELECT SUM(amount) AS totalExpenses FROM finance"
+    }
+  },
+  "Python": {
+    "DLLPath": "C:\\Users\\User\\AppData\\Local\\Programs\\Python\\Python38\\python38.dll"
+  }
+}
