@@ -123,6 +123,8 @@ namespace FinancialTracker
                     dynamic labels = new List<string> { groceries, transportation, housing, utilities, healthcare, clothing, entertainment, miscellaneous };
                     dynamic colors = new List<string> { "#449E48", "#06CCB0", "#FF817E", "#F58216", "#FED679", "#866FFD",  "#3388FF", "#82D5F9" };
 
+                    plt.figure().set_figwidth(9);
+
                     dynamic wedges;
                     //dynamic texts;
                     plt.pie(sizes, colors: colors, startangle: 140);
@@ -130,7 +132,7 @@ namespace FinancialTracker
                     wedges = result[0];
                     //texts = result[1];
 
-                    plt.legend(wedges, labels, loc: "center left", bbox_to_anchor: new double[] { 1, 0.5 });
+                    plt.legend(wedges, labels, loc: "center left", bbox_to_anchor: new double[] { 1, 0.5 }, fontsize: 12);
 
                     dynamic io = Py.Import("io");
                     dynamic buf = io.BytesIO();

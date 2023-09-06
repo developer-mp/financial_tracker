@@ -20,7 +20,7 @@
                         <Grid>
                             <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0,0,0,1">
                                 <TextBlock Text="{TemplateBinding Content}" 
-                                   Width="90" TextAlignment="Center" FontWeight="Bold" Margin="0,0,0,10"/>
+                                   Width="140" TextAlignment="Center" FontWeight="Bold" Margin="0,0,0,10"/>
                             </Border>
                         </Grid>
                     </ControlTemplate>
@@ -95,7 +95,9 @@
                         <TextBlock x:Name="TotalExpensesTextBlock" FontWeight="Bold" Foreground="Black" Margin="0,10,0,0" Grid.Column="1"/>
                     </Grid>
                     <TextBlock x:Name="ChartTitle" Text="TOTAL EXPENSES BY CATEGORY" HorizontalAlignment="Center" FontSize="10" Foreground="Black" Margin="0,10,0,0"/>
-                    <Image x:Name="ChartImage" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top">
+                        <Image x:Name="ChartImage" Margin="0,0,100,0"/>
+                </StackPanel>
                 </StackPanel>
             </TabItem>
             <TabItem Header="Transactions" Style="{StaticResource TabItemStyle}">
