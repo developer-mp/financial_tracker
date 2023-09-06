@@ -109,28 +109,25 @@ namespace FinancialTracker
                     dynamic np = Py.Import("numpy");
                     dynamic plt = Py.Import("matplotlib.pyplot");
 
-                    dynamic sizes = np.array(new double[] { 100, 30, 150, 60, 180, 70, 20, 10 });
+                    QuerySettings querySettings = _configManager.GetQuerySettings("LoadExpensesByCategoryData");
+                    List<ExpenseByCategory> expensesByCategory = _dataLoadingService.LoadExpensesByCategory(_connectionString, querySettings);
 
-                    var groceries = "Groceries" + " " + "$100";
-                    var transportation = "Transportation" + " " + "$30";
-                    var housing = "Housing" + " " + "$150";
-                    var utilities = "Utilities" + " " + "$60";
-                    var healthcare = "Healthcare" + " " + "$180";
-                    var clothing = "Clothing" + " " + "$70";
-                    var entertainment = "Entertainment" + " " + "$20";
-                    var miscellaneous = "Miscellaneous" + " " + "$10";
+                    dynamic labels = new List<string>();
+                    dynamic sizes = new List<double>();
+                    dynamic colors = new List<string> { "#449E48", "#06CCB0", "#FF817E", "#F58216", "#FED679", "#866FFD", "#3388FF", "#82D5F9" };
 
-                    dynamic labels = new List<string> { groceries, transportation, housing, utilities, healthcare, clothing, entertainment, miscellaneous };
-                    dynamic colors = new List<string> { "#449E48", "#06CCB0", "#FF817E", "#F58216", "#FED679", "#866FFD",  "#3388FF", "#82D5F9" };
+                    foreach (var expense in expensesByCategory)
+                    {
+                        labels.Add($"{expense.Category} ${expense.TotalAmount:N2}");
+                        sizes.Add(expense.TotalAmount);
+                    }
 
                     plt.figure().set_figwidth(9);
 
                     dynamic wedges;
-                    //dynamic texts;
                     plt.pie(sizes, colors: colors, startangle: 140);
                     dynamic result = plt.pie(sizes, colors: colors, autopct: "%1.0f%%", startangle: 140);
                     wedges = result[0];
-                    //texts = result[1];
 
                     plt.legend(wedges, labels, loc: "center left", bbox_to_anchor: new double[] { 1, 0.5 }, fontsize: 12);
 
