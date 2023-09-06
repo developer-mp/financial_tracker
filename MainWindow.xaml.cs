@@ -28,7 +28,7 @@ namespace FinancialTracker
             TransactionListView.ItemsSource = expenseList;
             LoadData();
             LoadTotalExpenses();
-            //LoadTotalExpensesByCategory();
+            LoadTotalExpensesByCategory();
             GenerateChart();
             DataContext = this;
         }
@@ -54,13 +54,14 @@ namespace FinancialTracker
             TotalExpensesTextBlock.Text = $"{totalExpenses:N2}";
         }
 
-        //private void LoadTotalExpensesByCategory()
-        //{
-        //    QuerySettings querySettings = _configManager.GetQuerySettings("LoadExpensesByCategoryData");
-        //    List<ExpenseByCategory> expensesByCategory = _dataLoadingService.LoadExpensesByCategory(_connectionString, querySettings);
+        private List<ExpenseByCategory> LoadTotalExpensesByCategory()
+        {
+            QuerySettings querySettings = _configManager.GetQuerySettings("LoadExpensesByCategoryData");
+            List<ExpenseByCategory> expensesByCategory = _dataLoadingService.LoadExpensesByCategory(_connectionString, querySettings);
 
-        //    TotalExpensesByCategoryListView.ItemsSource = expensesByCategory;
-        //}
+            return expensesByCategory;
+
+        }
 
 
         private void TransactionListViewEdit(object sender, MouseButtonEventArgs e)
@@ -80,7 +81,7 @@ namespace FinancialTracker
             expenseList.Clear();
             LoadData();
             LoadTotalExpenses();
-            //LoadTotalExpensesByCategory();
+            LoadTotalExpensesByCategory();
         }
 
         private void AddButtonClick(object sender, RoutedEventArgs e)
@@ -88,7 +89,7 @@ namespace FinancialTracker
             AddExpenseWindow addExpenseWindow = new AddExpenseWindow(this);
             addExpenseWindow.ShowDialog();
             LoadTotalExpenses();
-            //LoadTotalExpensesByCategory();
+            LoadTotalExpensesByCategory();
         }
 
         private void PrintButtonClick(object sender, RoutedEventArgs e)
@@ -109,8 +110,7 @@ namespace FinancialTracker
                     dynamic np = Py.Import("numpy");
                     dynamic plt = Py.Import("matplotlib.pyplot");
 
-                    QuerySettings querySettings = _configManager.GetQuerySettings("LoadExpensesByCategoryData");
-                    List<ExpenseByCategory> expensesByCategory = _dataLoadingService.LoadExpensesByCategory(_connectionString, querySettings);
+                    List<ExpenseByCategory> expensesByCategory = LoadTotalExpensesByCategory();
 
                     dynamic labels = new List<string>();
                     dynamic sizes = new List<double>();
