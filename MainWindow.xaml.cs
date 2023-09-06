@@ -82,6 +82,7 @@ namespace FinancialTracker
             LoadData();
             LoadTotalExpenses();
             LoadTotalExpensesByCategory();
+            GenerateChart();
         }
 
         private void AddButtonClick(object sender, RoutedEventArgs e)
@@ -90,6 +91,7 @@ namespace FinancialTracker
             addExpenseWindow.ShowDialog();
             LoadTotalExpenses();
             LoadTotalExpensesByCategory();
+            GenerateChart();
         }
 
         private void PrintButtonClick(object sender, RoutedEventArgs e)
