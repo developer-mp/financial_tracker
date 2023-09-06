@@ -1,4 +1,5 @@
-﻿using Npgsql;
+﻿using FinancialTracker.Service;
+using Npgsql;
 using System;
 using System.Windows;
 

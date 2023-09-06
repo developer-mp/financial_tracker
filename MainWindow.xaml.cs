@@ -6,6 +6,8 @@ using System.Windows.Input;
 using System.IO;
 using System.Windows.Media.Imaging;
 using Python.Runtime;
+using FinancialTracker.Service;
+using FinancialTracker.Utils;
 
 namespace FinancialTracker
 {

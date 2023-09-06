@@ -1,4 +1,5 @@
 ﻿using FinancialTracker;
+using FinancialTracker.Utils;
 using Npgsql;
 using System;
 using System.Collections.Generic;

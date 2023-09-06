@@ -1,5 +1,4 @@
-﻿
-namespace FinancialTracker
+﻿namespace FinancialTracker.Utils
 {
     public class DbSettings
     {

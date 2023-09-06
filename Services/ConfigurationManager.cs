@@ -1,8 +1,8 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using FinancialTracker.Utils;
+using Microsoft.Extensions.Configuration;
 using System.IO;
-using System.Runtime;
 
-namespace FinancialTracker
+namespace FinancialTracker.Service
 {
     public class ConfigurationManager
     {
