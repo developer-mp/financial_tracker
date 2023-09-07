@@ -12,7 +12,7 @@ namespace FinancialTracker.Service
         {
             Configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("settings.json")
+                .AddJsonFile("env.json")
                 .Build();
         }
 

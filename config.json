@@ -1,0 +1,36 @@
+{
+  "Categories": [
+    {
+      "CategoryName": "Groceries",
+      "CategoryColor": "#449E48"
+    },
+    {
+      "CategoryName": "Clothing",
+      "CategoryColor": "#06CCB0"
+    },
+    {
+      "CategoryName": "Healthcare",
+      "CategoryColor": "#FF817E"
+    },
+    {
+      "CategoryName": "Transportation",
+      "CategoryColor": "#F58216"
+    },
+    {
+      "CategoryName": "Entertainment",
+      "CategoryColor": "#FED679"
+    },
+    {
+      "CategoryName": "Housing",
+      "CategoryColor": "#866FFD"
+    },
+    {
+      "CategoryName": "Miscellaneous",
+      "CategoryColor": "#3388FF"
+    },
+    {
+      "CategoryName": "Utilities",
+      "CategoryColor": "#82D5F9"
+    }
+  ]
+}
