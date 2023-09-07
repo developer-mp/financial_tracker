@@ -64,7 +64,7 @@
         <TextBlock Grid.Row="4" Grid.Column="0" Text="Amount:" Style="{StaticResource TextBlockStyle}"/>
         <TextBox Grid.Row="4" Grid.Column="1" x:Name="AmountTextBox" Style="{StaticResource TextBoxStyle}" TextChanged="OnTextChanged"/>
 
-        <Button x:Name="UpdateButton" Grid.Row="5" Grid.ColumnSpan="2" Content="Update" Width="80" HorizontalAlignment="Left" Margin="10" Click="UpdateButtonClick" Style="{StaticResource UpdateButtonStyle}" IsEnabled="True"/>
+            <Button x:Name="UpdateButton" Grid.Row="5" Grid.ColumnSpan="2" Content="Update" Width="80" HorizontalAlignment="Left" Margin="10" Click="UpdateButtonClick" Style="{StaticResource UpdateButtonStyle}" IsEnabled="True"/>
         <Button Grid.Row="5" Grid.ColumnSpan="2" Content="Delete" Width="80" HorizontalAlignment="Right" Margin="10" Click="DeleteButtonClick" Style="{StaticResource DeleteButtonStyle}"/>
     </Grid>
 </Window>

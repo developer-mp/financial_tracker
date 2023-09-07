@@ -27,33 +27,46 @@ namespace FinancialTracker
 
         private async void UpdateButtonClick(object sender, RoutedEventArgs e)
         {
-
-            _selectedExpense.Date = DatePicker.SelectedDate ?? DateTime.Now;
-            _selectedExpense.Expense = ExpenseTextBox.Text;
-            _selectedExpense.Category = CategoryTextBox.Text;
-            _selectedExpense.Amount = Convert.ToDouble(AmountTextBox.Text);
-
-            string connString = _configManager.GetConnectionString();
-
-            using (var conn = new NpgsqlConnection(connString))
+            try
             {
-                conn.Open();
+                _selectedExpense.Date = DatePicker.SelectedDate ?? DateTime.Now;
+                _selectedExpense.Expense = ExpenseTextBox.Text;
+                _selectedExpense.Category = CategoryTextBox.Text;
 
-                using (var cmd = new NpgsqlCommand("UPDATE finance SET date = @Date, expense = @Expense, category = @Category, amount = @Amount WHERE id = @Id", conn))
+                if (!double.TryParse(AmountTextBox.Text, out double amount))
                 {
-                    cmd.Parameters.AddWithValue("Date", _selectedExpense.Date);
-                    cmd.Parameters.AddWithValue("Expense", _selectedExpense.Expense);
-                    cmd.Parameters.AddWithValue("Category", _selectedExpense.Category);
-                    cmd.Parameters.AddWithValue("Amount", _selectedExpense.Amount);
-                    cmd.Parameters.AddWithValue("Id", _selectedExpense.Id);
-
-                    await cmd.ExecuteNonQueryAsync();
+                    MessageBox.Show("Invalid amount. Only decimal numbers are allowed.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
                 }
+
+                _selectedExpense.Amount = Convert.ToDouble(AmountTextBox.Text);
+
+                string connString = _configManager.GetConnectionString();
+
+                using (var conn = new NpgsqlConnection(connString))
+                {
+                    conn.Open();
+
+                    using (var cmd = new NpgsqlCommand("UPDATE finance SET date = @Date, expense = @Expense, category = @Category, amount = @Amount WHERE id = @Id", conn))
+                    {
+                        cmd.Parameters.AddWithValue("Date", _selectedExpense.Date);
+                        cmd.Parameters.AddWithValue("Expense", _selectedExpense.Expense);
+                        cmd.Parameters.AddWithValue("Category", _selectedExpense.Category);
+                        cmd.Parameters.AddWithValue("Amount", _selectedExpense.Amount);
+                        cmd.Parameters.AddWithValue("Id", _selectedExpense.Id);
+
+                        await cmd.ExecuteNonQueryAsync();
+                    }
+                }
+
+                DataUpdated?.Invoke(this, EventArgs.Empty);
+
+                Close();
             }
-
-            DataUpdated?.Invoke(this, EventArgs.Empty);
-
-            Close();
+            catch (FormatException ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
 
