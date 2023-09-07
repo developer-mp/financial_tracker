@@ -1,4 +1,15 @@
 {
+  "Queries": {
+    "LoadFinanceData": {
+      "Query": "SELECT id, date, expense, category, amount FROM finance"
+    },
+    "LoadExpensesByCategoryData": {
+      "Query": "SELECT category, SUM(amount) AS totalAmount FROM finance GROUP BY category"
+    },
+    "LoadTotalExpensesData": {
+      "Query": "SELECT SUM(amount) AS totalExpenses FROM finance"
+    }
+  },
   "Categories": [
     {
       "CategoryName": "Groceries",

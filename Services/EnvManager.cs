@@ -4,11 +4,11 @@ using System.IO;
 
 namespace FinancialTracker.Service
 {
-    public class ConfigurationManager
+    public class EnvManager
     {
         private IConfiguration Configuration { get; }
 
-        public ConfigurationManager()
+        public EnvManager()
         {
             Configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
@@ -32,15 +32,6 @@ namespace FinancialTracker.Service
         {
             var dbSettings = GetDbSettings();
             return $"Host={dbSettings.Host};Username={dbSettings.Username};Password={dbSettings.Password};Database={dbSettings.DbName}";
-        }
-
-        public QuerySettings GetQuerySettings(string queryName)
-        {
-            var querySettingsSection = Configuration.GetSection($"Queries:{queryName}");
-            return new QuerySettings
-            {
-                Query = querySettingsSection["Query"]
-            };
         }
 
         public string GetPythonDLLPath()

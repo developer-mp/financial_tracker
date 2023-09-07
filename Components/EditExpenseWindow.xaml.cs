@@ -9,12 +9,12 @@ namespace FinancialTracker
     public partial class EditExpenseWindow : Window
     {
         private ExpenseItem _selectedExpense;
-        private ConfigurationManager _configManager;
+        private EnvManager _configManager;
 
         public EditExpenseWindow(ExpenseItem selectedExpense)
         {
             InitializeComponent();
-            _configManager = new ConfigurationManager();
+            _configManager = new EnvManager();
             _selectedExpense = selectedExpense;
 
             DatePicker.SelectedDate = _selectedExpense.Date;

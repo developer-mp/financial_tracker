@@ -11,7 +11,9 @@ namespace FinancialTracker
 {
     public partial class MainWindow : Window
     {
-        private ConfigurationManager _configManager;
+        private EnvManager _envManager;
+
+        private ConfigManager _configManager;
 
         private DataLoadingService _dataLoadingService;
 
@@ -22,8 +24,9 @@ namespace FinancialTracker
         public MainWindow()
         {
             InitializeComponent();
-            _configManager = new ConfigurationManager();
-            _connectionString = _configManager.GetConnectionString();
+            _envManager = new EnvManager();
+            _configManager = new ConfigManager();
+            _connectionString = _envManager.GetConnectionString();
             _dataLoadingService = new DataLoadingService();
             TransactionListView.ItemsSource = expenseList;
             LoadData();
@@ -100,7 +103,7 @@ namespace FinancialTracker
 
         private void GenerateChart()
         {
-            string pythonDllPath = _configManager.GetPythonDLLPath();
+            string pythonDllPath = _envManager.GetPythonDLLPath();
 
             List<ExpenseByCategory> expensesByCategory = LoadTotalExpensesByCategory();
 

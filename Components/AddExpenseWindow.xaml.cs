@@ -9,12 +9,12 @@ namespace FinancialTracker
     public partial class AddExpenseWindow : Window
     {
         private MainWindow _mainWindow;
-        private ConfigurationManager _configManager;
+        private EnvManager _configManager;
 
         public AddExpenseWindow(MainWindow mainWindow)
         {
             InitializeComponent();
-            _configManager = new ConfigurationManager();
+            _configManager = new EnvManager();
             _mainWindow = mainWindow;
 
         }
