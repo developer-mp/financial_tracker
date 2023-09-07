@@ -19,8 +19,13 @@
         </Style>
 
         <Style x:Key="SaveButtonStyle" BasedOn="{StaticResource ButtonStyle}" TargetType="Button">
-            <Setter Property="Background" Value="#178A83"/>
             <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="Background" Value="Gray"/>
+            <Style.Triggers>
+                <Trigger Property="IsEnabled" Value="True">
+                    <Setter Property="Background" Value="#178A83"/>
+                </Trigger>
+            </Style.Triggers>
         </Style>
 
         <Style x:Key="CancelButtonStyle" BasedOn="{StaticResource ButtonStyle}" TargetType="Button">
@@ -40,8 +45,6 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-
-
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="80"/>
             <ColumnDefinition Width="*"/>
@@ -53,15 +56,15 @@
         <DatePicker Grid.Row="1" Grid.Column="1" x:Name="DatePicker" Height="25" Margin="10" SelectedDate="{x:Static sys:DateTime.Now}"/>
 
         <TextBlock Grid.Row="2" Grid.Column="0" Text="Expense:" Style="{StaticResource TextBlockStyle}"/>
-        <TextBox Grid.Row="2" Grid.Column="1" x:Name="ExpenseTextBox" Style="{StaticResource TextBoxStyle}"/>
+        <TextBox Grid.Row="2" Grid.Column="1" x:Name="ExpenseTextBox" Style="{StaticResource TextBoxStyle}" TextChanged="OnTextChanged"/>
 
         <TextBlock Grid.Row="3" Grid.Column="0" Text="Category:" Style="{StaticResource TextBlockStyle}"/>
-        <TextBox Grid.Row="3" Grid.Column="1" x:Name="CategoryTextBox" Style="{StaticResource TextBoxStyle}"/>
+        <TextBox Grid.Row="3" Grid.Column="1" x:Name="CategoryTextBox" Style="{StaticResource TextBoxStyle}" TextChanged="OnTextChanged"/>
 
         <TextBlock Grid.Row="4" Grid.Column="0" Text="Amount:" Style="{StaticResource TextBlockStyle}"/>
-        <TextBox Grid.Row="4" Grid.Column="1" x:Name="AmountTextBox" Style="{StaticResource TextBoxStyle}"/>
+        <TextBox Grid.Row="4" Grid.Column="1" x:Name="AmountTextBox" Style="{StaticResource TextBoxStyle}" TextChanged="OnTextChanged"/>
 
-        <Button Grid.Row="5" Grid.ColumnSpan="2" Content="Save" Width="80" HorizontalAlignment="Left" Margin="10" Click="SaveButtonClick" Style="{StaticResource SaveButtonStyle}"/>
+        <Button x:Name="SaveButton" Grid.Row="5" Grid.ColumnSpan="2" Content="Save" Width="80" HorizontalAlignment="Left" Margin="10" Click="SaveButtonClick" Style="{StaticResource SaveButtonStyle}" IsEnabled="False"/>
         <Button Grid.Row="5" Grid.ColumnSpan="2" Content="Cancel" Width="80" HorizontalAlignment="Right" Margin="10" Click="CancelButtonClick" Style="{StaticResource CancelButtonStyle}"/>
     </Grid>
 </Window>

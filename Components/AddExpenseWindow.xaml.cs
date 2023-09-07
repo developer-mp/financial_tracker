@@ -2,6 +2,8 @@
 using Npgsql;
 using System;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace FinancialTracker
 {
@@ -58,6 +60,27 @@ namespace FinancialTracker
         private void CancelButtonClick(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        private void OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            bool areFieldsFilled = AreFieldsFilled;
+            SaveButton.IsEnabled = areFieldsFilled;
+            if (areFieldsFilled)
+            {
+                SaveButton.IsEnabled = true;
+            }
+        }
+
+        private bool AreFieldsFilled
+        {
+            get
+            {
+                return !string.IsNullOrEmpty(DatePicker.Text) &&
+                       !string.IsNullOrEmpty(ExpenseTextBox.Text) &&
+                       !string.IsNullOrEmpty(CategoryTextBox.Text) &&
+                       !string.IsNullOrEmpty(AmountTextBox.Text);
+            }
         }
     }
 }
