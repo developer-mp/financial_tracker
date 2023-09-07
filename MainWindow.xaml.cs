@@ -104,10 +104,11 @@ namespace FinancialTracker
         private void GenerateChart()
         {
             string pythonDllPath = _envManager.GetPythonDLLPath();
+            List<string> categoryColors = _configManager.GetCategoryColors();
 
             List<ExpenseByCategory> expensesByCategory = LoadTotalExpensesByCategory();
 
-            ChartGenerator chartGenerator = new ChartGenerator(pythonDllPath);
+            ChartGenerator chartGenerator = new ChartGenerator(pythonDllPath, categoryColors);
             BitmapImage chartImage = chartGenerator.GenerateChart(expensesByCategory);
 
             if (chartImage != null)

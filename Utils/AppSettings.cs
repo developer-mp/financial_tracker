@@ -12,4 +12,10 @@
     {
         public string Query { get; set; }
     }
+
+    public class CategorySettings
+    {
+        public string CategoryName { get; set; }
+        public string CategoryColor { get; set; }
+    }
 }

@@ -9,10 +9,12 @@ namespace FinancialTracker
     public class ChartGenerator
     {
         private readonly string _pythonDllPath;
+        private readonly List<string> _categoryColors;
 
-        public ChartGenerator(string pythonDllPath)
+        public ChartGenerator(string pythonDllPath, List<string> categoryColors)
         {
             _pythonDllPath = pythonDllPath;
+            _categoryColors = categoryColors;
         }
 
         public BitmapImage GenerateChart(List<ExpenseByCategory> expensesByCategory)
@@ -29,7 +31,7 @@ namespace FinancialTracker
 
                     List<string> labels = new List<string>();
                     List<double> sizes = new List<double>();
-                    List<string> colors = new List<string> { "#449E48", "#06CCB0", "#FF817E", "#F58216", "#FED679", "#866FFD", "#3388FF", "#82D5F9" };
+                    List<string> colors = _categoryColors;
 
                     foreach (var expense in expensesByCategory)
                     {

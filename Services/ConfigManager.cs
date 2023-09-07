@@ -1,6 +1,8 @@
 ﻿using FinancialTracker.Utils;
 using Microsoft.Extensions.Configuration;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace FinancialTracker.Service
 {
@@ -23,5 +25,12 @@ namespace FinancialTracker.Service
                 Query = querySettingsSection["Query"]
             };
         }
+
+        public List<string> GetCategoryColors()
+        {
+            var categorySettings = Configuration.GetSection("Categories").Get<List<CategorySettings>>();
+            return categorySettings.Select(category => category.CategoryColor).ToList();
+        }
+
     }
 }
