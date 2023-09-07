@@ -2,6 +2,7 @@
 using Npgsql;
 using System;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace FinancialTracker
 {
@@ -75,6 +76,27 @@ namespace FinancialTracker
             DataUpdated?.Invoke(this, EventArgs.Empty);
 
             Close();
+        }
+
+        private void OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            bool areFieldsFilled = AreFieldsFilled;
+            UpdateButton.IsEnabled = areFieldsFilled;
+            if (!areFieldsFilled)
+            {
+                UpdateButton.IsEnabled = false;
+            }
+        }
+
+        private bool AreFieldsFilled
+        {
+            get
+            {
+                return !string.IsNullOrEmpty(DatePicker.Text) &&
+                       !string.IsNullOrEmpty(ExpenseTextBox.Text) &&
+                       !string.IsNullOrEmpty(CategoryTextBox.Text) &&
+                       !string.IsNullOrEmpty(AmountTextBox.Text);
+            }
         }
     }
 }
