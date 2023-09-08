@@ -1,22 +1,33 @@
 ﻿using FinancialTracker.Service;
 using Npgsql;
 using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace FinancialTracker
 {
     public partial class AddExpenseWindow : Window
     {
         private MainWindow _mainWindow;
-        private EnvManager _configManager;
+        private EnvManager _envManager;
+        private ConfigManager _configManager;
 
         public AddExpenseWindow(MainWindow mainWindow)
         {
             InitializeComponent();
-            _configManager = new EnvManager();
+            _envManager = new EnvManager();
+            _configManager = new ConfigManager();
             _mainWindow = mainWindow;
+            PopulateCategoryComboBox();
 
+        }
+
+        private void PopulateCategoryComboBox()
+        {
+            List<string> categoryNames = _configManager.GetCategoryNames();
+            CategoryComboBox.ItemsSource = categoryNames;
         }
 
         private void SaveButtonClick(object sender, RoutedEventArgs e)
@@ -31,7 +42,7 @@ namespace FinancialTracker
                     Id = newId,
                     Date = DatePicker.SelectedDate ?? DateTime.Now,
                     Expense = ExpenseTextBox.Text,
-                    Category = CategoryTextBox.Text,
+                    Category = CategoryComboBox.SelectedItem.ToString(),
                 };
 
                 if (!double.TryParse(AmountTextBox.Text, out double amount))
@@ -42,7 +53,7 @@ namespace FinancialTracker
 
                 newExpense.Amount = amount;
 
-                string connString = _configManager.GetConnectionString();
+                string connString = _envManager.GetConnectionString();
 
                 using (var conn = new NpgsqlConnection(connString))
                 {
@@ -89,9 +100,7 @@ namespace FinancialTracker
         {
             get
             {
-                return !string.IsNullOrEmpty(DatePicker.Text) &&
-                       !string.IsNullOrEmpty(ExpenseTextBox.Text) &&
-                       !string.IsNullOrEmpty(CategoryTextBox.Text) &&
+                return !string.IsNullOrEmpty(ExpenseTextBox.Text) &&
                        !string.IsNullOrEmpty(AmountTextBox.Text);
             }
         }

@@ -23,6 +23,73 @@
                 </Setter>
             </Style>
 
+            <ControlTemplate x:Key="ComboBoxToggleButton" TargetType="ToggleButton">
+                <Grid>
+                    <Border Background="White"/>
+                </Grid>
+            </ControlTemplate>
+
+            <Style x:Key="{x:Type ComboBox}" TargetType="ComboBox">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ComboBox">
+                            <Border BorderBrush="#AEAEB0" BorderThickness="1">
+                                <Grid>
+                                    <ToggleButton 
+                                    Name="ToggleButton" 
+                                    Template="{StaticResource ComboBoxToggleButton}"    
+                                    Grid.Column="2" 
+                                    Focusable="false"
+                                    IsChecked="{Binding Path=IsDropDownOpen,Mode=TwoWay,RelativeSource={RelativeSource TemplatedParent}}"
+                                    ClickMode="Press">
+                                    </ToggleButton>
+                                    <ContentPresenter
+                                    Name="ContentSite"
+                                    IsHitTestVisible="False" 
+                                    Margin="3,3,23,3"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left" 
+                                    Content="{TemplateBinding ComboBox.SelectionBoxItem}" 		
+                                    ContentTemplate="{TemplateBinding ComboBox.SelectionBoxItemTemplate}" 		
+                                    ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}" />
+                                    <TextBox x:Name="PART_EditableTextBox"
+                                    Style="{x:Null}" 
+                                    HorizontalAlignment="Left" 
+                                    VerticalAlignment="Center" 
+                                    Margin="3,3,23,3"
+                                    Focusable="True" 
+                                    Background="Transparent"
+                                    Visibility="Hidden"
+                                    IsReadOnly="{TemplateBinding IsReadOnly}"/>
+                                    <Popup 
+                                    Name="Popup"
+                                    Placement="Bottom"
+                                    IsOpen="{TemplateBinding IsDropDownOpen}"
+                                    AllowsTransparency="True" 
+                                    Focusable="False"
+                                    PopupAnimation="Slide">
+                                        <Grid 
+                                        Name="DropDown"
+                                        SnapsToDevicePixels="True"                
+                                        MinWidth="{TemplateBinding ActualWidth}"
+                                        MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                                            <Border 
+                                            x:Name="DropDownBorder"
+                                            Background="White"
+                                            BorderBrush="#AEAEB0"
+                                            BorderThickness="1"/>
+                                            <ScrollViewer Margin="4,6,4,6" SnapsToDevicePixels="True">
+                                                <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" />
+                                            </ScrollViewer>
+                                        </Grid>
+                                    </Popup>
+                                </Grid>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>

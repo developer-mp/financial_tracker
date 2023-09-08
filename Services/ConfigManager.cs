@@ -32,5 +32,11 @@ namespace FinancialTracker.Service
             return categorySettings.Select(category => category.CategoryColor).ToList();
         }
 
+        public List<string> GetCategoryNames()
+        {
+            var categorySettings = Configuration.GetSection("Categories").Get<List<CategorySettings>>();
+            return categorySettings.Select(category => category.CategoryName).ToList();
+        }
+
     }
 }

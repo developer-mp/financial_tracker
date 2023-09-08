@@ -3,9 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         Title="Add Record" Height="310" Width="400">
+    
     <Window.Resources>
        
-            <Style x:Key="TextBoxStyle" TargetType="TextBox">
+        <Style x:Key="TextBoxStyle" TargetType="TextBox">
             <Setter Property="Height" Value="25"/>
             <Setter Property="Margin" Value="10"/>
             <Setter Property="VerticalAlignment" Value="Stretch"/>
@@ -59,7 +60,7 @@
         <TextBox Grid.Row="2" Grid.Column="1" x:Name="ExpenseTextBox" Style="{StaticResource TextBoxStyle}" TextChanged="OnTextChanged"/>
 
         <TextBlock Grid.Row="3" Grid.Column="0" Text="Category:" Style="{StaticResource TextBlockStyle}"/>
-        <TextBox Grid.Row="3" Grid.Column="1" x:Name="CategoryTextBox" Style="{StaticResource TextBoxStyle}" TextChanged="OnTextChanged"/>
+        <ComboBox Grid.Row="3" Grid.Column="1" Name="CategoryComboBox" SelectedIndex="0" Height="25" Margin="10,0,10,0" Style="{StaticResource {x:Type ComboBox}}"/>
 
         <TextBlock Grid.Row="4" Grid.Column="0" Text="Amount:" Style="{StaticResource TextBlockStyle}"/>
         <TextBox Grid.Row="4" Grid.Column="1" x:Name="AmountTextBox" Style="{StaticResource TextBoxStyle}" TextChanged="OnTextChanged"/>
