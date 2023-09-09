@@ -13,6 +13,7 @@ namespace FinancialTracker
         private DataLoadingService _dataLoadingService;
         private ExpenseItem _selectedExpense;
         private string _connectionString;
+        private ButtonStateHelper _buttonStateHelper;
 
         public EditExpenseWindow(ExpenseItem selectedExpense)
         {
@@ -22,11 +23,15 @@ namespace FinancialTracker
             _dataLoadingService = new DataLoadingService();
             _connectionString = _envManager.GetConnectionString();
             _selectedExpense = selectedExpense;
+            _buttonStateHelper = new ButtonStateHelper(UpdateButton, ExpenseTextBox, AmountTextBox);
 
             DatePicker.SelectedDate = _selectedExpense.Date;
             ExpenseTextBox.Text = _selectedExpense.Expense;
             CategoryTextBox.Text = _selectedExpense.Category;
             AmountTextBox.Text = _selectedExpense.Amount.ToString();
+
+            ExpenseTextBox.TextChanged += OnTextChanged;
+            AmountTextBox.TextChanged += OnTextChanged;
         }
 
         public event EventHandler DataUpdated;
@@ -67,23 +72,7 @@ namespace FinancialTracker
 
         private void OnTextChanged(object sender, TextChangedEventArgs e)
         {
-            bool areFieldsFilled = AreFieldsFilled;
-            UpdateButton.IsEnabled = areFieldsFilled;
-            if (!areFieldsFilled)
-            {
-                UpdateButton.IsEnabled = false;
-            }
-        }
-
-        private bool AreFieldsFilled
-        {
-            get
-            {
-                return !string.IsNullOrEmpty(DatePicker.Text) &&
-                       !string.IsNullOrEmpty(ExpenseTextBox.Text) &&
-                       !string.IsNullOrEmpty(CategoryTextBox.Text) &&
-                       !string.IsNullOrEmpty(AmountTextBox.Text);
-            }
+            _buttonStateHelper.UpdateButtonState();
         }
     }
 }

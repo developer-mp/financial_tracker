@@ -14,6 +14,7 @@ namespace FinancialTracker
         private ConfigManager _configManager;
         private DataLoadingService _dataLoadingService;
         private string _connectionString;
+        private ButtonStateHelper _buttonStateHelper;
 
         public AddExpenseWindow(MainWindow mainWindow)
         {
@@ -24,6 +25,10 @@ namespace FinancialTracker
             _connectionString = _envManager.GetConnectionString();
             _mainWindow = mainWindow;
             PopulateCategoryComboBox();
+            _buttonStateHelper = new ButtonStateHelper(SaveButton, ExpenseTextBox, AmountTextBox);
+
+            ExpenseTextBox.TextChanged += OnTextChanged;
+            AmountTextBox.TextChanged += OnTextChanged;
         }
 
         private void PopulateCategoryComboBox()
@@ -72,21 +77,7 @@ namespace FinancialTracker
 
         private void OnTextChanged(object sender, TextChangedEventArgs e)
         {
-            bool areFieldsFilled = AreFieldsFilled;
-            SaveButton.IsEnabled = areFieldsFilled;
-            if (areFieldsFilled)
-            {
-                SaveButton.IsEnabled = true;
-            }
-        }
-
-        private bool AreFieldsFilled
-        {
-            get
-            {
-                return !string.IsNullOrEmpty(ExpenseTextBox.Text) &&
-                       !string.IsNullOrEmpty(AmountTextBox.Text);
-            }
+            _buttonStateHelper.UpdateButtonState();
         }
     }
 }
