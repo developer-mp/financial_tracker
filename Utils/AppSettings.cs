@@ -1,4 +1,6 @@
-﻿namespace FinancialTracker.Utils
+﻿using System;
+
+namespace FinancialTracker.Utils
 {
     public class DbSettings
     {
@@ -17,5 +19,20 @@
     {
         public string CategoryName { get; set; }
         public string CategoryColor { get; set; }
+    }
+
+    public class ExpenseItem
+    {
+        public string Id { get; set; }
+        public DateTime Date { get; set; }
+        public string Expense { get; set; }
+        public string Category { get; set; }
+        public double Amount { get; set; }
+    }
+
+    public class ExpenseByCategory
+    {
+        public string Category { get; set; }
+        public double TotalAmount { get; set; }
     }
 }

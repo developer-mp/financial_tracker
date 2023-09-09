@@ -12,22 +12,18 @@ namespace FinancialTracker
     public partial class MainWindow : Window
     {
         private EnvManager _envManager;
-
         private ConfigManager _configManager;
-
         private DataLoadingService _dataLoadingService;
-
         private string _connectionString;
-
         public ObservableCollection<ExpenseItem> expenseList = new ObservableCollection<ExpenseItem>();
 
         public MainWindow()
         {
             InitializeComponent();
-            _envManager = new EnvManager();
             _configManager = new ConfigManager();
-            _connectionString = _envManager.GetConnectionString();
             _dataLoadingService = new DataLoadingService();
+            _envManager = new EnvManager();
+            _connectionString = _envManager.GetConnectionString();
             TransactionListView.ItemsSource = expenseList;
             LoadData();
             LoadTotalExpenses();
@@ -65,7 +61,6 @@ namespace FinancialTracker
             return expensesByCategory;
 
         }
-
 
         private void TransactionListViewEdit(object sender, MouseButtonEventArgs e)
         {
@@ -120,20 +115,5 @@ namespace FinancialTracker
                 MessageBox.Show("Failed to generate the chart");
             }
         }
-    }
-
-    public class ExpenseItem
-    {
-        public string Id { get; set; }
-        public DateTime Date { get; set; }
-        public string Expense { get; set; }
-        public string Category { get; set; }
-        public double Amount { get; set; }
-    }
-
-    public class ExpenseByCategory
-    {
-        public string Category { get; set; }
-        public double TotalAmount { get; set; }
     }
 }
