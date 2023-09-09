@@ -52,9 +52,8 @@ namespace FinancialTracker
                     Category = CategoryComboBox.SelectedItem.ToString(),
                 };
 
-                if (!double.TryParse(AmountTextBox.Text, out double amount))
+                if (!ValidationHelper.TryParseDouble(AmountTextBox, out double amount))
                 {
-                    MessageBox.Show("Invalid amount. Only decimal numbers are allowed", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
 
