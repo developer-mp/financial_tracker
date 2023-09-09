@@ -8,6 +8,15 @@
     },
     "LoadTotalExpensesData": {
       "Query": "SELECT SUM(amount) AS totalExpenses FROM finance"
+    },
+    "AddExpenseData": {
+      "Query": "INSERT INTO finance (id, date, expense, category, amount) VALUES (@Id, @Date, @Expense, @Category, @Amount)"
+    },
+    "UpdateExpenseData": {
+      "Query": "UPDATE finance SET date = @Date, expense = @Expense, category = @Category, amount = @Amount WHERE id = @Id"
+    },
+    "DeleteExpenseData": {
+      "Query": "DELETE FROM finance WHERE id = @Id"
     }
   },
   "Categories": [

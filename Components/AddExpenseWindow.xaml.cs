@@ -1,11 +1,9 @@
 ﻿using FinancialTracker.Service;
 using FinancialTracker.Utils;
-using Npgsql;
 using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
 
 namespace FinancialTracker
 {
@@ -14,15 +12,18 @@ namespace FinancialTracker
         private MainWindow _mainWindow;
         private EnvManager _envManager;
         private ConfigManager _configManager;
+        private DataLoadingService _dataLoadingService;
+        private string _connectionString;
 
         public AddExpenseWindow(MainWindow mainWindow)
         {
             InitializeComponent();
             _envManager = new EnvManager();
             _configManager = new ConfigManager();
+            _dataLoadingService = new DataLoadingService();
+            _connectionString = _envManager.GetConnectionString();
             _mainWindow = mainWindow;
             PopulateCategoryComboBox();
-
         }
 
         private void PopulateCategoryComboBox()
@@ -48,32 +49,14 @@ namespace FinancialTracker
 
                 if (!double.TryParse(AmountTextBox.Text, out double amount))
                 {
-                    MessageBox.Show("Invalid amount. Only decimal numbers are allowed.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("Invalid amount. Only decimal numbers are allowed", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
 
-                newExpense.Amount = amount;
-
-                string connString = _envManager.GetConnectionString();
-
-                using (var conn = new NpgsqlConnection(connString))
-                {
-                    conn.Open();
-
-                    using (var cmd = new NpgsqlCommand("INSERT INTO finance (id, date, expense, category, amount) VALUES (@Id, @Date, @Expense, @Category, @Amount)", conn))
-                    {
-                        cmd.Parameters.AddWithValue("Id", newExpense.Id);
-                        cmd.Parameters.AddWithValue("Date", newExpense.Date);
-                        cmd.Parameters.AddWithValue("Expense", newExpense.Expense);
-                        cmd.Parameters.AddWithValue("Category", newExpense.Category);
-                        cmd.Parameters.AddWithValue("Amount", newExpense.Amount);
-
-                        cmd.ExecuteNonQuery();
-                    }
-                }
-
+                newExpense.Amount = Convert.ToDouble(AmountTextBox.Text);
+                QuerySettings insertQuerySettings = _configManager.GetQuerySettings("AddExpenseData");
+                _dataLoadingService.InsertExpense(_connectionString, insertQuerySettings, newExpense);
                 _mainWindow.expenseList.Add(newExpense);
-
                 Close();
             }
             catch (FormatException ex)
