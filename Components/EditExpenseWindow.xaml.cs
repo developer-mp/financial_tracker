@@ -63,7 +63,7 @@ namespace FinancialTracker
             }
         }
 
-        private async void DeleteButtonClick(object sender, RoutedEventArgs e)
+        private void DeleteButtonClick(object sender, RoutedEventArgs e)
         {
             try
             {
