@@ -54,6 +54,8 @@ namespace FinancialTracker
                 _dataLoadingService.UpdateExpense(_connectionString, updateQuerySettings, _selectedExpense);
                 DataUpdated?.Invoke(this, EventArgs.Empty);
                 Close();
+
+                MessageBox.Show("Record updated successfully", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (FormatException ex)
             {
@@ -63,10 +65,20 @@ namespace FinancialTracker
 
         private async void DeleteButtonClick(object sender, RoutedEventArgs e)
         {
-            QuerySettings deleteQuerySettings = _configManager.GetQuerySettings("DeleteExpenseData");
-            _dataLoadingService.DeleteExpense(_connectionString, deleteQuerySettings, _selectedExpense);
-            DataUpdated?.Invoke(this, EventArgs.Empty);
-            Close();
+            try
+            {
+                QuerySettings deleteQuerySettings = _configManager.GetQuerySettings("DeleteExpenseData");
+                _dataLoadingService.DeleteExpense(_connectionString, deleteQuerySettings, _selectedExpense);
+                DataUpdated?.Invoke(this, EventArgs.Empty);
+                Close();
+
+                MessageBox.Show("Record deleted successfully", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (FormatException ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
         }
 
         private void OnTextChanged(object sender, TextChangedEventArgs e)

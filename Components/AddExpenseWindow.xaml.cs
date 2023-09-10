@@ -62,6 +62,8 @@ namespace FinancialTracker
                 _dataLoadingService.InsertExpense(_connectionString, insertQuerySettings, newExpense);
                 _mainWindow.expenseList.Add(newExpense);
                 Close();
+
+                MessageBox.Show("New record added successfully", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (FormatException ex)
             {
