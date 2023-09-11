@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using FinancialTracker.Service;
 using FinancialTracker.Utils;
@@ -41,9 +41,27 @@ namespace FinancialTracker
             LoadTotalExpensesByCategory();
             GenerateChart();
             DataContext = this;
+            SetDefaultSorting();
         }
 
-        void GridViewColumnHeaderClickedHandler(object sender, RoutedEventArgs e)
+        private void SetDefaultSorting()
+        {
+            GridView gridView = TransactionListView.View as GridView;
+
+            if (gridView != null)
+            {
+                var dateColumn = gridView.Columns.FirstOrDefault(column => column.Header.ToString() == "Date");
+
+                if (dateColumn != null)
+                {
+                    dateColumn.HeaderTemplate = Resources["HeaderArrowDown"] as DataTemplate;
+                }
+            }
+
+            Sort("Date", ListSortDirection.Descending);
+        }
+
+        private void ColumnHeaderClicked(object sender, RoutedEventArgs e)
         {
             var headerClicked = e.OriginalSource as GridViewColumnHeader;
             ListSortDirection direction;
@@ -76,12 +94,12 @@ namespace FinancialTracker
                     if (direction == ListSortDirection.Ascending)
                     {
                         headerClicked.Column.HeaderTemplate =
-                          Resources["HeaderTemplateArrowUp"] as DataTemplate;
+                          Resources["HeaderArrowUp"] as DataTemplate;
                     }
                     else
                     {
                         headerClicked.Column.HeaderTemplate =
-                          Resources["HeaderTemplateArrowDown"] as DataTemplate;
+                          Resources["HeaderArrowDown"] as DataTemplate;
                     }
 
                     if (_lastHeaderClicked != null && _lastHeaderClicked != headerClicked)
