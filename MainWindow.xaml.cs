@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Drawing;
+using System.ComponentModel;
 using System.IO;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -23,6 +25,9 @@ namespace FinancialTracker
         private string _connectionString;
         public ObservableCollection<ExpenseItem> expenseList = new ObservableCollection<ExpenseItem>();
 
+        GridViewColumnHeader _lastHeaderClicked = null;
+        ListSortDirection _lastDirection = ListSortDirection.Ascending;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -38,12 +43,72 @@ namespace FinancialTracker
             DataContext = this;
         }
 
+        void GridViewColumnHeaderClickedHandler(object sender, RoutedEventArgs e)
+        {
+            var headerClicked = e.OriginalSource as GridViewColumnHeader;
+            ListSortDirection direction;
+
+            if (headerClicked != null)
+            {
+                if (headerClicked.Role != GridViewColumnHeaderRole.Padding)
+                {
+                    if (headerClicked != _lastHeaderClicked)
+                    {
+                        direction = ListSortDirection.Ascending;
+                    }
+                    else
+                    {
+                        if (_lastDirection == ListSortDirection.Ascending)
+                        {
+                            direction = ListSortDirection.Descending;
+                        }
+                        else
+                        {
+                            direction = ListSortDirection.Ascending;
+                        }
+                    }
+
+                    var columnBinding = headerClicked.Column.DisplayMemberBinding as Binding;
+                    var sortBy = columnBinding?.Path.Path ?? headerClicked.Column.Header as string;
+
+                    Sort(sortBy, direction);
+
+                    if (direction == ListSortDirection.Ascending)
+                    {
+                        headerClicked.Column.HeaderTemplate =
+                          Resources["HeaderTemplateArrowUp"] as DataTemplate;
+                    }
+                    else
+                    {
+                        headerClicked.Column.HeaderTemplate =
+                          Resources["HeaderTemplateArrowDown"] as DataTemplate;
+                    }
+
+                    if (_lastHeaderClicked != null && _lastHeaderClicked != headerClicked)
+                    {
+                        _lastHeaderClicked.Column.HeaderTemplate = null;
+                    }
+
+                    _lastHeaderClicked = headerClicked;
+                    _lastDirection = direction;
+                }
+            }
+        }
+
+        private void Sort(string sortBy, ListSortDirection direction)
+        {
+            ICollectionView dataView = CollectionViewSource.GetDefaultView(TransactionListView.ItemsSource);
+
+            dataView.SortDescriptions.Clear();
+            SortDescription sd = new SortDescription(sortBy, direction);
+            dataView.SortDescriptions.Add(sd);
+            dataView.Refresh();
+        }
+
         private void LoadData()
         {
             expenseList.Clear();
-
             QuerySettings querySettings = _configManager.GetQuerySettings("LoadFinanceData");
-
             ObservableCollection<ExpenseItem> loadedData = _dataLoadingService.LoadData(_connectionString, querySettings);
             foreach (var expense in loadedData)
             {
@@ -55,7 +120,6 @@ namespace FinancialTracker
         {
             QuerySettings querySettings = _configManager.GetQuerySettings("LoadTotalExpensesData");
             double totalExpenses = _dataLoadingService.LoadTotalExpenses(_connectionString, querySettings);
-
             TotalExpensesTextBlock.Text = $"{totalExpenses:N2}";
         }
 
@@ -63,7 +127,6 @@ namespace FinancialTracker
         {
             QuerySettings querySettings = _configManager.GetQuerySettings("LoadExpensesByCategoryData");
             List<ExpenseByCategory> expensesByCategory = _dataLoadingService.LoadExpensesByCategory(_connectionString, querySettings);
-
             return expensesByCategory;
 
         }
@@ -73,7 +136,6 @@ namespace FinancialTracker
             if (TransactionListView.SelectedItem != null)
             {
                 ExpenseItem selectedExpense = (ExpenseItem)TransactionListView.SelectedItem;
-
                 EditExpenseWindow editExpenseWindow = new EditExpenseWindow(selectedExpense);
                 editExpenseWindow.DataUpdated += EditExpenseWindowDataUpdated;
                 editExpenseWindow.ShowDialog();
@@ -98,7 +160,7 @@ namespace FinancialTracker
             GenerateChart();
         }
 
-        private void PrintButtonClick(object sender, RoutedEventArgs e)
+    private void PrintButtonClick(object sender, RoutedEventArgs e)
         {
             try
             {
