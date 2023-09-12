@@ -35,4 +35,10 @@ namespace FinancialTracker.Utils
         public string Category { get; set; }
         public double TotalAmount { get; set; }
     }
+
+    public class DefaultSorting
+    {
+        public string SortColumn { get; set; }
+        public string SortDirection { get; set; }
+    }
 }

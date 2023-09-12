@@ -19,6 +19,10 @@
       "Query": "DELETE FROM finance WHERE id = @Id"
     }
   },
+  "DefaultSorting": {
+    "SortColumn": "Amount",
+    "SortDirection": "Ascending"
+  },
   "Categories": [
     {
       "CategoryName": "Groceries",

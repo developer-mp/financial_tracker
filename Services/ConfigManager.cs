@@ -1,6 +1,5 @@
 ﻿using FinancialTracker.Utils;
 using Microsoft.Extensions.Configuration;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -37,6 +36,16 @@ namespace FinancialTracker.Service
         {
             var categorySettings = Configuration.GetSection("Categories").Get<List<CategorySettings>>();
             return categorySettings.Select(category => category.CategoryName).ToList();
+        }
+
+        public DefaultSorting GetDefaultSorting()
+        {
+            var defaultSortingSection = Configuration.GetSection("DefaultSorting");
+            return new DefaultSorting
+            {
+                SortColumn = defaultSortingSection["SortColumn"],
+                SortDirection = defaultSortingSection["SortDirection"].ToLower() == "ascending" ? "Ascending" : "Descending"
+            };
         }
 
     }

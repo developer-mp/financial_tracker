@@ -46,19 +46,32 @@ namespace FinancialTracker
 
         private void SetDefaultSorting()
         {
+            var defaultSorting = _configManager.GetDefaultSorting();
+
             GridView gridView = TransactionListView.View as GridView;
 
-            if (gridView != null)
+            if (gridView != null && defaultSorting != null)
             {
-                var dateColumn = gridView.Columns.FirstOrDefault(column => column.Header.ToString() == "Date");
+                var sortColumn = gridView.Columns.FirstOrDefault(column => column.Header.ToString() == defaultSorting.SortColumn);
 
-                if (dateColumn != null)
+                if (sortColumn != null)
                 {
-                    dateColumn.HeaderTemplate = Resources["HeaderArrowDown"] as DataTemplate;
+                    ListSortDirection sortDirection = defaultSorting.SortDirection == "Ascending"
+                        ? ListSortDirection.Ascending
+                        : ListSortDirection.Descending;
+
+                    if (sortDirection == ListSortDirection.Ascending)
+                    {
+                        sortColumn.HeaderTemplate = Resources["HeaderArrowUp"] as DataTemplate;
+                    }
+                    else
+                    {
+                        sortColumn.HeaderTemplate = Resources["HeaderArrowDown"] as DataTemplate;
+                    }
+
+                    Sort(sortColumn.Header.ToString(), sortDirection);
                 }
             }
-
-            Sort("Date", ListSortDirection.Descending);
         }
 
         private void ColumnHeaderClicked(object sender, RoutedEventArgs e)
@@ -70,9 +83,11 @@ namespace FinancialTracker
             {
                 if (headerClicked.Role != GridViewColumnHeaderRole.Padding)
                 {
-                    if (headerClicked != _lastHeaderClicked)
+                    if (headerClicked == _lastHeaderClicked)
                     {
-                        direction = ListSortDirection.Ascending;
+                        direction = _lastDirection == ListSortDirection.Ascending
+                            ? ListSortDirection.Descending
+                            : ListSortDirection.Ascending;
                     }
                     else
                     {
@@ -88,6 +103,8 @@ namespace FinancialTracker
 
                     var columnBinding = headerClicked.Column.DisplayMemberBinding as Binding;
                     var sortBy = columnBinding?.Path.Path ?? headerClicked.Column.Header as string;
+
+                    ClearSorting();
 
                     Sort(sortBy, direction);
 
@@ -112,6 +129,22 @@ namespace FinancialTracker
                 }
             }
         }
+
+        
+        private void ClearSorting()
+        {
+            if (TransactionListView.View is GridView gridView)
+            {
+                 ICollectionView dataView = CollectionViewSource.GetDefaultView(TransactionListView.ItemsSource);
+                dataView.SortDescriptions.Clear();
+
+                foreach (GridViewColumn column in gridView.Columns)
+                {
+                    column.HeaderTemplate = null;
+                }
+            }
+        }
+
 
         private void Sort(string sortBy, ListSortDirection direction)
         {
