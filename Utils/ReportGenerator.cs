@@ -8,9 +8,9 @@ using Microsoft.Win32;
 
 namespace FinancialTracker.Utils
 {
-    public class PdfGenerator
+    public class ReportGenerator
     {
-        public static void GenerateReport(string pdfFilePath, string totalExpensesText, BitmapImage chartImage)
+        public static void CreateReport(string pdfFilePath, string totalExpensesText, BitmapImage chartImage)
         {
             try
             {

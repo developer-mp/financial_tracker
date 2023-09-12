@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using FinancialTracker.Models;
 using FinancialTracker.Service;
 using FinancialTracker.Utils;
 
@@ -17,7 +18,7 @@ namespace FinancialTracker
         private DataLoadingService _dataLoadingService;
         private string _connectionString;
         public ObservableCollection<ExpenseItem> expenseList = new ObservableCollection<ExpenseItem>();
-        private SortingHelper _sortingHelper;
+        private SortingHandler _sortingHandler;
 
         public MainWindow()
         {
@@ -32,27 +33,27 @@ namespace FinancialTracker
             LoadTotalExpensesByCategory();
             GenerateChart();
             DataContext = this;
-            _sortingHelper = new SortingHelper(this, TransactionListView);
+            _sortingHandler = new SortingHandler(this, TransactionListView);
             SetDefaultSorting();
         }
 
         private void SetDefaultSorting()
         {
             var defaultSorting = _configManager.GetDefaultSorting();
-            _sortingHelper.SetDefaultSorting(defaultSorting.SortColumn, defaultSorting.SortDirection);
+            _sortingHandler.SetDefaultSorting(defaultSorting.SortColumn, defaultSorting.SortDirection);
         }
 
         private void ColumnHeaderClicked(object sender, RoutedEventArgs e)
         {
             var headerClicked = e.OriginalSource as GridViewColumnHeader;
-            _sortingHelper.ColumnHeaderClicked(headerClicked);
+            _sortingHandler.ColumnHeaderClicked(headerClicked);
         }
 
         private void LoadData()
         {
             expenseList.Clear();
-            QuerySettings querySettings = _configManager.GetQuerySettings("LoadFinanceData");
-            ObservableCollection<ExpenseItem> loadedData = _dataLoadingService.LoadData(_connectionString, querySettings);
+            DbQuery DbQuery = _configManager.GetDbQuery("LoadFinanceData");
+            ObservableCollection<ExpenseItem> loadedData = _dataLoadingService.LoadData(_connectionString, DbQuery);
             foreach (var expense in loadedData)
             {
                 expenseList.Add(expense);
@@ -61,15 +62,15 @@ namespace FinancialTracker
 
         private void LoadTotalExpenses()
         {
-            QuerySettings querySettings = _configManager.GetQuerySettings("LoadTotalExpensesData");
-            double totalExpenses = _dataLoadingService.LoadTotalExpenses(_connectionString, querySettings);
+            DbQuery DbQuery = _configManager.GetDbQuery("LoadTotalExpensesData");
+            double totalExpenses = _dataLoadingService.LoadTotalExpenses(_connectionString, DbQuery);
             TotalExpensesTextBlock.Text = $"{totalExpenses:N2}";
         }
 
         private List<ExpenseByCategory> LoadTotalExpensesByCategory()
         {
-            QuerySettings querySettings = _configManager.GetQuerySettings("LoadExpensesByCategoryData");
-            List<ExpenseByCategory> expensesByCategory = _dataLoadingService.LoadExpensesByCategory(_connectionString, querySettings);
+            DbQuery DbQuery = _configManager.GetDbQuery("LoadExpensesByCategoryData");
+            List<ExpenseByCategory> expensesByCategory = _dataLoadingService.LoadExpensesByCategory(_connectionString, DbQuery);
             return expensesByCategory;
 
         }
@@ -107,12 +108,12 @@ namespace FinancialTracker
         {
             string pdfFilePath = null;
 
-            if (PdfGenerator.SaveReport(out pdfFilePath))
+            if (ReportGenerator.SaveReport(out pdfFilePath))
             {
                 string totalExpensesText = TotalExpensesTextBlock.Text;
                 BitmapImage chartImage = (BitmapImage)ChartImage.Source;
 
-                PdfGenerator.GenerateReport(pdfFilePath, totalExpensesText, chartImage);
+                ReportGenerator.CreateReport(pdfFilePath, totalExpensesText, chartImage);
             }
         }
 

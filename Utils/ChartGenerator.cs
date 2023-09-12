@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Media.Imaging;
+using FinancialTracker.Models;
 using Python.Runtime;
 
 namespace FinancialTracker.Utils

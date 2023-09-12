@@ -1,4 +1,4 @@
-﻿using FinancialTracker.Utils;
+﻿using FinancialTracker.Models;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using System.IO;
@@ -17,25 +17,25 @@ namespace FinancialTracker.Service
                 .AddJsonFile("config.json")
                 .Build();
         }
-        public QuerySettings GetQuerySettings(string queryName)
+        public DbQuery GetDbQuery(string queryName)
         {
-            var querySettingsSection = Configuration.GetSection($"Queries:{queryName}");
-            return new QuerySettings
+            var DbQuerySection = Configuration.GetSection($"Queries:{queryName}");
+            return new DbQuery
             {
-                Query = querySettingsSection["Query"]
+                Query = DbQuerySection["Query"]
             };
         }
 
         public List<string> GetCategoryColors()
         {
-            var categorySettings = Configuration.GetSection("Categories").Get<List<CategorySettings>>();
-            return categorySettings.Select(category => category.CategoryColor).ToList();
+            var Category = Configuration.GetSection("Categories").Get<List<Category>>();
+            return Category.Select(category => category.CategoryColor).ToList();
         }
 
         public List<string> GetCategoryNames()
         {
-            var categorySettings = Configuration.GetSection("Categories").Get<List<CategorySettings>>();
-            return categorySettings.Select(category => category.CategoryName).ToList();
+            var Category = Configuration.GetSection("Categories").Get<List<Category>>();
+            return Category.Select(category => category.CategoryName).ToList();
         }
 
         public DefaultSorting GetDefaultSorting()

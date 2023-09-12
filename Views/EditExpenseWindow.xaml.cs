@@ -1,5 +1,5 @@
-﻿using FinancialTracker.Service;
-using FinancialTracker.Utils;
+﻿using FinancialTracker.Models;
+using FinancialTracker.Service;
 using System;
 using System.Windows;
 using System.Windows.Controls;
@@ -50,8 +50,8 @@ namespace FinancialTracker
                 }
 
                 _selectedExpense.Amount = Convert.ToDouble(AmountTextBox.Text);
-                QuerySettings updateQuerySettings = _configManager.GetQuerySettings("UpdateExpenseData");
-                _dataLoadingService.UpdateExpense(_connectionString, updateQuerySettings, _selectedExpense);
+                DbQuery updateDbQuery = _configManager.GetDbQuery("UpdateExpenseData");
+                _dataLoadingService.UpdateExpense(_connectionString, updateDbQuery, _selectedExpense);
                 DataUpdated?.Invoke(this, EventArgs.Empty);
                 Close();
 
@@ -67,8 +67,8 @@ namespace FinancialTracker
         {
             try
             {
-                QuerySettings deleteQuerySettings = _configManager.GetQuerySettings("DeleteExpenseData");
-                _dataLoadingService.DeleteExpense(_connectionString, deleteQuerySettings, _selectedExpense);
+                DbQuery deleteDbQuery = _configManager.GetDbQuery("DeleteExpenseData");
+                _dataLoadingService.DeleteExpense(_connectionString, deleteDbQuery, _selectedExpense);
                 DataUpdated?.Invoke(this, EventArgs.Empty);
                 Close();
 

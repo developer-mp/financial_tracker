@@ -1,4 +1,4 @@
-﻿using FinancialTracker.Utils;
+﻿using FinancialTracker.Models;
 using Microsoft.Extensions.Configuration;
 using System.IO;
 
@@ -16,22 +16,22 @@ namespace FinancialTracker.Service
                 .Build();
         }
 
-        public DbSettings GetDbSettings()
+        public DbConnection GetDbConnection()
         {
-            var dbSettingsSection = Configuration.GetSection("Db");
-            return new DbSettings
+            var DbConnectionSection = Configuration.GetSection("Db");
+            return new DbConnection
             {
-                Host = dbSettingsSection["Host"],
-                Username = dbSettingsSection["Username"],
-                Password = dbSettingsSection["Password"],
-                DbName = dbSettingsSection["DbName"]
+                Host = DbConnectionSection["Host"],
+                Username = DbConnectionSection["Username"],
+                Password = DbConnectionSection["Password"],
+                DbName = DbConnectionSection["DbName"]
             };
         }
 
         public string GetConnectionString()
         {
-            var dbSettings = GetDbSettings();
-            return $"Host={dbSettings.Host};Username={dbSettings.Username};Password={dbSettings.Password};Database={dbSettings.DbName}";
+            var DbConnection = GetDbConnection();
+            return $"Host={DbConnection.Host};Username={DbConnection.Username};Password={DbConnection.Password};Database={DbConnection.DbName}";
         }
 
         public string GetPythonDLLPath()

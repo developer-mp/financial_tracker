@@ -1,4 +1,4 @@
-﻿using FinancialTracker.Utils;
+﻿using FinancialTracker.Models;
 using Npgsql;
 using System;
 using System.Collections.Generic;
@@ -18,13 +18,13 @@ public class DataLoadingService
             }
         }
     }
-    public ObservableCollection<ExpenseItem> LoadData(string connectionString, QuerySettings querySettings)
+    public ObservableCollection<ExpenseItem> LoadData(string connectionString, DbQuery DbQuery)
     {
         ObservableCollection<ExpenseItem> expenseList = new ObservableCollection<ExpenseItem>();
 
         ExecuteDbCommand(connectionString, (conn, cmd) =>
         {
-            cmd.CommandText = querySettings.Query;
+            cmd.CommandText = DbQuery.Query;
             using (var reader = cmd.ExecuteReader())
             {
                 while (reader.Read())
@@ -46,13 +46,13 @@ public class DataLoadingService
         return expenseList;
     }
 
-    public double LoadTotalExpenses(string connectionString, QuerySettings querySettings)
+    public double LoadTotalExpenses(string connectionString, DbQuery DbQuery)
     {
         double totalExpenses = 0;
 
         ExecuteDbCommand(connectionString, (conn, cmd) =>
         {
-            cmd.CommandText = querySettings.Query;
+            cmd.CommandText = DbQuery.Query;
             var result = cmd.ExecuteScalar();
             if (result != null && result != DBNull.Value)
             {
@@ -63,13 +63,13 @@ public class DataLoadingService
         return totalExpenses;
     }
 
-    public List<ExpenseByCategory> LoadExpensesByCategory(string connectionString, QuerySettings querySettings)
+    public List<ExpenseByCategory> LoadExpensesByCategory(string connectionString, DbQuery DbQuery)
     {
         List<ExpenseByCategory> expensesByCategory = new List<ExpenseByCategory>();
 
         ExecuteDbCommand(connectionString, (conn, cmd) =>
         {
-            cmd.CommandText = querySettings.Query;
+            cmd.CommandText = DbQuery.Query;
             using (var reader = cmd.ExecuteReader())
             {
                 while (reader.Read())
@@ -88,11 +88,11 @@ public class DataLoadingService
         return expensesByCategory;
     }
 
-    public void InsertExpense(string connectionString, QuerySettings querySettings, ExpenseItem newExpense)
+    public void InsertExpense(string connectionString, DbQuery DbQuery, ExpenseItem newExpense)
     {
         ExecuteDbCommand(connectionString, (conn, cmd) =>
         {
-            cmd.CommandText = querySettings.Query;
+            cmd.CommandText = DbQuery.Query;
 
             cmd.Parameters.AddWithValue("Id", newExpense.Id);
             cmd.Parameters.AddWithValue("Date", newExpense.Date);
@@ -104,11 +104,11 @@ public class DataLoadingService
         });
     }
 
-    public void UpdateExpense(string connectionString, QuerySettings querySettings, ExpenseItem updatedExpense)
+    public void UpdateExpense(string connectionString, DbQuery DbQuery, ExpenseItem updatedExpense)
     {
         ExecuteDbCommand(connectionString, (conn, cmd) =>
         {
-            cmd.CommandText = querySettings.Query;
+            cmd.CommandText = DbQuery.Query;
 
             cmd.Parameters.AddWithValue("Id", updatedExpense.Id);
             cmd.Parameters.AddWithValue("Date", updatedExpense.Date);
@@ -120,11 +120,11 @@ public class DataLoadingService
         });
     }
 
-    public void DeleteExpense(string connectionString, QuerySettings querySettings, ExpenseItem selectedExpense)
+    public void DeleteExpense(string connectionString, DbQuery DbQuery, ExpenseItem selectedExpense)
     {
         ExecuteDbCommand(connectionString, (conn, cmd) =>
         {
-            cmd.CommandText = querySettings.Query;
+            cmd.CommandText = DbQuery.Query;
 
             cmd.Parameters.AddWithValue("Id", selectedExpense.Id);
 

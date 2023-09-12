@@ -6,14 +6,14 @@ using System.Windows.Data;
 
 namespace FinancialTracker
 {
-    public class SortingHelper
+    public class SortingHandler
     {
         private GridViewColumnHeader _lastHeaderClicked = null;
         private ListSortDirection _lastDirection = ListSortDirection.Ascending;
         private FrameworkElement _mainWindow;
         private ListView _listView;
 
-        public SortingHelper(FrameworkElement mainWindow, ListView listView)
+        public SortingHandler(FrameworkElement mainWindow, ListView listView)
         {
             _mainWindow = mainWindow;
             _listView = listView;

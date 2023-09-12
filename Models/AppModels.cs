@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace FinancialTracker.Utils
+namespace FinancialTracker.Models
 {
-    public class DbSettings
+    public class DbConnection
     {
         public string Host { get; set; }
         public string Username { get; set; }
@@ -10,12 +10,12 @@ namespace FinancialTracker.Utils
         public string DbName { get; set; }
     }
 
-    public class QuerySettings
+    public class DbQuery
     {
         public string Query { get; set; }
     }
 
-    public class CategorySettings
+    public class Category
     {
         public string CategoryName { get; set; }
         public string CategoryColor { get; set; }

@@ -1,5 +1,5 @@
-﻿using FinancialTracker.Service;
-using FinancialTracker.Utils;
+﻿using FinancialTracker.Models;
+using FinancialTracker.Service;
 using System;
 using System.Collections.Generic;
 using System.Windows;
@@ -58,8 +58,8 @@ namespace FinancialTracker
                 }
 
                 newExpense.Amount = Convert.ToDouble(AmountTextBox.Text);
-                QuerySettings insertQuerySettings = _configManager.GetQuerySettings("AddExpenseData");
-                _dataLoadingService.InsertExpense(_connectionString, insertQuerySettings, newExpense);
+                DbQuery insertDbQuery = _configManager.GetDbQuery("AddExpenseData");
+                _dataLoadingService.InsertExpense(_connectionString, insertDbQuery, newExpense);
                 _mainWindow.expenseList.Add(newExpense);
                 Close();
 
