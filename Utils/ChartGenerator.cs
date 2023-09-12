@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Media.Imaging;
-using FinancialTracker.Utils;
 using Python.Runtime;
 
-namespace FinancialTracker
+namespace FinancialTracker.Utils
 {
     public class ChartGenerator
     {
