@@ -7,7 +7,6 @@ using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using FinancialTracker.Service;
 using FinancialTracker.Utils;
-using Microsoft.Win32;
 
 namespace FinancialTracker
 {
@@ -106,29 +105,17 @@ namespace FinancialTracker
 
         private void PrintButtonClick(object sender, RoutedEventArgs e)
         {
-            try
+            string pdfFilePath = null;
+
+            if (PdfGenerator.SaveReport(out pdfFilePath))
             {
-                SaveFileDialog saveFileDialog = new SaveFileDialog();
-                saveFileDialog.Filter = "PDF Files|*.pdf";
-                saveFileDialog.Title = "Save PDF Report";
-                saveFileDialog.FileName = "SummaryReport.pdf";
+                string totalExpensesText = TotalExpensesTextBlock.Text;
+                BitmapImage chartImage = (BitmapImage)ChartImage.Source;
 
-                if (saveFileDialog.ShowDialog() == true)
-                {
-                    string pdfFilePath = saveFileDialog.FileName;
-                    string totalExpensesText = TotalExpensesTextBlock.Text;
-                    BitmapImage chartImage = (BitmapImage)ChartImage.Source;
-
-                    PdfGenerator.GenerateAndSavePDF(pdfFilePath, totalExpensesText, chartImage);
-
-                    MessageBox.Show("PDF report saved successfully", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error saving PDF report: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                PdfGenerator.GenerateReport(pdfFilePath, totalExpensesText, chartImage);
             }
         }
+
         private void GenerateChart()
         {
             string pythonDllPath = _envManager.GetPythonDLLPath();

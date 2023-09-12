@@ -4,12 +4,13 @@ using iTextSharp.text;
 using iTextSharp.text.pdf;
 using System.Windows.Media.Imaging;
 using System.Windows;
+using Microsoft.Win32;
 
 namespace FinancialTracker.Utils
 {
     public class PdfGenerator
     {
-        public static void GenerateAndSavePDF(string pdfFilePath, string totalExpensesText, BitmapImage chartImage)
+        public static void GenerateReport(string pdfFilePath, string totalExpensesText, BitmapImage chartImage)
         {
             try
             {
@@ -54,5 +55,30 @@ namespace FinancialTracker.Utils
                 MessageBox.Show($"Error generating PDF report: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+        public static bool SaveReport(out string pdfFilePath)
+        {
+            pdfFilePath = null;
+
+            try
+            {
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                saveFileDialog.Filter = "PDF Files|*.pdf";
+                saveFileDialog.Title = "Save PDF Report";
+                saveFileDialog.FileName = "SummaryReport.pdf";
+
+                if (saveFileDialog.ShowDialog() == true)
+                {
+                    pdfFilePath = saveFileDialog.FileName;
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error preparing PDF report: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
+            return false;
+        }
     }
 }
+
