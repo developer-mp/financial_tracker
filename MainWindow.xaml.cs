@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.IO;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using FinancialTracker.Service;
@@ -24,9 +21,7 @@ namespace FinancialTracker
         private DataLoadingService _dataLoadingService;
         private string _connectionString;
         public ObservableCollection<ExpenseItem> expenseList = new ObservableCollection<ExpenseItem>();
-
-        GridViewColumnHeader _lastHeaderClicked = null;
-        ListSortDirection _lastDirection = ListSortDirection.Ascending;
+        private SortingHelper _sortingHelper;
 
         public MainWindow()
         {
@@ -41,119 +36,20 @@ namespace FinancialTracker
             LoadTotalExpensesByCategory();
             GenerateChart();
             DataContext = this;
+            _sortingHelper = new SortingHelper(this, TransactionListView);
             SetDefaultSorting();
         }
 
         private void SetDefaultSorting()
         {
             var defaultSorting = _configManager.GetDefaultSorting();
-
-            GridView gridView = TransactionListView.View as GridView;
-
-            if (gridView != null && defaultSorting != null)
-            {
-                var sortColumn = gridView.Columns.FirstOrDefault(column => column.Header.ToString() == defaultSorting.SortColumn);
-
-                if (sortColumn != null)
-                {
-                    ListSortDirection sortDirection = defaultSorting.SortDirection == "Ascending"
-                        ? ListSortDirection.Ascending
-                        : ListSortDirection.Descending;
-
-                    if (sortDirection == ListSortDirection.Ascending)
-                    {
-                        sortColumn.HeaderTemplate = Resources["HeaderArrowUp"] as DataTemplate;
-                    }
-                    else
-                    {
-                        sortColumn.HeaderTemplate = Resources["HeaderArrowDown"] as DataTemplate;
-                    }
-
-                    Sort(sortColumn.Header.ToString(), sortDirection);
-                }
-            }
+            _sortingHelper.SetDefaultSorting(defaultSorting.SortColumn, defaultSorting.SortDirection);
         }
 
         private void ColumnHeaderClicked(object sender, RoutedEventArgs e)
         {
             var headerClicked = e.OriginalSource as GridViewColumnHeader;
-            ListSortDirection direction;
-
-            if (headerClicked != null)
-            {
-                if (headerClicked.Role != GridViewColumnHeaderRole.Padding)
-                {
-                    if (headerClicked == _lastHeaderClicked)
-                    {
-                        direction = _lastDirection == ListSortDirection.Ascending
-                            ? ListSortDirection.Descending
-                            : ListSortDirection.Ascending;
-                    }
-                    else
-                    {
-                        if (_lastDirection == ListSortDirection.Ascending)
-                        {
-                            direction = ListSortDirection.Descending;
-                        }
-                        else
-                        {
-                            direction = ListSortDirection.Ascending;
-                        }
-                    }
-
-                    var columnBinding = headerClicked.Column.DisplayMemberBinding as Binding;
-                    var sortBy = columnBinding?.Path.Path ?? headerClicked.Column.Header as string;
-
-                    ClearSorting();
-
-                    Sort(sortBy, direction);
-
-                    if (direction == ListSortDirection.Ascending)
-                    {
-                        headerClicked.Column.HeaderTemplate =
-                          Resources["HeaderArrowUp"] as DataTemplate;
-                    }
-                    else
-                    {
-                        headerClicked.Column.HeaderTemplate =
-                          Resources["HeaderArrowDown"] as DataTemplate;
-                    }
-
-                    if (_lastHeaderClicked != null && _lastHeaderClicked != headerClicked)
-                    {
-                        _lastHeaderClicked.Column.HeaderTemplate = null;
-                    }
-
-                    _lastHeaderClicked = headerClicked;
-                    _lastDirection = direction;
-                }
-            }
-        }
-
-        
-        private void ClearSorting()
-        {
-            if (TransactionListView.View is GridView gridView)
-            {
-                 ICollectionView dataView = CollectionViewSource.GetDefaultView(TransactionListView.ItemsSource);
-                dataView.SortDescriptions.Clear();
-
-                foreach (GridViewColumn column in gridView.Columns)
-                {
-                    column.HeaderTemplate = null;
-                }
-            }
-        }
-
-
-        private void Sort(string sortBy, ListSortDirection direction)
-        {
-            ICollectionView dataView = CollectionViewSource.GetDefaultView(TransactionListView.ItemsSource);
-
-            dataView.SortDescriptions.Clear();
-            SortDescription sd = new SortDescription(sortBy, direction);
-            dataView.SortDescriptions.Add(sd);
-            dataView.Refresh();
+            _sortingHelper.ColumnHeaderClicked(headerClicked);
         }
 
         private void LoadData()
