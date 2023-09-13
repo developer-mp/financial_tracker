@@ -1,5 +1,6 @@
 ﻿using FinancialTracker.Models;
 using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -48,5 +49,15 @@ namespace FinancialTracker.Service
             };
         }
 
+        public ErrorMessage GetErrorMessage(string errorName, bool isSuccess = false)
+        {
+            var errorMessageSection = Configuration.GetSection($"Errors:{errorName}");
+
+            return new ErrorMessage
+            {
+                Success = isSuccess ? errorMessageSection["Success"] : errorMessageSection["Error"],
+                Error = errorMessageSection["Error"]
+            };
+        }
     }
 }

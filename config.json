@@ -56,5 +56,27 @@
       "CategoryName": "Utilities",
       "CategoryColor": "#82D5F9"
     }
-  ]
+  ],
+  "Errors": {
+    "ValidateAmount": {
+      "Success": "Amount is valid",
+      "Error": "Invalid amount. Only decimal numbers are allowed"
+    },
+    "AddNewRecord": {
+      "Success": "New record added successfully",
+      "Error": "Error adding a new record"
+    },
+    "UpdateRecord": {
+      "Success": "Record updated successfully",
+      "Error": "Error updating record"
+    },
+    "DeleteRecord": {
+      "Success": "Record deleted successfully",
+      "Error": "Error deleting record"
+    },
+    "SaveReport": {
+      "Success": "PDF report saved successfully",
+      "Error": "Error saving PDF report"
+    }
+  }
 }

@@ -41,4 +41,10 @@ namespace FinancialTracker.Models
         public string SortColumn { get; set; }
         public string SortDirection { get; set; }
     }
+
+    public class ErrorMessage
+    {
+        public string Success { get; set; }
+        public string Error { get; set; }
+    }
 }

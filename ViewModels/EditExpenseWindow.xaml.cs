@@ -55,11 +55,12 @@ namespace FinancialTracker
                 DataUpdated?.Invoke(this, EventArgs.Empty);
                 Close();
 
-                MessageBox.Show("Record updated successfully", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                ErrorMessageGenerator.ShowSuccess("UpdateRecord", _configManager);
             }
             catch (FormatException ex)
             {
-                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                ErrorMessageGenerator.ShowError("UpdateRecord", _configManager);
+                Console.WriteLine($"Error updating record: {ex.Message}");
             }
         }
 
@@ -72,18 +73,26 @@ namespace FinancialTracker
                 DataUpdated?.Invoke(this, EventArgs.Empty);
                 Close();
 
-                MessageBox.Show("Record deleted successfully", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                ErrorMessageGenerator.ShowSuccess("DeleteRecord", _configManager);
             }
             catch (FormatException ex)
             {
-                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                ErrorMessageGenerator.ShowError("DeleteRecord", _configManager);
+                Console.WriteLine($"Error deleting record: {ex.Message}");
             }
 
         }
 
         private void OnTextChanged(object sender, TextChangedEventArgs e)
         {
-            _buttonStateHelper.UpdateButtonState();
+            try
+            {
+                _buttonStateHelper.UpdateButtonState();
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine($"Error updating button state: {ex.Message}");
+            }
         }
     }
 }

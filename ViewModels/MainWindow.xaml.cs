@@ -39,102 +39,169 @@ namespace FinancialTracker
 
         private void SetDefaultSorting()
         {
-            var defaultSorting = _configManager.GetDefaultSorting();
-            _sortingHandler.SetDefaultSorting(defaultSorting.SortColumn, defaultSorting.SortDirection);
+            try
+            {
+                var defaultSorting = _configManager.GetDefaultSorting();
+                _sortingHandler.SetDefaultSorting(defaultSorting.SortColumn, defaultSorting.SortDirection);
+            }
+            catch (FormatException ex)
+            {
+                Console.WriteLine($"Error default sorting: {ex.Message}");
+            }
         }
 
         private void ColumnHeaderClicked(object sender, RoutedEventArgs e)
         {
-            var headerClicked = e.OriginalSource as GridViewColumnHeader;
-            _sortingHandler.ColumnHeaderClicked(headerClicked);
+            try
+            {
+                var headerClicked = e.OriginalSource as GridViewColumnHeader;
+                _sortingHandler.ColumnHeaderClicked(headerClicked);
+            }
+            catch (FormatException ex)
+            {
+                Console.WriteLine($"Error sorting column headers: {ex.Message}");
+            }
         }
 
         private void LoadData()
         {
-            expenseList.Clear();
-            DbQuery DbQuery = _configManager.GetDbQuery("LoadFinanceData");
-            ObservableCollection<ExpenseItem> loadedData = _dataLoadingService.LoadData(_connectionString, DbQuery);
-            foreach (var expense in loadedData)
+            try
             {
-                expenseList.Add(expense);
+                expenseList.Clear();
+                DbQuery DbQuery = _configManager.GetDbQuery("LoadFinanceData");
+                ObservableCollection<ExpenseItem> loadedData = _dataLoadingService.LoadData(_connectionString, DbQuery);
+                foreach (var expense in loadedData)
+                {
+                    expenseList.Add(expense);
+                }
+            }
+            catch (FormatException ex)
+            {
+                Console.WriteLine($"Error loading data: {ex.Message}");
             }
         }
 
         private void LoadTotalExpenses()
         {
-            DbQuery DbQuery = _configManager.GetDbQuery("LoadTotalExpensesData");
-            double totalExpenses = _dataLoadingService.LoadTotalExpenses(_connectionString, DbQuery);
-            TotalExpensesTextBlock.Text = $"{totalExpenses:N2}";
+            try
+            {
+                DbQuery DbQuery = _configManager.GetDbQuery("LoadTotalExpensesData");
+                double totalExpenses = _dataLoadingService.LoadTotalExpenses(_connectionString, DbQuery);
+                TotalExpensesTextBlock.Text = $"{totalExpenses:N2}";
+            }
+            catch (FormatException ex)
+            {
+                Console.WriteLine($"Error loading total expenses: {ex.Message}");
+            }
         }
 
         private List<ExpenseByCategory> LoadTotalExpensesByCategory()
         {
-            DbQuery DbQuery = _configManager.GetDbQuery("LoadExpensesByCategoryData");
-            List<ExpenseByCategory> expensesByCategory = _dataLoadingService.LoadExpensesByCategory(_connectionString, DbQuery);
-            return expensesByCategory;
-
+            try
+            {
+                DbQuery DbQuery = _configManager.GetDbQuery("LoadExpensesByCategoryData");
+                List<ExpenseByCategory> expensesByCategory = _dataLoadingService.LoadExpensesByCategory(_connectionString, DbQuery);
+                return expensesByCategory;
+            }
+            catch (FormatException ex)
+            {
+                Console.WriteLine($"Error loading total expenses by category: {ex.Message}");
+                return null;
+            }
         }
 
         private void TransactionListViewEdit(object sender, MouseButtonEventArgs e)
         {
-            if (TransactionListView.SelectedItem != null)
+            try
             {
-                ExpenseItem selectedExpense = (ExpenseItem)TransactionListView.SelectedItem;
-                EditExpenseWindow editExpenseWindow = new EditExpenseWindow(selectedExpense);
-                editExpenseWindow.DataUpdated += EditExpenseWindowDataUpdated;
-                editExpenseWindow.ShowDialog();
+                if (TransactionListView.SelectedItem != null)
+                {
+                    ExpenseItem selectedExpense = (ExpenseItem)TransactionListView.SelectedItem;
+                    EditExpenseWindow editExpenseWindow = new EditExpenseWindow(selectedExpense);
+                    editExpenseWindow.DataUpdated += EditExpenseWindowDataUpdated;
+                    editExpenseWindow.ShowDialog();
+                }
+            }
+            catch (FormatException ex)
+            {
+                Console.WriteLine($"Error displaying Edit View: {ex.Message}");
             }
         }
 
         private void EditExpenseWindowDataUpdated(object sender, EventArgs e)
         {
-            expenseList.Clear();
-            LoadData();
-            LoadTotalExpenses();
-            LoadTotalExpensesByCategory();
-            GenerateChart();
+            try
+            {
+                expenseList.Clear();
+                LoadData();
+                LoadTotalExpenses();
+                LoadTotalExpensesByCategory();
+                GenerateChart();
+            }
+            catch (FormatException ex)
+            {
+                Console.WriteLine($"Error loading updated records: {ex.Message}");
+            }
         }
 
         private void AddButtonClick(object sender, RoutedEventArgs e)
         {
-            AddExpenseWindow addExpenseWindow = new AddExpenseWindow(this);
-            addExpenseWindow.ShowDialog();
-            LoadTotalExpenses();
-            LoadTotalExpensesByCategory();
-            GenerateChart();
+            try
+            {
+                AddExpenseWindow addExpenseWindow = new AddExpenseWindow(this);
+                addExpenseWindow.ShowDialog();
+                LoadTotalExpenses();
+                LoadTotalExpensesByCategory();
+                GenerateChart();
+            }
+            catch (FormatException ex)
+            {
+                Console.WriteLine($"Error clicking Add button: {ex.Message}");
+            }
         }
 
         private void PrintButtonClick(object sender, RoutedEventArgs e)
         {
-            string pdfFilePath = null;
-
-            if (ReportGenerator.SaveReport(out pdfFilePath))
+            try
             {
-                string totalExpensesText = TotalExpensesTextBlock.Text;
-                BitmapImage chartImage = (BitmapImage)ChartImage.Source;
+                string pdfFilePath = null;
 
-                ReportGenerator.CreateReport(pdfFilePath, totalExpensesText, chartImage);
+                if (ReportGenerator.SaveReport(out pdfFilePath))
+                {
+                    string totalExpensesText = TotalExpensesTextBlock.Text;
+                    BitmapImage chartImage = (BitmapImage)ChartImage.Source;
+
+                    ReportGenerator.CreateReport(pdfFilePath, totalExpensesText, chartImage);
+                }
+            }
+            catch (FormatException ex)
+            {
+                Console.WriteLine($"Error clicking Print button: {ex.Message}");
             }
         }
 
         private void GenerateChart()
         {
-            string pythonDllPath = _envManager.GetPythonDLLPath();
-            List<string> categoryColors = _configManager.GetCategoryColors();
-
-            List<ExpenseByCategory> expensesByCategory = LoadTotalExpensesByCategory();
-
-            ChartGenerator chartGenerator = new ChartGenerator(pythonDllPath, categoryColors);
-            BitmapImage chartImage = chartGenerator.GenerateChart(expensesByCategory);
-
-            if (chartImage != null)
+            try
             {
-                ChartImage.Source = chartImage;
+                string pythonDllPath = _envManager.GetPythonDLLPath();
+                List<string> categoryColors = _configManager.GetCategoryColors();
+
+                List<ExpenseByCategory> expensesByCategory = LoadTotalExpensesByCategory();
+
+                ChartGenerator chartGenerator = new ChartGenerator(pythonDllPath, categoryColors);
+                BitmapImage chartImage = chartGenerator.GenerateChart(expensesByCategory);
+
+                if (chartImage != null)
+                {
+                    ChartImage.Source = chartImage;
+                }
             }
-            else
+            catch (FormatException ex)
             {
-                MessageBox.Show("Failed to generate the chart");
+                Console.WriteLine($"Error saving PDF report: {ex.Message}");
             }
+
         }
     }
 }

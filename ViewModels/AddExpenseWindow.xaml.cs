@@ -33,8 +33,15 @@ namespace FinancialTracker
 
         private void PopulateCategoryComboBox()
         {
-            List<string> categoryNames = _configManager.GetCategoryNames();
-            CategoryComboBox.ItemsSource = categoryNames;
+            try
+            {
+                List<string> categoryNames = _configManager.GetCategoryNames();
+                CategoryComboBox.ItemsSource = categoryNames;
+            }
+            catch (FormatException ex)
+            {
+                Console.WriteLine($"Error populating combo box: {ex.Message}");
+            }
         }
 
         private void SaveButtonClick(object sender, RoutedEventArgs e)
@@ -54,6 +61,7 @@ namespace FinancialTracker
 
                 if (!ValidationHelper.TryParseDouble(AmountTextBox, out double amount))
                 {
+                    ErrorMessageGenerator.ShowError("ValidateAmount", _configManager);
                     return;
                 }
 
@@ -63,22 +71,37 @@ namespace FinancialTracker
                 _mainWindow.expenseList.Add(newExpense);
                 Close();
 
-                MessageBox.Show("New record added successfully", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                ErrorMessageGenerator.ShowSuccess("AddNewRecord", _configManager);
             }
             catch (FormatException ex)
             {
-                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                ErrorMessageGenerator.ShowError("AddNewRecord", _configManager);
+                Console.WriteLine($"Error adding a new record: {ex.Message}");
             }
         }
 
         private void CancelButtonClick(object sender, RoutedEventArgs e)
         {
-            Close();
+            try
+            {
+                Close();
+            }
+            catch (FormatException ex)
+            {
+                Console.WriteLine($"Error clicking a cancel button: {ex.Message}");
+            }
         }
 
         private void OnTextChanged(object sender, TextChangedEventArgs e)
         {
-            _buttonStateHelper.UpdateButtonState();
+            try
+            {
+                _buttonStateHelper.UpdateButtonState();
+            }
+            catch (FormatException ex)
+            {
+                Console.WriteLine($"Error updating button state: {ex.Message}");
+            }
         }
     }
 }

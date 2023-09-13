@@ -1,5 +1,4 @@
-﻿using System.Windows;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 
 public static class ValidationHelper
 {
@@ -11,7 +10,6 @@ public static class ValidationHelper
         }
         else
         {
-            MessageBox.Show("Invalid amount. Only decimal numbers are allowed", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             return false;
         }
     }
