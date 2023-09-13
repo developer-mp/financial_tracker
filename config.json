@@ -75,8 +75,8 @@
       "Error": "Error deleting record"
     },
     "SaveReport": {
-      "Success": "PDF report saved successfully",
-      "Error": "Error saving PDF report"
+      "Success": "Report saved successfully",
+      "Error": "Error creating or saving the report"
     }
   }
 }

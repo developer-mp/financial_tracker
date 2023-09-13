@@ -8,6 +8,7 @@ using System.Windows.Media.Imaging;
 using FinancialTracker.Models;
 using FinancialTracker.Service;
 using FinancialTracker.Utils;
+using Microsoft.Win32;
 
 namespace FinancialTracker
 {
@@ -166,7 +167,7 @@ namespace FinancialTracker
             {
                 string pdfFilePath = null;
 
-                if (ReportGenerator.SaveReport(out pdfFilePath))
+                if (SaveReport(out pdfFilePath, _configManager))
                 {
                     string totalExpensesText = TotalExpensesTextBlock.Text;
                     BitmapImage chartImage = (BitmapImage)ChartImage.Source;
@@ -199,9 +200,36 @@ namespace FinancialTracker
             }
             catch (FormatException ex)
             {
-                Console.WriteLine($"Error saving PDF report: {ex.Message}");
+                Console.WriteLine($"Error saving the report: {ex.Message}");
             }
 
+        }
+
+        private static bool SaveReport(out string pdfFilePath, ConfigManager configManager)
+        {
+            pdfFilePath = null;
+
+            try
+            {
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                saveFileDialog.Filter = "PDF Files|*.pdf";
+                saveFileDialog.Title = "Save PDF Report";
+                saveFileDialog.FileName = "SummaryReport.pdf";
+
+                if (saveFileDialog.ShowDialog() == true)
+                {
+                    pdfFilePath = saveFileDialog.FileName;
+                    ErrorMessageGenerator.ShowSuccess("SaveReport", configManager);
+                    return true;
+                }        
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error saving the report: {ex.Message}");
+            }
+
+            ErrorMessageGenerator.ShowError("SaveReport", configManager);
+            return false;
         }
     }
 }

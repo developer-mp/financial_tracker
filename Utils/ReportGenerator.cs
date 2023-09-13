@@ -3,8 +3,6 @@ using System.IO;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using System.Windows.Media.Imaging;
-using Microsoft.Win32;
-using System.Windows;
 
 namespace FinancialTracker.Utils
 {
@@ -47,37 +45,11 @@ namespace FinancialTracker.Utils
                 doc.Add(table);
                 File.Delete(tempImagePath);
                 doc.Close();
-
-                MessageBox.Show("Report created successfully", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error creating PDF report: {ex.Message}");
+                Console.WriteLine($"Error creating report: {ex.Message}");
             }
-        }
-        public static bool SaveReport(out string pdfFilePath)
-        {
-            pdfFilePath = null;
-
-            try
-            {
-                SaveFileDialog saveFileDialog = new SaveFileDialog();
-                saveFileDialog.Filter = "PDF Files|*.pdf";
-                saveFileDialog.Title = "Save PDF Report";
-                saveFileDialog.FileName = "SummaryReport.pdf";
-
-                if (saveFileDialog.ShowDialog() == true)
-                {
-                    pdfFilePath = saveFileDialog.FileName;
-                    return true;
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error saving PDF report: {ex.Message}");
-            }
-
-            return false;
         }
     }
 }
