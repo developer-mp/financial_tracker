@@ -11,20 +11,21 @@ namespace FinancialTracker
         private MainWindow _mainWindow;
         private EnvService _envService;
         private ConfigService _configService;
-        private ExpenseManager _expenseManager;
         private DataLoadingService _dataLoadingService;
+        private ExpenseManager _expenseManager;
         private string _connectionString;
         private ButtonStateHelper _buttonStateHelper;
 
         public AddExpenseWindow(MainWindow mainWindow)
         {
             InitializeComponent();
+            _mainWindow = mainWindow;
+
             _envService = new EnvService();
             _configService = new ConfigService();
             _dataLoadingService = new DataLoadingService();
-            _expenseManager = new ExpenseManager(_configService, _dataLoadingService);
+            _expenseManager = new ExpenseManager();
             _connectionString = _envService.GetConnectionString();
-            _mainWindow = mainWindow;
 
             InitializeComboBox();
             InitializeButtonStateHelper();
@@ -56,8 +57,11 @@ namespace FinancialTracker
                     return;
                 }
 
-                ExpenseItem newExpense = _expenseManager.CreateNewExpense(Guid.NewGuid().ToString(),
-    DatePicker.SelectedDate ?? DateTime.Now, expenseText, CategoryComboBox.SelectedItem.ToString(), amount);
+                ExpenseItem newExpense = _expenseManager.CreateNewExpense(
+                    Guid.NewGuid().ToString(),
+                    DatePicker.SelectedDate ?? DateTime.Now, 
+                    expenseText, CategoryComboBox.SelectedItem.ToString(), 
+                    amount);
 
                 if (newExpense == null)
                 {
@@ -65,7 +69,7 @@ namespace FinancialTracker
                 }
 
                 DbQuery insertDbQuery = _configService.GetDbQuery("AddExpense");
-                _expenseManager.InsertExpenseToDatabase(_connectionString, insertDbQuery, newExpense);
+                _expenseManager.InsertNewExpense(_dataLoadingService, _connectionString, insertDbQuery, newExpense);
                 _mainWindow.expenseList.Add(newExpense);
                 Close();
                 ErrorMessageGenerator.ShowSuccess("AddNewRecord", _configService);
