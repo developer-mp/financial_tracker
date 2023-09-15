@@ -18,16 +18,18 @@ namespace FinancialTracker
         public EditExpenseWindow(ExpenseItem selectedExpense)
         {
             InitializeComponent();
+
             _envService = new EnvService();
             _configService = new ConfigService();
             _dataLoadingService = new DataLoadingService();
             _connectionString = _envService.GetConnectionString();
             _selectedExpense = selectedExpense;
-            _buttonStateHelper = new ButtonStateHelper(UpdateButton, ExpenseTextBox, AmountTextBox);
+
+            InitializeComboBox();
+            InitializeButtonStateHelper();
 
             DatePicker.SelectedDate = _selectedExpense.Date;
             ExpenseTextBox.Text = _selectedExpense.Expense;
-            ComboBoxHelper.PopulateCategoryComboBox(CategoryComboBox, _configService, _selectedExpense.Category);
             AmountTextBox.Text = _selectedExpense.Amount.ToString();
 
             ExpenseTextBox.TextChanged += OnTextChanged;
@@ -35,6 +37,16 @@ namespace FinancialTracker
         }
 
         public event EventHandler DataUpdated;
+
+        private void InitializeComboBox()
+        {
+            ComboBoxHelper.PopulateCategoryComboBox(CategoryComboBox, _configService, _selectedExpense.Category);
+        }
+
+        private void InitializeButtonStateHelper()
+        {
+            _buttonStateHelper = new ButtonStateHelper(UpdateButton, ExpenseTextBox, AmountTextBox);
+        }
 
         private void UpdateButtonClick(object sender, RoutedEventArgs e)
         {
@@ -44,12 +56,13 @@ namespace FinancialTracker
                 _selectedExpense.Expense = ExpenseTextBox.Text;
                 _selectedExpense.Category = CategoryComboBox.Text;
 
-                if (!ValidationHelper.TryParseDouble(AmountTextBox, out double amount))
+                if (!Double.TryParse(AmountTextBox.Text, out double amount))
                 {
+                    ErrorMessageGenerator.ShowError("ValidateAmount", _configService);
                     return;
                 }
 
-                _selectedExpense.Amount = Convert.ToDouble(AmountTextBox.Text);
+                _selectedExpense.Amount = amount;
                 DbQuery updateDbQuery = _configService.GetDbQuery("UpdateExpense");
                 _dataLoadingService.UpdateExpense(_connectionString, updateDbQuery, _selectedExpense);
                 DataUpdated?.Invoke(this, EventArgs.Empty);

@@ -60,7 +60,8 @@ namespace FinancialTracker
                 ExpenseItem newExpense = _expenseManager.CreateNewExpense(
                     Guid.NewGuid().ToString(),
                     DatePicker.SelectedDate ?? DateTime.Now, 
-                    expenseText, CategoryComboBox.SelectedItem.ToString(), 
+                    expenseText, 
+                    CategoryComboBox.SelectedItem.ToString(), 
                     amount);
 
                 if (newExpense == null)
