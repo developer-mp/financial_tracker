@@ -8,8 +8,8 @@ namespace FinancialTracker
 {
     public partial class EditExpenseWindow : Window
     {
-        private EnvManager _envManager;
-        private ConfigManager _configManager;
+        private EnvService _envService;
+        private ConfigService _configService;
         private DataLoadingService _dataLoadingService;
         private ExpenseItem _selectedExpense;
         private string _connectionString;
@@ -18,16 +18,16 @@ namespace FinancialTracker
         public EditExpenseWindow(ExpenseItem selectedExpense)
         {
             InitializeComponent();
-            _envManager = new EnvManager();
-            _configManager = new ConfigManager();
+            _envService = new EnvService();
+            _configService = new ConfigService();
             _dataLoadingService = new DataLoadingService();
-            _connectionString = _envManager.GetConnectionString();
+            _connectionString = _envService.GetConnectionString();
             _selectedExpense = selectedExpense;
             _buttonStateHelper = new ButtonStateHelper(UpdateButton, ExpenseTextBox, AmountTextBox);
 
             DatePicker.SelectedDate = _selectedExpense.Date;
             ExpenseTextBox.Text = _selectedExpense.Expense;
-            ComboBoxHelper.PopulateCategoryComboBox(CategoryComboBox, _configManager, _selectedExpense.Category);
+            ComboBoxHelper.PopulateCategoryComboBox(CategoryComboBox, _configService, _selectedExpense.Category);
             AmountTextBox.Text = _selectedExpense.Amount.ToString();
 
             ExpenseTextBox.TextChanged += OnTextChanged;
@@ -50,16 +50,16 @@ namespace FinancialTracker
                 }
 
                 _selectedExpense.Amount = Convert.ToDouble(AmountTextBox.Text);
-                DbQuery updateDbQuery = _configManager.GetDbQuery("UpdateExpense");
+                DbQuery updateDbQuery = _configService.GetDbQuery("UpdateExpense");
                 _dataLoadingService.UpdateExpense(_connectionString, updateDbQuery, _selectedExpense);
                 DataUpdated?.Invoke(this, EventArgs.Empty);
                 Close();
 
-                ErrorMessageGenerator.ShowSuccess("UpdateRecord", _configManager);
+                ErrorMessageGenerator.ShowSuccess("UpdateRecord", _configService);
             }
             catch (FormatException ex)
             {
-                ErrorMessageGenerator.ShowError("UpdateRecord", _configManager);
+                ErrorMessageGenerator.ShowError("UpdateRecord", _configService);
                 Console.WriteLine($"Error updating record: {ex.Message}");
             }
         }
@@ -68,16 +68,16 @@ namespace FinancialTracker
         {
             try
             {
-                DbQuery deleteDbQuery = _configManager.GetDbQuery("DeleteExpense");
+                DbQuery deleteDbQuery = _configService.GetDbQuery("DeleteExpense");
                 _dataLoadingService.DeleteExpense(_connectionString, deleteDbQuery, _selectedExpense);
                 DataUpdated?.Invoke(this, EventArgs.Empty);
                 Close();
 
-                ErrorMessageGenerator.ShowSuccess("DeleteRecord", _configManager);
+                ErrorMessageGenerator.ShowSuccess("DeleteRecord", _configService);
             }
             catch (FormatException ex)
             {
-                ErrorMessageGenerator.ShowError("DeleteRecord", _configManager);
+                ErrorMessageGenerator.ShowError("DeleteRecord", _configService);
                 Console.WriteLine($"Error deleting record: {ex.Message}");
             }
 

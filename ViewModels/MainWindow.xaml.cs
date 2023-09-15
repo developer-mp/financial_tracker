@@ -14,8 +14,8 @@ namespace FinancialTracker
 {
     public partial class MainWindow : Window
     {
-        private EnvManager _envManager;
-        private ConfigManager _configManager;
+        private EnvService _envService;
+        private ConfigService _configService;
         private DataLoadingService _dataLoadingService;
         private string _connectionString;
         public ObservableCollection<ExpenseItem> expenseList = new ObservableCollection<ExpenseItem>();
@@ -24,12 +24,12 @@ namespace FinancialTracker
         public MainWindow()
         {
             InitializeComponent();
-            _configManager = new ConfigManager();
+            _configService = new ConfigService();
             _dataLoadingService = new DataLoadingService();
-            _envManager = new EnvManager();
-            _connectionString = _envManager.GetConnectionString();
+            _envService = new EnvService();
+            _connectionString = _envService.GetConnectionString();
             TransactionListView.ItemsSource = expenseList;
-            LoadData();
+            LoadExpenses();
             LoadTotalExpenses();
             LoadTotalExpensesByCategory();
             GenerateChart();
@@ -42,7 +42,7 @@ namespace FinancialTracker
         {
             try
             {
-                var defaultSorting = _configManager.GetDefaultSorting();
+                var defaultSorting = _configService.GetDefaultSorting();
                 _sortingHandler.SetDefaultSorting(defaultSorting.SortColumn, defaultSorting.SortDirection);
             }
             catch (FormatException ex)
@@ -64,13 +64,13 @@ namespace FinancialTracker
             }
         }
 
-        private void LoadData()
+        private void LoadExpenses()
         {
             try
             {
                 expenseList.Clear();
-                DbQuery DbQuery = _configManager.GetDbQuery("LoadExpenses");
-                ObservableCollection<ExpenseItem> loadedData = _dataLoadingService.LoadData(_connectionString, DbQuery);
+                DbQuery DbQuery = _configService.GetDbQuery("LoadExpenses");
+                ObservableCollection<ExpenseItem> loadedData = _dataLoadingService.LoadExpenses(_connectionString, DbQuery);
                 foreach (var expense in loadedData)
                 {
                     expenseList.Add(expense);
@@ -86,7 +86,7 @@ namespace FinancialTracker
         {
             try
             {
-                DbQuery DbQuery = _configManager.GetDbQuery("LoadTotalExpenses");
+                DbQuery DbQuery = _configService.GetDbQuery("LoadTotalExpenses");
                 double totalExpenses = _dataLoadingService.LoadTotalExpenses(_connectionString, DbQuery);
                 TotalExpensesTextBlock.Text = $"{totalExpenses:N2}";
             }
@@ -100,7 +100,7 @@ namespace FinancialTracker
         {
             try
             {
-                DbQuery DbQuery = _configManager.GetDbQuery("LoadExpensesByCategory");
+                DbQuery DbQuery = _configService.GetDbQuery("LoadExpensesByCategory");
                 List<ExpenseByCategory> expensesByCategory = _dataLoadingService.LoadExpensesByCategory(_connectionString, DbQuery);
                 return expensesByCategory;
             }
@@ -134,7 +134,7 @@ namespace FinancialTracker
             try
             {
                 expenseList.Clear();
-                LoadData();
+                LoadExpenses();
                 LoadTotalExpenses();
                 LoadTotalExpensesByCategory();
                 GenerateChart();
@@ -167,7 +167,7 @@ namespace FinancialTracker
             {
                 string pdfFilePath = null;
 
-                if (SaveReport(out pdfFilePath, _configManager))
+                if (SaveReport(out pdfFilePath, _configService))
                 {
                     string totalExpensesText = TotalExpensesTextBlock.Text;
                     BitmapImage chartImage = (BitmapImage)ChartImage.Source;
@@ -185,8 +185,8 @@ namespace FinancialTracker
         {
             try
             {
-                string pythonDllPath = _envManager.GetPythonDLLPath();
-                List<string> categoryColors = _configManager.GetCategoryColors();
+                string pythonDllPath = _envService.GetPythonDLLPath();
+                List<string> categoryColors = _configService.GetCategoryColors();
 
                 List<ExpenseByCategory> expensesByCategory = LoadTotalExpensesByCategory();
 
@@ -205,7 +205,7 @@ namespace FinancialTracker
 
         }
 
-        private static bool SaveReport(out string pdfFilePath, ConfigManager configManager)
+        private static bool SaveReport(out string pdfFilePath, ConfigService configManager)
         {
             pdfFilePath = null;
 

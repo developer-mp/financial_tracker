@@ -5,7 +5,7 @@ using System;
 
 public static class ComboBoxHelper
 {
-    public static void PopulateCategoryComboBox(ComboBox comboBox, ConfigManager configManager, string selectedCategory = null)
+    public static void PopulateCategoryComboBox(ComboBox comboBox, ConfigService configManager, string selectedCategory = null)
     {
         try
         {

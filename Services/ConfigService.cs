@@ -1,17 +1,16 @@
 ﻿using FinancialTracker.Models;
 using Microsoft.Extensions.Configuration;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
 namespace FinancialTracker.Service
 {
-    public class ConfigManager
+    public class ConfigService
     {
         private IConfiguration Configuration { get; }
 
-        public ConfigManager()
+        public ConfigService()
         {
             Configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())

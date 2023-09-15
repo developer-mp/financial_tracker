@@ -5,12 +5,12 @@ using System.Windows.Controls;
 
 public class ExpenseManager
 {
-    private ConfigManager _configManager;
+    private ConfigService _configService;
     private DataLoadingService _dataLoadingService;
 
-    public ExpenseManager(ConfigManager configManager, DataLoadingService dataLoadingService)
+    public ExpenseManager(ConfigService configManager, DataLoadingService dataLoadingService)
     {
-        _configManager = configManager;
+        _configService = configManager;
         _dataLoadingService = dataLoadingService;
     }
 
@@ -54,7 +54,7 @@ public class ExpenseManager
     {
         try
         {
-            _dataLoadingService.InsertExpense(connectionString, insertDbQuery, newExpense);
+            _dataLoadingService.AddExpense(connectionString, insertDbQuery, newExpense);
         }
         catch (Exception ex)
         {

@@ -9,8 +9,8 @@ namespace FinancialTracker
     public partial class AddExpenseWindow : Window
     {
         private MainWindow _mainWindow;
-        private EnvManager _envManager;
-        private ConfigManager _configManager;
+        private EnvService _envService;
+        private ConfigService _configService;
         private ExpenseManager _expenseManager;
         private DataLoadingService _dataLoadingService;
         private string _connectionString;
@@ -19,11 +19,11 @@ namespace FinancialTracker
         public AddExpenseWindow(MainWindow mainWindow)
         {
             InitializeComponent();
-            _envManager = new EnvManager();
-            _configManager = new ConfigManager();
+            _envService = new EnvService();
+            _configService = new ConfigService();
             _dataLoadingService = new DataLoadingService();
-            _expenseManager = new ExpenseManager(_configManager, _dataLoadingService);
-            _connectionString = _envManager.GetConnectionString();
+            _expenseManager = new ExpenseManager(_configService, _dataLoadingService);
+            _connectionString = _envService.GetConnectionString();
             _mainWindow = mainWindow;
 
             InitializeComboBox();
@@ -35,7 +35,7 @@ namespace FinancialTracker
 
         private void InitializeComboBox()
         {
-            ComboBoxHelper.PopulateCategoryComboBox(CategoryComboBox, _configManager);
+            ComboBoxHelper.PopulateCategoryComboBox(CategoryComboBox, _configService);
         }
 
         private void InitializeButtonStateHelper()
@@ -52,7 +52,7 @@ namespace FinancialTracker
 
                 if (!Double.TryParse(amountText, out double amount))
                 {
-                    ErrorMessageGenerator.ShowError("ValidateAmount", _configManager);
+                    ErrorMessageGenerator.ShowError("ValidateAmount", _configService);
                     return;
                 }
 
@@ -64,15 +64,15 @@ namespace FinancialTracker
                     return;
                 }
 
-                DbQuery insertDbQuery = _configManager.GetDbQuery("AddExpense");
+                DbQuery insertDbQuery = _configService.GetDbQuery("AddExpense");
                 _expenseManager.InsertExpenseToDatabase(_connectionString, insertDbQuery, newExpense);
                 _mainWindow.expenseList.Add(newExpense);
                 Close();
-                ErrorMessageGenerator.ShowSuccess("AddNewRecord", _configManager);
+                ErrorMessageGenerator.ShowSuccess("AddNewRecord", _configService);
             }
             catch (FormatException ex)
             {
-                ErrorMessageGenerator.ShowError("AddNewRecord", _configManager);
+                ErrorMessageGenerator.ShowError("AddNewRecord", _configService);
                 Console.WriteLine($"Error adding a new record: {ex.Message}");
             }
         }

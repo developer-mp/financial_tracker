@@ -4,11 +4,11 @@ using System.IO;
 
 namespace FinancialTracker.Service
 {
-    public class EnvManager
+    public class EnvService
     {
         private IConfiguration Configuration { get; }
 
-        public EnvManager()
+        public EnvService()
         {
             Configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())

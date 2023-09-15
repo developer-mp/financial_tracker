@@ -18,7 +18,7 @@ public class DataLoadingService
             }
         }
     }
-    public ObservableCollection<ExpenseItem> LoadData(string connectionString, DbQuery DbQuery)
+    public ObservableCollection<ExpenseItem> LoadExpenses(string connectionString, DbQuery DbQuery)
     {
         ObservableCollection<ExpenseItem> expenseList = new ObservableCollection<ExpenseItem>();
 
@@ -88,7 +88,7 @@ public class DataLoadingService
         return expensesByCategory;
     }
 
-    public void InsertExpense(string connectionString, DbQuery DbQuery, ExpenseItem newExpense)
+    public void AddExpense(string connectionString, DbQuery DbQuery, ExpenseItem newExpense)
     {
         ExecuteDbCommand(connectionString, (conn, cmd) =>
         {
