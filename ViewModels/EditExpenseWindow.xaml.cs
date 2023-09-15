@@ -27,7 +27,7 @@ namespace FinancialTracker
 
             DatePicker.SelectedDate = _selectedExpense.Date;
             ExpenseTextBox.Text = _selectedExpense.Expense;
-            CategoryTextBox.Text = _selectedExpense.Category;
+            ComboBoxHelper.PopulateCategoryComboBox(CategoryComboBox, _configManager, _selectedExpense.Category);
             AmountTextBox.Text = _selectedExpense.Amount.ToString();
 
             ExpenseTextBox.TextChanged += OnTextChanged;
@@ -42,7 +42,7 @@ namespace FinancialTracker
             {
                 _selectedExpense.Date = DatePicker.SelectedDate ?? DateTime.Now;
                 _selectedExpense.Expense = ExpenseTextBox.Text;
-                _selectedExpense.Category = CategoryTextBox.Text;
+                _selectedExpense.Category = CategoryComboBox.Text;
 
                 if (!ValidationHelper.TryParseDouble(AmountTextBox, out double amount))
                 {

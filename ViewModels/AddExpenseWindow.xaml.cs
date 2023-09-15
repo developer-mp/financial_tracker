@@ -1,7 +1,6 @@
 ﻿using FinancialTracker.Models;
 using FinancialTracker.Service;
 using System;
-using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -24,24 +23,11 @@ namespace FinancialTracker
             _dataLoadingService = new DataLoadingService();
             _connectionString = _envManager.GetConnectionString();
             _mainWindow = mainWindow;
-            PopulateCategoryComboBox();
+            ComboBoxHelper.PopulateCategoryComboBox(CategoryComboBox, _configManager);
             _buttonStateHelper = new ButtonStateHelper(SaveButton, ExpenseTextBox, AmountTextBox);
 
             ExpenseTextBox.TextChanged += OnTextChanged;
             AmountTextBox.TextChanged += OnTextChanged;
-        }
-
-        private void PopulateCategoryComboBox()
-        {
-            try
-            {
-                List<string> categoryNames = _configManager.GetCategoryNames();
-                CategoryComboBox.ItemsSource = categoryNames;
-            }
-            catch (FormatException ex)
-            {
-                Console.WriteLine($"Error populating combo box: {ex.Message}");
-            }
         }
 
         private void SaveButtonClick(object sender, RoutedEventArgs e)
