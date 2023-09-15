@@ -24,18 +24,21 @@ namespace FinancialTracker
         public MainWindow()
         {
             InitializeComponent();
+
+            _envService = new EnvService();
             _configService = new ConfigService();
             _dataLoadingService = new DataLoadingService();
-            _envService = new EnvService();
+            _sortingHandler = new SortingHandler(this, TransactionListView);
             _connectionString = _envService.GetConnectionString();
             TransactionListView.ItemsSource = expenseList;
+
             LoadExpenses();
             LoadTotalExpenses();
             LoadTotalExpensesByCategory();
             GenerateChart();
-            DataContext = this;
-            _sortingHandler = new SortingHandler(this, TransactionListView);
             SetDefaultSorting();
+
+            DataContext = this;
         }
 
         private void SetDefaultSorting()
@@ -71,6 +74,7 @@ namespace FinancialTracker
                 expenseList.Clear();
                 DbQuery DbQuery = _configService.GetDbQuery("LoadExpenses");
                 ObservableCollection<ExpenseItem> loadedData = _dataLoadingService.LoadExpenses(_connectionString, DbQuery);
+
                 foreach (var expense in loadedData)
                 {
                     expenseList.Add(expense);

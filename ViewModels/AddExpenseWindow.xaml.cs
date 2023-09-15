@@ -12,7 +12,6 @@ namespace FinancialTracker
         private EnvService _envService;
         private ConfigService _configService;
         private DataLoadingService _dataLoadingService;
-        private ExpenseManager _expenseManager;
         private string _connectionString;
         private ButtonStateHelper _buttonStateHelper;
 
@@ -24,7 +23,6 @@ namespace FinancialTracker
             _envService = new EnvService();
             _configService = new ConfigService();
             _dataLoadingService = new DataLoadingService();
-            _expenseManager = new ExpenseManager();
             _connectionString = _envService.GetConnectionString();
 
             InitializeComboBox();
@@ -57,20 +55,22 @@ namespace FinancialTracker
                     return;
                 }
 
-                ExpenseItem newExpense = _expenseManager.CreateNewExpense(
-                    Guid.NewGuid().ToString(),
-                    DatePicker.SelectedDate ?? DateTime.Now, 
-                    expenseText, 
-                    CategoryComboBox.SelectedItem.ToString(), 
-                    amount);
+                ExpenseItem newExpense = new ExpenseItem
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Date = DatePicker.SelectedDate ?? DateTime.Now,
+                    Expense = expenseText,
+                    Category = CategoryComboBox.SelectedItem.ToString(),
+                    Amount = amount
+                };
 
                 if (newExpense == null)
                 {
                     return;
                 }
 
-                DbQuery insertDbQuery = _configService.GetDbQuery("AddExpense");
-                _expenseManager.InsertNewExpense(_dataLoadingService, _connectionString, insertDbQuery, newExpense);
+                DbQuery addDbQuery = _configService.GetDbQuery("AddExpense");
+                _dataLoadingService.AddExpense(_connectionString, addDbQuery, newExpense);
                 _mainWindow.expenseList.Add(newExpense);
                 Close();
                 ErrorMessageGenerator.ShowSuccess("AddNewRecord", _configService);
