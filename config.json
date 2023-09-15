@@ -1,21 +1,21 @@
 {
   "Queries": {
-    "LoadFinanceData": {
+    "LoadExpenses": {
       "Query": "SELECT id, date, expense, category, amount FROM finance"
     },
-    "LoadExpensesByCategoryData": {
+    "LoadExpensesByCategory": {
       "Query": "SELECT category, SUM(amount) AS totalAmount FROM finance GROUP BY category"
     },
-    "LoadTotalExpensesData": {
+    "LoadTotalExpenses": {
       "Query": "SELECT SUM(amount) AS totalExpenses FROM finance"
     },
-    "AddExpenseData": {
+    "AddExpense": {
       "Query": "INSERT INTO finance (id, date, expense, category, amount) VALUES (@Id, @Date, @Expense, @Category, @Amount)"
     },
-    "UpdateExpenseData": {
+    "UpdateExpense": {
       "Query": "UPDATE finance SET date = @Date, expense = @Expense, category = @Category, amount = @Amount WHERE id = @Id"
     },
-    "DeleteExpenseData": {
+    "DeleteExpense": {
       "Query": "DELETE FROM finance WHERE id = @Id"
     }
   },

@@ -69,7 +69,7 @@ namespace FinancialTracker
             try
             {
                 expenseList.Clear();
-                DbQuery DbQuery = _configManager.GetDbQuery("LoadFinanceData");
+                DbQuery DbQuery = _configManager.GetDbQuery("LoadExpenses");
                 ObservableCollection<ExpenseItem> loadedData = _dataLoadingService.LoadData(_connectionString, DbQuery);
                 foreach (var expense in loadedData)
                 {
@@ -86,7 +86,7 @@ namespace FinancialTracker
         {
             try
             {
-                DbQuery DbQuery = _configManager.GetDbQuery("LoadTotalExpensesData");
+                DbQuery DbQuery = _configManager.GetDbQuery("LoadTotalExpenses");
                 double totalExpenses = _dataLoadingService.LoadTotalExpenses(_connectionString, DbQuery);
                 TotalExpensesTextBlock.Text = $"{totalExpenses:N2}";
             }
@@ -100,7 +100,7 @@ namespace FinancialTracker
         {
             try
             {
-                DbQuery DbQuery = _configManager.GetDbQuery("LoadExpensesByCategoryData");
+                DbQuery DbQuery = _configManager.GetDbQuery("LoadExpensesByCategory");
                 List<ExpenseByCategory> expensesByCategory = _dataLoadingService.LoadExpensesByCategory(_connectionString, DbQuery);
                 return expensesByCategory;
             }

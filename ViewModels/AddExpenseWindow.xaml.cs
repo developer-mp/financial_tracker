@@ -11,6 +11,7 @@ namespace FinancialTracker
         private MainWindow _mainWindow;
         private EnvManager _envManager;
         private ConfigManager _configManager;
+        private ExpenseManager _expenseManager;
         private DataLoadingService _dataLoadingService;
         private string _connectionString;
         private ButtonStateHelper _buttonStateHelper;
@@ -21,42 +22,52 @@ namespace FinancialTracker
             _envManager = new EnvManager();
             _configManager = new ConfigManager();
             _dataLoadingService = new DataLoadingService();
+            _expenseManager = new ExpenseManager(_configManager, _dataLoadingService);
             _connectionString = _envManager.GetConnectionString();
             _mainWindow = mainWindow;
-            ComboBoxHelper.PopulateCategoryComboBox(CategoryComboBox, _configManager);
-            _buttonStateHelper = new ButtonStateHelper(SaveButton, ExpenseTextBox, AmountTextBox);
+
+            InitializeComboBox();
+            InitializeButtonStateHelper();
 
             ExpenseTextBox.TextChanged += OnTextChanged;
             AmountTextBox.TextChanged += OnTextChanged;
+        }
+
+        private void InitializeComboBox()
+        {
+            ComboBoxHelper.PopulateCategoryComboBox(CategoryComboBox, _configManager);
+        }
+
+        private void InitializeButtonStateHelper()
+        {
+            _buttonStateHelper = new ButtonStateHelper(SaveButton, ExpenseTextBox, AmountTextBox);
         }
 
         private void SaveButtonClick(object sender, RoutedEventArgs e)
         {
             try
             {
-                Guid newGuid = Guid.NewGuid();
-                string newId = newGuid.ToString();
+                string expenseText = ExpenseTextBox.Text;
+                string amountText = AmountTextBox.Text;
 
-                ExpenseItem newExpense = new ExpenseItem
-                {
-                    Id = newId,
-                    Date = DatePicker.SelectedDate ?? DateTime.Now,
-                    Expense = ExpenseTextBox.Text,
-                    Category = CategoryComboBox.SelectedItem.ToString(),
-                };
-
-                if (!ValidationHelper.TryParseDouble(AmountTextBox, out double amount))
+                if (!Double.TryParse(amountText, out double amount))
                 {
                     ErrorMessageGenerator.ShowError("ValidateAmount", _configManager);
                     return;
                 }
 
-                newExpense.Amount = Convert.ToDouble(AmountTextBox.Text);
-                DbQuery insertDbQuery = _configManager.GetDbQuery("AddExpenseData");
-                _dataLoadingService.InsertExpense(_connectionString, insertDbQuery, newExpense);
+                ExpenseItem newExpense = _expenseManager.CreateNewExpense(Guid.NewGuid().ToString(),
+    DatePicker.SelectedDate ?? DateTime.Now, expenseText, CategoryComboBox.SelectedItem.ToString(), amount);
+
+                if (newExpense == null)
+                {
+                    return;
+                }
+
+                DbQuery insertDbQuery = _configManager.GetDbQuery("AddExpense");
+                _expenseManager.InsertExpenseToDatabase(_connectionString, insertDbQuery, newExpense);
                 _mainWindow.expenseList.Add(newExpense);
                 Close();
-
                 ErrorMessageGenerator.ShowSuccess("AddNewRecord", _configManager);
             }
             catch (FormatException ex)
@@ -91,3 +102,4 @@ namespace FinancialTracker
         }
     }
 }
+

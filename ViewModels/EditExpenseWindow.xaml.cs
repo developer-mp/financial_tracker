@@ -50,7 +50,7 @@ namespace FinancialTracker
                 }
 
                 _selectedExpense.Amount = Convert.ToDouble(AmountTextBox.Text);
-                DbQuery updateDbQuery = _configManager.GetDbQuery("UpdateExpenseData");
+                DbQuery updateDbQuery = _configManager.GetDbQuery("UpdateExpense");
                 _dataLoadingService.UpdateExpense(_connectionString, updateDbQuery, _selectedExpense);
                 DataUpdated?.Invoke(this, EventArgs.Empty);
                 Close();
@@ -68,7 +68,7 @@ namespace FinancialTracker
         {
             try
             {
-                DbQuery deleteDbQuery = _configManager.GetDbQuery("DeleteExpenseData");
+                DbQuery deleteDbQuery = _configManager.GetDbQuery("DeleteExpense");
                 _dataLoadingService.DeleteExpense(_connectionString, deleteDbQuery, _selectedExpense);
                 DataUpdated?.Invoke(this, EventArgs.Empty);
                 Close();
