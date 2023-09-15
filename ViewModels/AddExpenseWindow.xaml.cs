@@ -26,7 +26,6 @@ namespace FinancialTracker
             _connectionString = _envService.GetConnectionString();
 
             InitializeComboBox();
-            InitializeButtonStateHelper();
 
             ExpenseTextBox.TextChanged += OnTextChanged;
             AmountTextBox.TextChanged += OnTextChanged;
@@ -35,11 +34,6 @@ namespace FinancialTracker
         private void InitializeComboBox()
         {
             ComboBoxHelper.PopulateCategoryComboBox(CategoryComboBox, _configService);
-        }
-
-        private void InitializeButtonStateHelper()
-        {
-            _buttonStateHelper = new ButtonStateHelper(SaveButton, ExpenseTextBox, AmountTextBox);
         }
 
         private void SaveButtonClick(object sender, RoutedEventArgs e)
@@ -98,7 +92,7 @@ namespace FinancialTracker
         {
             try
             {
-                _buttonStateHelper.UpdateButtonState();
+                _buttonStateHelper = new ButtonStateHelper(SaveButton, ExpenseTextBox, AmountTextBox);
             }
             catch (FormatException ex)
             {

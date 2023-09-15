@@ -26,7 +26,6 @@ namespace FinancialTracker
             _selectedExpense = selectedExpense;
 
             InitializeComboBox();
-            InitializeButtonStateHelper();
 
             DatePicker.SelectedDate = _selectedExpense.Date;
             ExpenseTextBox.Text = _selectedExpense.Expense;
@@ -41,11 +40,6 @@ namespace FinancialTracker
         private void InitializeComboBox()
         {
             ComboBoxHelper.PopulateCategoryComboBox(CategoryComboBox, _configService, _selectedExpense.Category);
-        }
-
-        private void InitializeButtonStateHelper()
-        {
-            _buttonStateHelper = new ButtonStateHelper(UpdateButton, ExpenseTextBox, AmountTextBox);
         }
 
         private void UpdateButtonClick(object sender, RoutedEventArgs e)
@@ -100,7 +94,7 @@ namespace FinancialTracker
         {
             try
             {
-                _buttonStateHelper.UpdateButtonState();
+                _buttonStateHelper = new ButtonStateHelper(UpdateButton, ExpenseTextBox, AmountTextBox);
             }
             catch(Exception ex)
             {

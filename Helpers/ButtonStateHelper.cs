@@ -1,24 +1,25 @@
-﻿using System.Windows.Controls;
+﻿using System;
+using System.Windows.Controls;
 
 public class ButtonStateHelper
 {
-    private Button _button;
-    private TextBox _expenseTextBox;
-    private TextBox _amountTextBox;
-
     public ButtonStateHelper(Button button, TextBox expenseTextBox, TextBox amountTextBox)
     {
-        _button = button;
-        _expenseTextBox = expenseTextBox;
-        _amountTextBox = amountTextBox;
-        UpdateButtonState();
+        try
+        {
+            UpdateButtonState(button, expenseTextBox, amountTextBox);
+        }
+        catch (FormatException ex)
+        {
+            Console.WriteLine($"Error updating button state helper: {ex.Message}");
+        }
     }
 
-    public void UpdateButtonState()
+    public void UpdateButtonState(Button button, TextBox expenseTextBox, TextBox amountTextBox)
     {
-        bool areFieldsFilled = !string.IsNullOrEmpty(_expenseTextBox.Text) &&
-                               !string.IsNullOrEmpty(_amountTextBox.Text);
+        bool areFieldsFilled = !string.IsNullOrEmpty(expenseTextBox.Text) &&
+                               !string.IsNullOrEmpty(amountTextBox.Text);
 
-        _button.IsEnabled = areFieldsFilled;
+        button.IsEnabled = areFieldsFilled;
     }
 }
