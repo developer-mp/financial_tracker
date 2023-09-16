@@ -9,20 +9,11 @@ namespace FinancialTracker.Utils
 {
     public class ChartGenerator
     {
-        private readonly string _pythonDllPath;
-        private readonly List<string> _categoryColors;
-
-        public ChartGenerator(string pythonDllPath, List<string> categoryColors)
+        public BitmapImage GenerateChart(List<ExpenseByCategory> expensesByCategory, string pythonDllPath, List<string> categoryColors)
         {
-            _pythonDllPath = pythonDllPath;
-            _categoryColors = categoryColors;
-        }
-
-        public BitmapImage GenerateChart(List<ExpenseByCategory> expensesByCategory)
-        {
-            if (!string.IsNullOrEmpty(_pythonDllPath))
+            if (!string.IsNullOrEmpty(pythonDllPath))
             {
-                Environment.SetEnvironmentVariable("PYTHONNET_PYDLL", _pythonDllPath);
+                Environment.SetEnvironmentVariable("PYTHONNET_PYDLL", pythonDllPath);
                 PythonEngine.Initialize();
 
                 using (Py.GIL())
@@ -32,7 +23,7 @@ namespace FinancialTracker.Utils
 
                     List<string> labels = new List<string>();
                     List<double> sizes = new List<double>();
-                    List<string> colors = _categoryColors;
+                    List<string> colors = categoryColors;
 
                     foreach (var expense in expensesByCategory)
                     {

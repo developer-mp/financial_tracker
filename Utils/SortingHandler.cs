@@ -8,20 +8,11 @@ namespace FinancialTracker
 {
     public class SortingHandler
     {
-        private GridViewColumnHeader _lastHeaderClicked = null;
-        private ListSortDirection _lastDirection = ListSortDirection.Ascending;
-        private FrameworkElement _mainWindow;
-        private ListView _listView;
-
-        public SortingHandler(FrameworkElement mainWindow, ListView listView)
+        private GridViewColumnHeader lastHeaderClicked = null;
+        private ListSortDirection lastDirection = ListSortDirection.Ascending;
+        public void SetDefaultSorting(ListView listView, FrameworkElement mainWindow, string defaultSortColumn, string defaultSortDirection)
         {
-            _mainWindow = mainWindow;
-            _listView = listView;
-        }
-
-        public void SetDefaultSorting(string defaultSortColumn, string defaultSortDirection)
-        {
-            var gridView = _listView.View as GridView;
+            var gridView = listView.View as GridView;
 
             if (gridView != null)
             {
@@ -35,19 +26,20 @@ namespace FinancialTracker
 
                     if (sortDirection == ListSortDirection.Ascending)
                     {
-                        sortColumn.HeaderTemplate = _mainWindow.FindResource("HeaderArrowUp") as DataTemplate;
+                        sortColumn.HeaderTemplate = mainWindow.FindResource("HeaderArrowUp") as DataTemplate;
                     }
                     else
                     {
-                        sortColumn.HeaderTemplate = _mainWindow.FindResource("HeaderArrowDown") as DataTemplate;
+                        sortColumn.HeaderTemplate = mainWindow.FindResource("HeaderArrowDown") as DataTemplate;
                     }
 
-                    Sort(sortColumn.Header.ToString(), sortDirection);
+                    Sort(listView, sortColumn.Header.ToString(), sortDirection);
+                    lastDirection = sortDirection;
                 }
             }
         }
 
-        public void ColumnHeaderClicked(GridViewColumnHeader headerClicked)
+        public void ColumnHeaderClicked(ListView listView, FrameworkElement mainWindow, GridViewColumnHeader headerClicked)
         {
             ListSortDirection direction;
 
@@ -55,15 +47,15 @@ namespace FinancialTracker
             {
                 if (headerClicked.Role != GridViewColumnHeaderRole.Padding)
                 {
-                    if (headerClicked == _lastHeaderClicked)
+                    if (headerClicked == lastHeaderClicked)
                     {
-                        direction = _lastDirection == ListSortDirection.Ascending
+                        direction = lastDirection == ListSortDirection.Ascending
                             ? ListSortDirection.Descending
                             : ListSortDirection.Ascending;
                     }
                     else
                     {
-                        if (_lastDirection == ListSortDirection.Ascending)
+                        if (lastDirection == ListSortDirection.Ascending)
                         {
                             direction = ListSortDirection.Descending;
                         }
@@ -76,37 +68,37 @@ namespace FinancialTracker
                     var columnBinding = headerClicked.Column.DisplayMemberBinding as Binding;
                     var sortBy = columnBinding?.Path.Path ?? headerClicked.Column.Header as string;
 
-                    ClearSorting();
+                    ClearSorting(listView);
 
-                    Sort(sortBy, direction);
+                    Sort(listView, sortBy, direction);
 
                     if (direction == ListSortDirection.Ascending)
                     {
                         headerClicked.Column.HeaderTemplate =
-                          _mainWindow.FindResource("HeaderArrowUp") as DataTemplate;
+                          mainWindow.FindResource("HeaderArrowUp") as DataTemplate;
                     }
                     else
                     {
                         headerClicked.Column.HeaderTemplate =
-                          _mainWindow.FindResource("HeaderArrowDown") as DataTemplate;
+                          mainWindow.FindResource("HeaderArrowDown") as DataTemplate;
                     }
 
-                    if (_lastHeaderClicked != null && _lastHeaderClicked != headerClicked)
+                    if (lastHeaderClicked != null && lastHeaderClicked != headerClicked)
                     {
-                        _lastHeaderClicked.Column.HeaderTemplate = null;
+                        lastHeaderClicked.Column.HeaderTemplate = null;
                     }
 
-                    _lastHeaderClicked = headerClicked;
-                    _lastDirection = direction;
+                    lastHeaderClicked = headerClicked;
+                    lastDirection = direction;
                 }
             }
         }
 
-        public void ClearSorting()
+        public void ClearSorting(ListView listView)
         {
-            if (_listView.View is GridView gridView)
+            if (listView.View is GridView gridView)
             {
-                ICollectionView dataView = CollectionViewSource.GetDefaultView(_listView.ItemsSource);
+                ICollectionView dataView = CollectionViewSource.GetDefaultView(listView.ItemsSource);
                 dataView.SortDescriptions.Clear();
 
                 foreach (GridViewColumn column in gridView.Columns)
@@ -116,9 +108,9 @@ namespace FinancialTracker
             }
         }
 
-        private void Sort(string sortBy, ListSortDirection direction)
+        private void Sort(ListView listView, string sortBy, ListSortDirection direction)
         {
-            ICollectionView dataView = CollectionViewSource.GetDefaultView(_listView.ItemsSource);
+            ICollectionView dataView = CollectionViewSource.GetDefaultView(listView.ItemsSource);
 
             dataView.SortDescriptions.Clear();
             SortDescription sd = new SortDescription(sortBy, direction);

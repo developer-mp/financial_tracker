@@ -28,7 +28,7 @@ namespace FinancialTracker
             _envService = new EnvService();
             _configService = new ConfigService();
             _dataLoadingService = new DataLoadingService();
-            _sortingHandler = new SortingHandler(this, TransactionListView);
+            _sortingHandler = new SortingHandler();
             _connectionString = _envService.GetConnectionString();
             TransactionListView.ItemsSource = expenseList;
 
@@ -46,7 +46,7 @@ namespace FinancialTracker
             try
             {
                 var defaultSorting = _configService.GetDefaultSorting();
-                _sortingHandler.SetDefaultSorting(defaultSorting.SortColumn, defaultSorting.SortDirection);
+                _sortingHandler.SetDefaultSorting(TransactionListView, this, defaultSorting.SortColumn, defaultSorting.SortDirection);
             }
             catch (FormatException ex)
             {
@@ -59,7 +59,7 @@ namespace FinancialTracker
             try
             {
                 var headerClicked = e.OriginalSource as GridViewColumnHeader;
-                _sortingHandler.ColumnHeaderClicked(headerClicked);
+                _sortingHandler.ColumnHeaderClicked(TransactionListView, this, headerClicked);
             }
             catch (FormatException ex)
             {
@@ -194,8 +194,8 @@ namespace FinancialTracker
 
                 List<ExpenseByCategory> expensesByCategory = LoadTotalExpensesByCategory();
 
-                ChartGenerator chartGenerator = new ChartGenerator(pythonDllPath, categoryColors);
-                BitmapImage chartImage = chartGenerator.GenerateChart(expensesByCategory);
+                ChartGenerator chartGenerator = new ChartGenerator();
+                BitmapImage chartImage = chartGenerator.GenerateChart(expensesByCategory, pythonDllPath, categoryColors);
 
                 if (chartImage != null)
                 {
@@ -206,7 +206,6 @@ namespace FinancialTracker
             {
                 Console.WriteLine($"Error saving the report: {ex.Message}");
             }
-
         }
 
         private static bool SaveReport(out string pdfFilePath, ConfigService configManager)

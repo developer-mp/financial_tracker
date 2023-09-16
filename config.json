@@ -20,7 +20,7 @@
     }
   },
   "DefaultSorting": {
-    "SortColumn": "Amount",
+    "SortColumn": "Date",
     "SortDirection": "Ascending"
   },
   "Categories": [
