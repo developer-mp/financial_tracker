@@ -98,6 +98,7 @@ namespace FinancialTracker
             }
             catch(Exception ex)
             {
+                ErrorMessageGenerator.ShowError("GeneralError", _configService);
                 Console.WriteLine($"Error updating button state: {ex.Message}");
             }
         }

@@ -59,7 +59,7 @@
   ],
   "Errors": {
     "ValidateAmount": {
-      "Success": "Amount is valid",
+      "Success": "OK",
       "Error": "Invalid amount. Only decimal numbers are allowed"
     },
     "AddNewRecord": {
@@ -74,9 +74,17 @@
       "Success": "Record deleted successfully",
       "Error": "Error deleting record"
     },
+    "LoadData": {
+      "Success": "OK",
+      "Error": "Error loading data"
+    },
     "SaveReport": {
       "Success": "Report saved successfully",
       "Error": "Error creating or saving the report"
+    },
+    "GeneralError": {
+      "Success": "OK",
+      "Error": "Can not process the request"
     }
   }
 }

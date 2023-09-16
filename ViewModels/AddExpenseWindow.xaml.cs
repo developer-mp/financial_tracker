@@ -78,14 +78,7 @@ namespace FinancialTracker
 
         private void CancelButtonClick(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                Close();
-            }
-            catch (FormatException ex)
-            {
-                Console.WriteLine($"Error clicking a cancel button: {ex.Message}");
-            }
+            Close();
         }
 
         private void OnTextChanged(object sender, TextChangedEventArgs e)
@@ -96,6 +89,7 @@ namespace FinancialTracker
             }
             catch (FormatException ex)
             {
+                ErrorMessageGenerator.ShowError("GeneralError", _configService);
                 Console.WriteLine($"Error updating button state: {ex.Message}");
             }
         }

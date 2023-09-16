@@ -10,8 +10,6 @@ namespace FinancialTracker.Utils
     {
         public static void CreateReport(string pdfFilePath, string totalExpensesText, BitmapImage chartImage)
         {
-            try
-            {
                 Document doc = new Document();
                 PdfWriter writer = PdfWriter.GetInstance(doc, new FileStream(pdfFilePath, FileMode.Create));
                 doc.Open();
@@ -45,11 +43,6 @@ namespace FinancialTracker.Utils
                 doc.Add(table);
                 File.Delete(tempImagePath);
                 doc.Close();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error creating report: {ex.Message}");
-            }
         }
     }
 }

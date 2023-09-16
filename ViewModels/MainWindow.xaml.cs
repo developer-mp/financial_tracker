@@ -63,6 +63,7 @@ namespace FinancialTracker
             }
             catch (FormatException ex)
             {
+                ErrorMessageGenerator.ShowError("GeneralError", _configService);
                 Console.WriteLine($"Error sorting column headers: {ex.Message}");
             }
         }
@@ -82,6 +83,7 @@ namespace FinancialTracker
             }
             catch (FormatException ex)
             {
+                ErrorMessageGenerator.ShowError("LoadData", _configService);
                 Console.WriteLine($"Error loading data: {ex.Message}");
             }
         }
@@ -96,6 +98,7 @@ namespace FinancialTracker
             }
             catch (FormatException ex)
             {
+                ErrorMessageGenerator.ShowError("LoadData", _configService);
                 Console.WriteLine($"Error loading total expenses: {ex.Message}");
             }
         }
@@ -110,6 +113,7 @@ namespace FinancialTracker
             }
             catch (FormatException ex)
             {
+                ErrorMessageGenerator.ShowError("LoadData", _configService);
                 Console.WriteLine($"Error loading total expenses by category: {ex.Message}");
                 return null;
             }
@@ -129,6 +133,7 @@ namespace FinancialTracker
             }
             catch (FormatException ex)
             {
+                ErrorMessageGenerator.ShowError("LoadData", _configService);
                 Console.WriteLine($"Error displaying Edit View: {ex.Message}");
             }
         }
@@ -145,6 +150,7 @@ namespace FinancialTracker
             }
             catch (FormatException ex)
             {
+                ErrorMessageGenerator.ShowError("LoadData", _configService);
                 Console.WriteLine($"Error loading updated records: {ex.Message}");
             }
         }
@@ -161,6 +167,7 @@ namespace FinancialTracker
             }
             catch (FormatException ex)
             {
+                ErrorMessageGenerator.ShowError("GeneralError", _configService);
                 Console.WriteLine($"Error clicking Add button: {ex.Message}");
             }
         }
@@ -181,6 +188,7 @@ namespace FinancialTracker
             }
             catch (FormatException ex)
             {
+                ErrorMessageGenerator.ShowError("GeneralError", _configService);
                 Console.WriteLine($"Error clicking Print button: {ex.Message}");
             }
         }
@@ -204,7 +212,7 @@ namespace FinancialTracker
             }
             catch (FormatException ex)
             {
-                Console.WriteLine($"Error saving the report: {ex.Message}");
+                Console.WriteLine($"Error generating the report: {ex.Message}");
             }
         }
 
