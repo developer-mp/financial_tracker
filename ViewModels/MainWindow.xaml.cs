@@ -21,6 +21,9 @@ namespace FinancialTracker
         public ObservableCollection<ExpenseItem> expenseList = new ObservableCollection<ExpenseItem>();
         private SortingHandler _sortingHandler;
 
+        DateTime startDate;
+        DateTime endDate;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -32,9 +35,12 @@ namespace FinancialTracker
             _connectionString = _envService.GetConnectionString();
             TransactionListView.ItemsSource = expenseList;
 
-            LoadExpenses();
-            LoadTotalExpenses();
-            LoadTotalExpensesByCategory();
+            startDate = DateTime.MinValue;
+            endDate = DateTime.MaxValue;
+
+            LoadExpenses(startDate, endDate);
+            LoadTotalExpenses(startDate, endDate);
+            LoadTotalExpensesByCategory(startDate, endDate);
             GenerateChart();
             SetDefaultSorting();
 
@@ -68,13 +74,13 @@ namespace FinancialTracker
             }
         }
 
-        private void LoadExpenses()
+        private void LoadExpenses(DateTime startDate, DateTime endDate)
         {
             try
             {
                 expenseList.Clear();
                 DbQuery DbQuery = _configService.GetDbQuery("LoadExpenses");
-                ObservableCollection<ExpenseItem> loadedData = _dataLoadingService.LoadExpenses(_connectionString, DbQuery);
+                ObservableCollection<ExpenseItem> loadedData = _dataLoadingService.LoadExpenses(_connectionString, DbQuery, startDate, endDate);
 
                 foreach (var expense in loadedData)
                 {
@@ -88,12 +94,12 @@ namespace FinancialTracker
             }
         }
 
-        private void LoadTotalExpenses()
+        private void LoadTotalExpenses(DateTime startDate, DateTime endDate)
         {
             try
             {
                 DbQuery DbQuery = _configService.GetDbQuery("LoadTotalExpenses");
-                double totalExpenses = _dataLoadingService.LoadTotalExpenses(_connectionString, DbQuery);
+                double totalExpenses = _dataLoadingService.LoadTotalExpenses(_connectionString, DbQuery, startDate, endDate);
                 TotalExpensesTextBlock.Text = $"{totalExpenses:N2}";
             }
             catch (FormatException ex)
@@ -103,12 +109,13 @@ namespace FinancialTracker
             }
         }
 
-        private List<ExpenseByCategory> LoadTotalExpensesByCategory()
+        private List<ExpenseByCategory> LoadTotalExpensesByCategory(DateTime startDate, DateTime endDate)
         {
             try
             {
                 DbQuery DbQuery = _configService.GetDbQuery("LoadExpensesByCategory");
-                List<ExpenseByCategory> expensesByCategory = _dataLoadingService.LoadExpensesByCategory(_connectionString, DbQuery);
+
+                List<ExpenseByCategory> expensesByCategory = _dataLoadingService.LoadExpensesByCategory(_connectionString, DbQuery, startDate, endDate);
                 return expensesByCategory;
             }
             catch (FormatException ex)
@@ -118,6 +125,7 @@ namespace FinancialTracker
                 return null;
             }
         }
+
 
         private void TransactionListViewEdit(object sender, MouseButtonEventArgs e)
         {
@@ -143,9 +151,9 @@ namespace FinancialTracker
             try
             {
                 expenseList.Clear();
-                LoadExpenses();
-                LoadTotalExpenses();
-                LoadTotalExpensesByCategory();
+                LoadExpenses(startDate, endDate);
+                LoadTotalExpenses(startDate, endDate);
+                LoadTotalExpensesByCategory(startDate, endDate);
                 GenerateChart();
             }
             catch (FormatException ex)
@@ -161,8 +169,8 @@ namespace FinancialTracker
             {
                 AddExpenseWindow addExpenseWindow = new AddExpenseWindow(this);
                 addExpenseWindow.ShowDialog();
-                LoadTotalExpenses();
-                LoadTotalExpensesByCategory();
+                LoadTotalExpenses(startDate, endDate);
+                LoadTotalExpensesByCategory(startDate, endDate);
                 GenerateChart();
             }
             catch (FormatException ex)
@@ -200,7 +208,7 @@ namespace FinancialTracker
                 string pythonDllPath = _envService.GetPythonDLLPath();
                 List<string> categoryColors = _configService.GetCategoryColors();
 
-                List<ExpenseByCategory> expensesByCategory = LoadTotalExpensesByCategory();
+                List<ExpenseByCategory> expensesByCategory = LoadTotalExpensesByCategory(startDate, endDate);
 
                 ChartGenerator chartGenerator = new ChartGenerator();
                 BitmapImage chartImage = chartGenerator.GenerateChart(expensesByCategory, pythonDllPath, categoryColors);
@@ -242,5 +250,28 @@ namespace FinancialTracker
             ErrorMessageGenerator.ShowError("SaveReport", configManager);
             return false;
         }
+
+        private void ApplyDateFilterClick(object sender, RoutedEventArgs e)
+        {
+            startDate = StartDatePicker.SelectedDate ?? DateTime.MinValue;
+            endDate = EndDatePicker.SelectedDate ?? DateTime.MaxValue;
+
+            LoadExpenses(startDate, endDate);
+            LoadTotalExpenses(startDate, endDate);
+            LoadTotalExpensesByCategory(startDate, endDate);
+            GenerateChart();
+        }
+
+        private void ClearDateFilterClick(object sender, RoutedEventArgs e)
+        {
+            startDate = DateTime.MinValue;
+            endDate = DateTime.MaxValue;
+
+            LoadExpenses(startDate, endDate);
+            LoadTotalExpenses(startDate, endDate);
+            LoadTotalExpensesByCategory(startDate, endDate);
+            GenerateChart();
+        }
+
     }
 }

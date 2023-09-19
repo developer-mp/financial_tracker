@@ -1,13 +1,13 @@
 {
   "Queries": {
     "LoadExpenses": {
-      "Query": "SELECT id, date, expense, category, amount FROM finance"
+      "Query": "SELECT id, date, expense, category, amount FROM finance WHERE date >= @StartDate AND date <= @EndDate"
     },
     "LoadExpensesByCategory": {
-      "Query": "SELECT category, SUM(amount) AS totalAmount FROM finance GROUP BY category"
+      "Query": "SELECT category, SUM(amount) AS totalAmount FROM finance WHERE date >= @StartDate AND date <= @EndDate GROUP BY category"
     },
     "LoadTotalExpenses": {
-      "Query": "SELECT SUM(amount) AS totalExpenses FROM finance"
+      "Query": "SELECT SUM(amount) AS totalExpenses FROM finance WHERE date >= @StartDate AND date <= @EndDate"
     },
     "AddExpense": {
       "Query": "INSERT INTO finance (id, date, expense, category, amount) VALUES (@Id, @Date, @Expense, @Category, @Amount)"

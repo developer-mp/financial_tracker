@@ -18,13 +18,16 @@ public class DataLoadingService
             }
         }
     }
-    public ObservableCollection<ExpenseItem> LoadExpenses(string connectionString, DbQuery DbQuery)
+    public ObservableCollection<ExpenseItem> LoadExpenses(string connectionString, DbQuery DbQuery, DateTime startDate, DateTime endDate)
     {
         ObservableCollection<ExpenseItem> expenseList = new ObservableCollection<ExpenseItem>();
 
         ExecuteDbCommand(connectionString, (conn, cmd) =>
         {
             cmd.CommandText = DbQuery.Query;
+            cmd.Parameters.AddWithValue("StartDate", startDate);
+            cmd.Parameters.AddWithValue("EndDate", endDate);
+
             using (var reader = cmd.ExecuteReader())
             {
                 while (reader.Read())
@@ -46,14 +49,17 @@ public class DataLoadingService
         return expenseList;
     }
 
-    public double LoadTotalExpenses(string connectionString, DbQuery DbQuery)
+    public double LoadTotalExpenses(string connectionString, DbQuery DbQuery, DateTime startDate, DateTime endDate)
     {
         double totalExpenses = 0;
 
         ExecuteDbCommand(connectionString, (conn, cmd) =>
         {
             cmd.CommandText = DbQuery.Query;
+            cmd.Parameters.AddWithValue("StartDate", startDate);
+            cmd.Parameters.AddWithValue("EndDate", endDate);
             var result = cmd.ExecuteScalar();
+
             if (result != null && result != DBNull.Value)
             {
                 totalExpenses = Convert.ToDouble(result);
@@ -63,13 +69,16 @@ public class DataLoadingService
         return totalExpenses;
     }
 
-    public List<ExpenseByCategory> LoadExpensesByCategory(string connectionString, DbQuery DbQuery)
+    public List<ExpenseByCategory> LoadExpensesByCategory(string connectionString, DbQuery DbQuery, DateTime startDate, DateTime endDate)
     {
         List<ExpenseByCategory> expensesByCategory = new List<ExpenseByCategory>();
 
         ExecuteDbCommand(connectionString, (conn, cmd) =>
         {
             cmd.CommandText = DbQuery.Query;
+            cmd.Parameters.AddWithValue("StartDate", startDate);
+            cmd.Parameters.AddWithValue("EndDate", endDate);
+
             using (var reader = cmd.ExecuteReader())
             {
                 while (reader.Read())
