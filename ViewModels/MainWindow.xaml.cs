@@ -20,9 +20,8 @@ namespace FinancialTracker
         private string _connectionString;
         public ObservableCollection<ExpenseItem> expenseList = new ObservableCollection<ExpenseItem>();
         private SortingHandler _sortingHandler;
-
-        DateTime startDate;
-        DateTime endDate;
+        private DateTime startDate = DateTime.MinValue;
+        private DateTime endDate = DateTime.MaxValue;
 
         public MainWindow()
         {
@@ -34,9 +33,6 @@ namespace FinancialTracker
             _sortingHandler = new SortingHandler();
             _connectionString = _envService.GetConnectionString();
             TransactionListView.ItemsSource = expenseList;
-
-            startDate = DateTime.MinValue;
-            endDate = DateTime.MaxValue;
 
             LoadExpenses(startDate, endDate);
             LoadTotalExpenses(startDate, endDate);
