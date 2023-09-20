@@ -19,7 +19,7 @@
             <Setter Property="Margin" Value="10"/>
         </Style>
 
-        <Style x:Key="UpdateButtonStyle" BasedOn="{StaticResource ButtonStyle}" TargetType="Button">
+        <Style x:Key="UpdateButtonStyle" BasedOn="{StaticResource ButtonMainStyle}" TargetType="Button">
             <Setter Property="HorizontalAlignment" Value="Left"/>
             <Setter Property="Background" Value="Gray"/>
             <Style.Triggers>
@@ -29,7 +29,7 @@
             </Style.Triggers>
         </Style>
 
-        <Style x:Key="DeleteButtonStyle" BasedOn="{StaticResource ButtonStyle}" TargetType="Button">
+        <Style x:Key="DeleteButtonStyle" BasedOn="{StaticResource ButtonMainStyle}" TargetType="Button">
             <Setter Property="Background" Value="#ED5E68"/>
             <Setter Property="HorizontalAlignment" Value="Right"/>
         </Style>
