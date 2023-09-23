@@ -77,6 +77,7 @@ namespace FinancialTracker
             }
 
             ApplyFilterRequested?.Invoke(this, EventArgs.Empty);
+            Close();
         }
 
         private void ClearDateFilterClick(object sender, RoutedEventArgs e)
@@ -88,6 +89,7 @@ namespace FinancialTracker
             MaxAmount = double.MaxValue;
 
             ClearFilterRequested?.Invoke(this, EventArgs.Empty);
+            Close();
         }
 
         public event EventHandler ApplyFilterRequested;
