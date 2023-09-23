@@ -18,7 +18,7 @@ public class DataLoadingService
             }
         }
     }
-    public ObservableCollection<ExpenseItem> LoadExpenses(string connectionString, DbQuery DbQuery, DateTime startDate, DateTime endDate)
+    public ObservableCollection<ExpenseItem> LoadExpenses(string connectionString, DbQuery DbQuery, DateTime startDate, DateTime endDate, string category, double minAmount, double maxAmount)
     {
         ObservableCollection<ExpenseItem> expenseList = new ObservableCollection<ExpenseItem>();
 
@@ -27,6 +27,9 @@ public class DataLoadingService
             cmd.CommandText = DbQuery.Query;
             cmd.Parameters.AddWithValue("StartDate", startDate);
             cmd.Parameters.AddWithValue("EndDate", endDate);
+            cmd.Parameters.AddWithValue("Category", category);
+            cmd.Parameters.AddWithValue("MinAmount", minAmount);
+            cmd.Parameters.AddWithValue("MaxAmount", maxAmount);
 
             using (var reader = cmd.ExecuteReader())
             {

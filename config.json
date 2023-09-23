@@ -1,22 +1,22 @@
 {
   "Queries": {
     "LoadExpenses": {
-      "Query": "SELECT id, date, expense, category, amount FROM finance WHERE date >= @StartDate AND date <= @EndDate"
+      "Query": "SELECT id, date, expense, category, amount FROM expense WHERE date >= @StartDate AND date <= @EndDate AND category = (CASE WHEN @Category = '' THEN category ELSE @Category END) AND amount >= @MinAmount AND amount <= @MaxAmount"
     },
     "LoadExpensesByCategory": {
-      "Query": "SELECT category, SUM(amount) AS totalAmount FROM finance WHERE date >= @StartDate AND date <= @EndDate GROUP BY category"
+      "Query": "SELECT category, SUM(amount) AS totalAmount FROM expense WHERE date >= @StartDate AND date <= @EndDate GROUP BY category"
     },
     "LoadTotalExpenses": {
-      "Query": "SELECT SUM(amount) AS totalExpenses FROM finance WHERE date >= @StartDate AND date <= @EndDate"
+      "Query": "SELECT SUM(amount) AS totalExpenses FROM expense WHERE date >= @StartDate AND date <= @EndDate"
     },
     "AddExpense": {
-      "Query": "INSERT INTO finance (id, date, expense, category, amount) VALUES (@Id, @Date, @Expense, @Category, @Amount)"
+      "Query": "INSERT INTO expense (id, date, expense, category, amount) VALUES (@Id, @Date, @Expense, @Category, @Amount)"
     },
     "UpdateExpense": {
-      "Query": "UPDATE finance SET date = @Date, expense = @Expense, category = @Category, amount = @Amount WHERE id = @Id"
+      "Query": "UPDATE expense SET date = @Date, expense = @Expense, category = @Category, amount = @Amount WHERE id = @Id"
     },
     "DeleteExpense": {
-      "Query": "DELETE FROM finance WHERE id = @Id"
+      "Query": "DELETE FROM expense WHERE id = @Id"
     }
   },
   "DefaultSorting": {

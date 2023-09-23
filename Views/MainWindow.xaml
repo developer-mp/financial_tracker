@@ -4,7 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Financial Tracker" Height="450" Width="600">
+        Title="Financial Tracker" Height="450" Width="600"
+        Icon="pack://application:,,,/FinancialTracker;component/appIcon.ico">
 
     <Window.Resources>
 
@@ -122,27 +123,9 @@
             </TabItem>
             <TabItem Header="Transactions" Style="{StaticResource TabItemStyle}">
                 <StackPanel>
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10">
-                        <StackPanel>
-                            <TextBlock Text="Start date" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Black" FontSize="10"/>
-                            <DatePicker x:Name="StartDatePicker" Margin="5"/>
-                            <Button Content="Filter" Click="ApplyDateFilterClick" HorizontalAlignment="Left">
-                                <Button.Style>
-                                    <Style TargetType="Button" BasedOn="{StaticResource FilterButtonStyle}">
-                                    </Style>
-                                </Button.Style>
-                            </Button>
-                        </StackPanel>
-                        <StackPanel>
-                            <TextBlock Text="End date" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Black" FontSize="10"/>
-                            <DatePicker x:Name="EndDatePicker" Margin="5"/>
-                            <Button Content="Clear" Click="ClearDateFilterClick" HorizontalAlignment="Right">
-                                <Button.Style>
-                                    <Style TargetType="Button" BasedOn="{StaticResource ClearButtonStyle}">
-                                    </Style>
-                                </Button.Style>
-                            </Button>
-                        </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Image Source="pack://application:,,,/FinancialTracker;component/searchIcon.ico" Cursor="Hand" Width="20" Height="20"/>
+                        <Image Source="pack://application:,,,/FinancialTracker;component/filterIcon.ico" MouseDown="OpenFilterWindowClick" Cursor="Hand" Width="20" Height="20" Margin="10"/>
                     </StackPanel>
                     <StackPanel>
                     <TextBlock Text="Double-click a row to edit" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Gray" FontSize="10"/>
