@@ -47,4 +47,13 @@ namespace FinancialTracker.Models
         public string Success { get; set; }
         public string Error { get; set; }
     }
+
+    public class Filter
+    {
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+        public string Category { get; set; }
+        public double MinAmount { get; set; }
+        public double MaxAmount { get; set; }
+    }
 }

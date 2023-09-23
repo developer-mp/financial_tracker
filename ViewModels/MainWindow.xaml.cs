@@ -251,7 +251,16 @@ namespace FinancialTracker
 
         private void OpenFilterWindowClick(object sender, RoutedEventArgs e)
         {
-            FilterWindow filterWindow = new FilterWindow();
+            //FilterWindow filterWindow = new FilterWindow();
+
+            FilterWindow filterWindow = new FilterWindow(new Filter
+            {
+                StartDate = startDate,
+                EndDate = endDate,
+                Category = category,
+                MinAmount = minAmount,
+                MaxAmount = maxAmount
+            });
 
             filterWindow.ApplyFilterRequested += (s, args) => ApplyFilter(filterWindow);
             filterWindow.ClearFilterRequested += (s, args) => ClearFilter(filterWindow);
@@ -261,12 +270,24 @@ namespace FinancialTracker
 
         private void ApplyFilter(FilterWindow filterWindow)
         {
-            LoadExpenses(filterWindow.StartDate, filterWindow.EndDate, filterWindow.Category, filterWindow.MinAmount, filterWindow.MaxAmount);
+            startDate = filterWindow.StartDatePicker.SelectedDate ?? DateTime.MinValue;
+            endDate = filterWindow.EndDatePicker.SelectedDate ?? DateTime.MaxValue;
+            category = filterWindow.CategoryComboBox.SelectedItem?.ToString() ?? "";
+            minAmount = double.TryParse(filterWindow.MinAmountTextBox.Text, out double min) ? min : 0;
+            maxAmount = double.TryParse(filterWindow.MaxAmountTextBox.Text, out double max) ? max : double.MaxValue;
+
+            LoadExpenses(startDate, endDate, category, minAmount, maxAmount);
         }
 
         private void ClearFilter(FilterWindow filterWindow)
         {
-            LoadExpenses(DateTime.MinValue, DateTime.MaxValue, "", 0, double.MaxValue);
+            startDate = DateTime.MinValue;
+            endDate = DateTime.MaxValue;
+            category = "";
+            minAmount = 0;
+            maxAmount = double.MaxValue;
+
+            LoadExpenses(startDate, endDate, category, minAmount, maxAmount);
         }
     }
 }

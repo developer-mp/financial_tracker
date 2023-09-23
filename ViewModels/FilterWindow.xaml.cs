@@ -1,4 +1,5 @@
-﻿using FinancialTracker.Service;
+﻿using FinancialTracker.Models;
+using FinancialTracker.Service;
 using System;
 using System.Windows;
 
@@ -7,26 +8,22 @@ namespace FinancialTracker
     public partial class FilterWindow : Window
     {
         private ConfigService _configService;
+        private Filter _selectedFilter;
 
-        public DateTime StartDate { get; private set; }
-        public DateTime EndDate { get; private set; }
-        public string Category { get; private set; }
-        public double MinAmount { get; private set; }
-        public double MaxAmount { get; private set; }
-
-        public FilterWindow()
+        public FilterWindow(Filter selectedFilter)
         {
             InitializeComponent();
             _configService = new ConfigService();
-
-            StartDate = DateTime.MinValue;
-            EndDate = DateTime.MaxValue;
-            Category = "";
-            MinAmount = 0;
-            MaxAmount = double.MaxValue;
+            _selectedFilter = selectedFilter;
 
             InitializeComboBox();
-        }
+
+            StartDatePicker.SelectedDate = _selectedFilter.StartDate;
+            EndDatePicker.SelectedDate = _selectedFilter.EndDate;
+            CategoryComboBox.SelectedItem = _selectedFilter.Category;
+            MinAmountTextBox.Text = _selectedFilter.MinAmount.ToString();
+            MaxAmountTextBox.Text = _selectedFilter.MaxAmount.ToString();
+    }
 
         private void InitializeComboBox()
         {
@@ -35,22 +32,22 @@ namespace FinancialTracker
 
         private void ApplyDateFilterClick(object sender, RoutedEventArgs e)
         {
-            StartDate = StartDatePicker.SelectedDate ?? DateTime.MinValue;
-            EndDate = EndDatePicker.SelectedDate ?? DateTime.MaxValue;
-            Category = CategoryComboBox.SelectedItem?.ToString() ?? "";
+            _selectedFilter.StartDate = StartDatePicker.SelectedDate ?? DateTime.MinValue;
+            _selectedFilter.EndDate = EndDatePicker.SelectedDate ?? DateTime.MaxValue;
+            _selectedFilter.Category = CategoryComboBox.SelectedItem?.ToString() ?? "";
 
             string minAmountText = MinAmountTextBox.Text;
             string maxAmountText = MaxAmountTextBox.Text;
 
             if (string.IsNullOrEmpty(minAmountText))
             {
-                MinAmount = 0;
+                _selectedFilter.MinAmount = 0;
             }
             else
             {
                 if (double.TryParse(minAmountText, out double parsedMinAmount))
                 {
-                    MinAmount = parsedMinAmount;
+                    _selectedFilter.MinAmount = parsedMinAmount;
                 }
                 else
                 {
@@ -61,13 +58,13 @@ namespace FinancialTracker
 
             if (string.IsNullOrEmpty(maxAmountText))
             {
-                MaxAmount = double.MaxValue;
+                _selectedFilter.MaxAmount = double.MaxValue;
             }
             else
             {
                 if (double.TryParse(maxAmountText, out double parsedMaxAmount))
                 {
-                    MaxAmount = parsedMaxAmount;
+                    _selectedFilter.MaxAmount = parsedMaxAmount;
                 }
                 else
                 {
@@ -82,11 +79,11 @@ namespace FinancialTracker
 
         private void ClearDateFilterClick(object sender, RoutedEventArgs e)
         {
-            StartDate = DateTime.MinValue;
-            EndDate = DateTime.MaxValue;
-            Category = "";
-            MinAmount = 0;
-            MaxAmount = double.MaxValue;
+            _selectedFilter.StartDate = DateTime.MinValue;
+            _selectedFilter.EndDate = DateTime.MaxValue;
+            _selectedFilter.Category = "";
+            _selectedFilter.MinAmount = 0;
+            _selectedFilter.MaxAmount = double.MaxValue;
 
             ClearFilterRequested?.Invoke(this, EventArgs.Empty);
             Close();
