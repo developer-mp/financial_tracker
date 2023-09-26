@@ -18,12 +18,15 @@ namespace FinancialTracker
 
             InitializeComboBox();
 
-            StartDatePicker.SelectedDate = _selectedFilter.StartDate;
-            EndDatePicker.SelectedDate = _selectedFilter.EndDate;
-            CategoryComboBox.SelectedItem = _selectedFilter.Category;
-            MinAmountTextBox.Text = _selectedFilter.MinAmount.ToString();
-            MaxAmountTextBox.Text = _selectedFilter.MaxAmount.ToString();
-    }
+            if (_selectedFilter != null)
+            {
+                StartDatePicker.SelectedDate = _selectedFilter.StartDate;
+                EndDatePicker.SelectedDate = _selectedFilter.EndDate;
+                CategoryComboBox.SelectedItem = _selectedFilter.Category;
+                MinAmountTextBox.Text = _selectedFilter.MinAmount.ToString();
+                MaxAmountTextBox.Text = _selectedFilter.MaxAmount.ToString();
+            }
+        }
 
         private void InitializeComboBox()
         {
@@ -32,19 +35,9 @@ namespace FinancialTracker
 
         private void ApplyDateFilterClick(object sender, RoutedEventArgs e)
         {
-            _selectedFilter.StartDate = StartDatePicker.SelectedDate ?? DateTime.MinValue;
-            _selectedFilter.EndDate = EndDatePicker.SelectedDate ?? DateTime.MaxValue;
-            _selectedFilter.Category = CategoryComboBox.SelectedItem?.ToString() ?? "";
-
             string minAmountText = MinAmountTextBox.Text;
             string maxAmountText = MaxAmountTextBox.Text;
 
-            if (string.IsNullOrEmpty(minAmountText))
-            {
-                _selectedFilter.MinAmount = 0;
-            }
-            else
-            {
                 if (double.TryParse(minAmountText, out double parsedMinAmount))
                 {
                     _selectedFilter.MinAmount = parsedMinAmount;
@@ -54,14 +47,7 @@ namespace FinancialTracker
                     ErrorMessageGenerator.ShowError("ValidateAmount", _configService);
                     return;
                 }
-            }
 
-            if (string.IsNullOrEmpty(maxAmountText))
-            {
-                _selectedFilter.MaxAmount = double.MaxValue;
-            }
-            else
-            {
                 if (double.TryParse(maxAmountText, out double parsedMaxAmount))
                 {
                     _selectedFilter.MaxAmount = parsedMaxAmount;
@@ -71,7 +57,6 @@ namespace FinancialTracker
                     ErrorMessageGenerator.ShowError("ValidateAmount", _configService);
                     return;
                 }
-            }
 
             ApplyFilterRequested?.Invoke(this, EventArgs.Empty);
             Close();
@@ -79,12 +64,6 @@ namespace FinancialTracker
 
         private void ClearDateFilterClick(object sender, RoutedEventArgs e)
         {
-            _selectedFilter.StartDate = DateTime.MinValue;
-            _selectedFilter.EndDate = DateTime.MaxValue;
-            _selectedFilter.Category = "";
-            _selectedFilter.MinAmount = 0;
-            _selectedFilter.MaxAmount = double.MaxValue;
-
             ClearFilterRequested?.Invoke(this, EventArgs.Empty);
             Close();
         }
