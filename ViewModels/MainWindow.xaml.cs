@@ -21,11 +21,12 @@ namespace FinancialTracker
         public ObservableCollection<ExpenseItem> expenseList = new ObservableCollection<ExpenseItem>();
         private SortingHandler _sortingHandler;
         private Filter _selectedFilter;
-        //private DateTime startDate = DateTime.MinValue;
-        //private DateTime endDate = DateTime.MaxValue;
-        //private string category = "";
-        //private double minAmount = 0;
-        //private double maxAmount = double.MaxValue;
+
+        private DateTime startDate = DateTime.MinValue;
+        private DateTime endDate = DateTime.MaxValue;
+        private string category = "";
+        private double minAmount = 0;
+        private double maxAmount = double.MaxValue;
 
         public MainWindow()
         {
@@ -40,16 +41,16 @@ namespace FinancialTracker
 
             _selectedFilter = new Filter
             {
-                StartDate = DateTime.MinValue,
-                EndDate = DateTime.MaxValue,
+                StartDate = DateTime.Now,
+                EndDate = DateTime.Now,
                 Category = "",
                 MinAmount = 0,
-                MaxAmount = double.MaxValue
+                MaxAmount = 0
             };
 
-            LoadExpenses(_selectedFilter.StartDate, _selectedFilter.EndDate, _selectedFilter.Category, _selectedFilter.MinAmount, _selectedFilter.MaxAmount);
-            LoadTotalExpenses(_selectedFilter.StartDate, _selectedFilter.EndDate);
-            LoadTotalExpensesByCategory(_selectedFilter.StartDate, _selectedFilter.EndDate);
+            LoadExpenses(startDate, endDate, category, minAmount, maxAmount);
+            LoadTotalExpenses(startDate,endDate);
+            LoadTotalExpensesByCategory(startDate, endDate);
             GenerateChart();
             SetDefaultSorting();
 
@@ -159,9 +160,9 @@ namespace FinancialTracker
             try
             {
                 expenseList.Clear();
-                LoadExpenses(_selectedFilter.StartDate, _selectedFilter.EndDate, _selectedFilter.Category, _selectedFilter.MinAmount, _selectedFilter.MaxAmount);
-                LoadTotalExpenses(_selectedFilter.StartDate, _selectedFilter.EndDate);
-                LoadTotalExpensesByCategory(_selectedFilter.StartDate, _selectedFilter.EndDate);
+                LoadExpenses(startDate, endDate, category, minAmount, maxAmount);
+                LoadTotalExpenses(startDate, endDate);
+                LoadTotalExpensesByCategory(startDate, endDate);
                 GenerateChart();
             }
             catch (FormatException ex)
@@ -177,8 +178,8 @@ namespace FinancialTracker
             {
                 AddExpenseWindow addExpenseWindow = new AddExpenseWindow(this);
                 addExpenseWindow.ShowDialog();
-                LoadTotalExpenses(_selectedFilter.StartDate, _selectedFilter.EndDate);
-                LoadTotalExpensesByCategory(_selectedFilter.StartDate, _selectedFilter.EndDate);
+                LoadTotalExpenses(startDate, endDate);
+                LoadTotalExpensesByCategory(startDate, endDate);
                 GenerateChart();
             }
             catch (FormatException ex)
@@ -216,7 +217,7 @@ namespace FinancialTracker
                 string pythonDllPath = _envService.GetPythonDLLPath();
                 List<string> categoryColors = _configService.GetCategoryColors();
 
-                List<ExpenseByCategory> expensesByCategory = LoadTotalExpensesByCategory(_selectedFilter.StartDate, _selectedFilter.EndDate);
+                List<ExpenseByCategory> expensesByCategory = LoadTotalExpensesByCategory(startDate, endDate);
 
                 ChartGenerator chartGenerator = new ChartGenerator();
                 BitmapImage chartImage = chartGenerator.GenerateChart(expensesByCategory, pythonDllPath, categoryColors);
@@ -289,13 +290,13 @@ namespace FinancialTracker
 
         private void ClearFilter(FilterWindow filterWindow)
         {
-            _selectedFilter.StartDate = DateTime.MinValue;
-            _selectedFilter.EndDate = DateTime.MaxValue;
+            _selectedFilter.StartDate = DateTime.Now;
+            _selectedFilter.EndDate = DateTime.Now;
             _selectedFilter.Category = "";
             _selectedFilter.MinAmount = 0;
-            _selectedFilter.MaxAmount = double.MaxValue;
+            _selectedFilter.MaxAmount = 0;
 
-            LoadExpenses(_selectedFilter.StartDate, _selectedFilter.EndDate, _selectedFilter.Category, _selectedFilter.MinAmount, _selectedFilter.MaxAmount);
+            LoadExpenses(startDate, endDate, category, minAmount, maxAmount);
         }
     }
 }

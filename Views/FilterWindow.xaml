@@ -27,24 +27,24 @@
                 <TextBlock Text="Start date" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Black" FontSize="10"/>
                 <DatePicker x:Name="StartDatePicker" Margin="5"/>
                 <TextBlock Text="Min Amount" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Black" FontSize="10" Margin="0,5,0,0"/>
-                <TextBox x:Name="MinAmountTextBox" Margin="5" Height="25"/>
+                <TextBox x:Name="MinAmountTextBox" Margin="5" Height="25" VerticalContentAlignment="Center"/>
             </StackPanel>
             <StackPanel>
                 <TextBlock Text="End date" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Black" FontSize="10"/>
                 <DatePicker x:Name="EndDatePicker" Margin="5"/>
                 <TextBlock Text="Max Amount" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Black" FontSize="10" Margin="0,5,0,0"/>
-                <TextBox x:Name="MaxAmountTextBox" Margin="5" Height="25"/>
+                <TextBox x:Name="MaxAmountTextBox" Margin="5" Height="25" VerticalContentAlignment="Center"/>
             </StackPanel>
         </StackPanel>
         <TextBlock Text="Category" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Black" FontSize="10"/>
-        <ComboBox x:Name="CategoryComboBox" Height="25" Margin="5" Style="{StaticResource {x:Type ComboBox}}" Width="215"/>
+        <ComboBox x:Name="CategoryComboBox" Height="25" Margin="5" Style="{StaticResource {x:Type ComboBox}}" Width="265"/>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Button Content="Filter" Click="ApplyDateFilterClick" Width="100" Margin="0,20,15,0">
+            <Button Content="Filter" Click="ApplyDateFilterClick" Width="125" Margin="0,20,15,0">
                 <Button.Style>
                     <Style TargetType="Button" BasedOn="{StaticResource FilterButtonStyle}"/>
                 </Button.Style>
             </Button>
-            <Button Content="Clear" Click="ClearDateFilterClick" Width="100" Margin="0,20,0,0">
+            <Button Content="Clear" Click="ClearDateFilterClick" Width="125" Margin="0,20,0,0">
                 <Button.Style>
                     <Style TargetType="Button" BasedOn="{StaticResource ClearButtonStyle}"/>
                 </Button.Style>
