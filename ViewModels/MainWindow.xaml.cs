@@ -269,7 +269,7 @@ namespace FinancialTracker
                 Category = _selectedFilter.Category,
                 MinAmount = _selectedFilter.MinAmount,
                 MaxAmount = _selectedFilter.MaxAmount
-            });
+            }, false);
 
             filterWindow.ApplyFilterRequested += (s, args) => ApplyFilterTransactions(filterWindow);
             filterWindow.ClearFilterRequested += (s, args) => ClearFilterTransactions(filterWindow);
@@ -286,7 +286,7 @@ namespace FinancialTracker
                 Category = _selectedFilter.Category,
                 MinAmount = _selectedFilter.MinAmount,
                 MaxAmount = _selectedFilter.MaxAmount
-            });
+            }, true);
 
             filterWindow.ApplyFilterRequested += (s, args) => ApplyFilterSummary(filterWindow);
             filterWindow.ClearFilterRequested += (s, args) => ClearFilterSummary(filterWindow);
@@ -339,6 +339,7 @@ namespace FinancialTracker
 
             LoadTotalExpenses(startDate, endDate);
             LoadTotalExpensesByCategory(startDate, endDate);
+            GenerateChart(startDate, endDate);
         }
     }
 }

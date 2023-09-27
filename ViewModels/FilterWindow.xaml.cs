@@ -10,7 +10,7 @@ namespace FinancialTracker
         private ConfigService _configService;
         private Filter _selectedFilter;
 
-        public FilterWindow(Filter selectedFilter)
+        public FilterWindow(Filter selectedFilter, bool isSummaryTab)
         {
             InitializeComponent();
             _configService = new ConfigService();
@@ -25,6 +25,13 @@ namespace FinancialTracker
                 CategoryComboBox.SelectedItem = _selectedFilter.Category;
                 MinAmountTextBox.Text = _selectedFilter.MinAmount.ToString();
                 MaxAmountTextBox.Text = _selectedFilter.MaxAmount.ToString();
+            }
+
+            if (isSummaryTab)
+            {
+                MinAmountSection.Visibility = Visibility.Collapsed;
+                MaxAmountSection.Visibility = Visibility.Collapsed;
+                CategorySection.Visibility = Visibility.Collapsed;
             }
         }
 
