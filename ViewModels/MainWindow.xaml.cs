@@ -341,5 +341,17 @@ namespace FinancialTracker
             LoadTotalExpensesByCategory(startDate, endDate);
             GenerateChart(startDate, endDate);
         }
+
+        private void OpenSearchBarClick(object sender, RoutedEventArgs e)
+        {
+            if (SearchTextBox.Visibility == Visibility.Collapsed)
+            {
+                SearchTextBox.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                SearchTextBox.Visibility = Visibility.Collapsed;
+            }
+        }
     }
 }
