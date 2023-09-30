@@ -347,11 +347,21 @@ namespace FinancialTracker
             if (SearchTextBox.Visibility == Visibility.Collapsed)
             {
                 SearchTextBox.Visibility = Visibility.Visible;
+                SearchTextButton.Visibility = Visibility.Visible;
             }
             else
             {
                 SearchTextBox.Visibility = Visibility.Collapsed;
+                SearchTextButton.Visibility = Visibility.Collapsed;
             }
+        }
+
+        private void SearchButtonClick(object sender, RoutedEventArgs e)
+        {
+            // Add your search functionality here
+            string searchText = SearchTextBox.Text;
+            // Perform the search based on the searchText
+            // Display search results or take appropriate action
         }
     }
 }

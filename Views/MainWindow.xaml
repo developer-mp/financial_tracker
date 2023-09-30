@@ -65,6 +65,16 @@
             </Setter>
         </Style>
 
+        <Style x:Key="SearchButtonStyle" BasedOn="{StaticResource ButtonMainStyle}" TargetType="Button">
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="Background" Value="Gray"/>
+            <Style.Triggers>
+                <Trigger Property="IsEnabled" Value="True">
+                    <Setter Property="Background" Value="#178A83"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
     </Window.Resources>
 
     <Grid>
@@ -106,7 +116,7 @@
             <TabItem Header="Summary" Style="{StaticResource TabItemStyle}">
                 <StackPanel>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                        <Image Source="pack://application:,,,/FinancialTracker;component/filterIcon.ico" MouseDown="OpenFilterWindowClickSummary" Cursor="Hand" Width="20" Height="20" Margin="10"/>
+                        <Image Source="pack://application:,,,/FinancialTracker;component/filterIcon.ico" MouseDown="OpenFilterWindowClickSummary" Cursor="Hand" Width="20" Height="25" Margin="10"/>
                     </StackPanel>
                     <Border BorderBrush="#B0B0B0" BorderThickness="1" Width="550" Height="300">
                         <StackPanel>
@@ -129,9 +139,10 @@
             <TabItem Header="Transactions" Style="{StaticResource TabItemStyle}">
                 <StackPanel>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                        <TextBox x:Name="SearchTextBox" Visibility="Collapsed" Width="200" Height="20" Margin="10" BorderBrush="Gray" BorderThickness="1"/>
-                        <Image Source="pack://application:,,,/FinancialTracker;component/searchIcon.ico" MouseDown="OpenSearchBarClick" Cursor="Hand" Width="20" Height="20"/>
-                        <Image Source="pack://application:,,,/FinancialTracker;component/filterIcon.ico" MouseDown="OpenFilterWindowClickTransactions" Cursor="Hand" Width="20" Height="20" Margin="10"/>
+                        <TextBox x:Name="SearchTextBox" Visibility="Collapsed" Width="200" Height="20" BorderBrush="Gray" BorderThickness="1"/>
+                        <Button x:Name="SearchTextButton" Content="Search" Visibility="Collapsed" Click="SearchButtonClick" Width="60" Height="25" Margin="10" Style="{StaticResource SearchButtonStyle}"/>
+                        <Image Source="pack://application:,,,/FinancialTracker;component/searchIcon.ico" MouseDown="OpenSearchBarClick" Cursor="Hand" Width="20" Height="25"/>
+                        <Image Source="pack://application:,,,/FinancialTracker;component/filterIcon.ico" MouseDown="OpenFilterWindowClickTransactions" Cursor="Hand" Width="20" Height="25" Margin="10"/>
                     </StackPanel>
                     <StackPanel>
                         <TextBlock Text="Double-click a row to edit" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Gray" FontSize="10"/>
