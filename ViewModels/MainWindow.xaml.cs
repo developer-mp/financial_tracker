@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Transactions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -358,10 +359,26 @@ namespace FinancialTracker
 
         private void SearchButtonClick(object sender, RoutedEventArgs e)
         {
-            // Add your search functionality here
-            string searchText = SearchTextBox.Text;
-            // Perform the search based on the searchText
-            // Display search results or take appropriate action
+            string searchText = SearchTextBox.Text.Trim();
+            PerformTransactionsSearch(searchText);
+        }
+
+        private void PerformTransactionsSearch(string searchText)
+        {
+            var filteredTransactions = new ObservableCollection<ExpenseItem>();
+
+            foreach (var transaction in expenseList)
+            {
+                if (transaction.Date.ToString("MMM d").Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
+                    transaction.Expense.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
+                    transaction.Category.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
+                    transaction.Category.Contains(searchText, StringComparison.OrdinalIgnoreCase))
+                {
+                    filteredTransactions.Add(transaction);
+                }
+            }
+
+            TransactionListView.ItemsSource = filteredTransactions;
         }
     }
 }

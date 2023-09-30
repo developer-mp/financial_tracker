@@ -19,7 +19,7 @@
       "Query": "DELETE FROM expense WHERE id = @Id"
     },
     "SearchExpense": {
-      "Query": "SELECT * FROM expense WHERE date LIKE '%' + @param + '%' OR expense LIKE '%' + @param + '%' OR category LIKE '%' + @param + '%' OR amount LIKE '%' + @param + '%'"
+      "Query": "SELECT id, date, expense, category, amount FROM expense WHERE date LIKE '%' + @param + '%' OR expense LIKE '%' + @param + '%' OR category LIKE '%' + @param + '%' OR amount LIKE '%' + @param + '%'"
     }
   },
   "DefaultSorting": {
