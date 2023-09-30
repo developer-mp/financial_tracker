@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Transactions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -56,6 +55,10 @@ namespace FinancialTracker
             SetDefaultSorting();
 
             DataContext = this;
+
+            SearchTextBox.TextChanged += SearchTextBoxTextChanged;
+
+            TransactionsSearcher.SearchCompleted += HandleSearchCompleted;
         }
 
         private void SetDefaultSorting()
@@ -348,37 +351,27 @@ namespace FinancialTracker
             if (SearchTextBox.Visibility == Visibility.Collapsed)
             {
                 SearchTextBox.Visibility = Visibility.Visible;
-                SearchTextButton.Visibility = Visibility.Visible;
             }
             else
             {
                 SearchTextBox.Visibility = Visibility.Collapsed;
-                SearchTextButton.Visibility = Visibility.Collapsed;
             }
         }
 
-        private void SearchButtonClick(object sender, RoutedEventArgs e)
+        private void HandleSearchCompleted(ObservableCollection<ExpenseItem> filteredTransactions)
         {
-            string searchText = SearchTextBox.Text.Trim();
-            PerformTransactionsSearch(searchText);
+            TransactionListView.ItemsSource = filteredTransactions;
         }
 
         private void PerformTransactionsSearch(string searchText)
         {
-            var filteredTransactions = new ObservableCollection<ExpenseItem>();
+            TransactionsSearcher.PerformTransactionsSearch(searchText, expenseList);
+        }
 
-            foreach (var transaction in expenseList)
-            {
-                if (transaction.Date.ToString("MMM d").Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
-                    transaction.Expense.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
-                    transaction.Category.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
-                    transaction.Category.Contains(searchText, StringComparison.OrdinalIgnoreCase))
-                {
-                    filteredTransactions.Add(transaction);
-                }
-            }
-
-            TransactionListView.ItemsSource = filteredTransactions;
+        private void SearchTextBoxTextChanged(object sender, TextChangedEventArgs e)
+        {
+            string searchText = SearchTextBox.Text.Trim();
+            PerformTransactionsSearch(searchText);
         }
     }
 }
