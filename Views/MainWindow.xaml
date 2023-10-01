@@ -127,6 +127,7 @@
                 </StackPanel>
             </TabItem>
             <TabItem Header="Transactions" Style="{StaticResource TabItemStyle}">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
                 <StackPanel>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                         <TextBox x:Name="SearchTextBox" Visibility="Collapsed" Width="200" Height="20" BorderBrush="Gray" BorderThickness="1" Margin="10"/>
@@ -153,6 +154,7 @@
                         </ListView>
                     </StackPanel>
                 </StackPanel>
+                </ScrollViewer>
             </TabItem>
         </TabControl>
     </Grid>
