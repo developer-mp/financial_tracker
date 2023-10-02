@@ -24,9 +24,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="appIcon.ico" />
-    <Resource Include="filterIcon.ico" />
-    <Resource Include="searchIcon.ico" />
+    <Resource Include="Assets\appIcon.ico" />
+    <Resource Include="Assets\filterIcon.ico" />
+    <Resource Include="Assets\searchIcon.ico" />
   </ItemGroup>
 
   <ItemGroup>

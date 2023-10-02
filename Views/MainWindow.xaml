@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         Title="Financial Tracker" Height="500" Width="600"
-        Icon="pack://application:,,,/FinancialTracker;component/appIcon.ico">
+        Icon="pack://application:,,,/FinancialTracker;component/Assets/appIcon.ico">
 
     <Window.Resources>
 
@@ -106,7 +106,7 @@
             <TabItem Header="Summary" Style="{StaticResource TabItemStyle}">
                 <StackPanel>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                        <Image Source="pack://application:,,,/FinancialTracker;component/filterIcon.ico" MouseDown="OpenFilterWindowClickSummary" Cursor="Hand" Width="20" Height="20" Margin="10"/>
+                        <Image Source="pack://application:,,,/FinancialTracker;component/Assets/filterIcon.ico" MouseDown="OpenFilterWindowClickSummary" Cursor="Hand" Width="20" Height="20" Margin="10"/>
                     </StackPanel>
                     <Border BorderBrush="#B0B0B0" BorderThickness="1" Width="550" Height="300">
                         <StackPanel>
@@ -131,8 +131,8 @@
                 <StackPanel>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                         <TextBox x:Name="SearchTextBox" Visibility="Collapsed" Width="200" Height="20" BorderBrush="Gray" BorderThickness="1" Margin="10"/>
-                        <Image Source="pack://application:,,,/FinancialTracker;component/searchIcon.ico" MouseDown="OpenSearchBarClick" Cursor="Hand" Width="20" Height="20"/>
-                        <Image Source="pack://application:,,,/FinancialTracker;component/filterIcon.ico" MouseDown="OpenFilterWindowClickTransactions" Cursor="Hand" Width="20" Height="20" Margin="10"/>
+                        <Image Source="pack://application:,,,/FinancialTracker;component/Assets/searchIcon.ico" MouseDown="OpenSearchBarClick" Cursor="Hand" Width="20" Height="20"/>
+                        <Image Source="pack://application:,,,/FinancialTracker;component/Assets/filterIcon.ico" MouseDown="OpenFilterWindowClickTransactions" Cursor="Hand" Width="20" Height="20" Margin="10"/>
                     </StackPanel>
                     <StackPanel>
                         <TextBlock Text="Double-click a row to edit" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Gray" FontSize="10"/>
