@@ -149,6 +149,7 @@ namespace FinancialTracker
                     ExpenseItem selectedExpense = (ExpenseItem)TransactionListView.SelectedItem;
                     EditExpenseWindow editExpenseWindow = new EditExpenseWindow(selectedExpense);
                     editExpenseWindow.DataUpdated += EditExpenseWindowDataUpdated;
+                    editExpenseWindow.Owner = this;
                     editExpenseWindow.ShowDialog();
                 }
             }
@@ -181,6 +182,7 @@ namespace FinancialTracker
             try
             {
                 AddExpenseWindow addExpenseWindow = new AddExpenseWindow(this);
+                addExpenseWindow.Owner = this;
                 addExpenseWindow.ShowDialog();
                 LoadTotalExpenses(startDate, endDate);
                 LoadTotalExpensesByCategory(startDate, endDate);
@@ -278,6 +280,7 @@ namespace FinancialTracker
             filterWindow.ApplyFilterRequested += (s, args) => ApplyFilterTransactions(filterWindow);
             filterWindow.ClearFilterRequested += (s, args) => ClearFilterTransactions(filterWindow);
 
+            filterWindow.Owner = this;
             filterWindow.ShowDialog();
         }
 
@@ -295,6 +298,7 @@ namespace FinancialTracker
             filterWindow.ApplyFilterRequested += (s, args) => ApplyFilterSummary(filterWindow);
             filterWindow.ClearFilterRequested += (s, args) => ClearFilterSummary(filterWindow);
 
+            filterWindow.Owner = this;
             filterWindow.ShowDialog();
         }
 
