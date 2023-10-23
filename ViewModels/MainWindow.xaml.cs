@@ -377,5 +377,15 @@ namespace FinancialTracker
             string searchText = SearchTextBox.Text.Trim();
             PerformTransactionsSearch(searchText);
         }
+
+        private void ListViewSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            ListView listView = sender as ListView;
+
+            if (listView != null)
+            {
+                ListViewSizeChanger.ListViewSizeChanged(listView);
+            }
+        }
     }
 }
