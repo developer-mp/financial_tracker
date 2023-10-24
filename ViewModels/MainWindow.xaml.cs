@@ -255,15 +255,18 @@ namespace FinancialTracker
                     pdfFilePath = saveFileDialog.FileName;
                     ErrorMessageGenerator.ShowSuccess("SaveReport", configManager);
                     return true;
-                }        
+                }
+                else
+                {
+                    return false;
+                }
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error saving the report: {ex.Message}");
+                ErrorMessageGenerator.ShowError("SaveReport", configManager);
+                return false;
             }
-
-            ErrorMessageGenerator.ShowError("SaveReport", configManager);
-            return false;
         }
 
         private void OpenFilterWindowClickTransactions(object sender, RoutedEventArgs e)

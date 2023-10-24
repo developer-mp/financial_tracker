@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using System.Windows.Media.Imaging;
