@@ -4,143 +4,143 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-public class DataLoadingService
+namespace FinancialTracker.DataLoading
 {
-    private void ExecuteDbCommand(string connectionString, Action<NpgsqlConnection, NpgsqlCommand> commandAction)
+
+    public class DataLoadingService
     {
-        using (var conn = new NpgsqlConnection(connectionString))
+        private static void ExecuteDbCommand(string connectionString, Action<NpgsqlConnection, NpgsqlCommand> commandAction)
         {
+            using var conn = new NpgsqlConnection(connectionString);
             conn.Open();
-            using (var cmd = new NpgsqlCommand())
-            {
-                cmd.Connection = conn;
-                commandAction(conn, cmd);
-            }
+            using var cmd = new NpgsqlCommand();
+            cmd.Connection = conn;
+            commandAction(conn, cmd);
         }
-    }
-    public ObservableCollection<ExpenseItem> LoadExpenses(string connectionString, DbQuery DbQuery, DateTime startDate, DateTime endDate, string category, double minAmount, double maxAmount)
-    {
-        ObservableCollection<ExpenseItem> expenseList = new ObservableCollection<ExpenseItem>();
-
-        ExecuteDbCommand(connectionString, (conn, cmd) =>
+        public static ObservableCollection<ExpenseItem> LoadExpenses(string connectionString, DbQuery DbQuery, DateTime startDate, DateTime endDate, string category, double minAmount, double maxAmount)
         {
-            cmd.CommandText = DbQuery.Query;
-            cmd.Parameters.AddWithValue("StartDate", startDate);
-            cmd.Parameters.AddWithValue("EndDate", endDate);
-            cmd.Parameters.AddWithValue("Category", category);
-            cmd.Parameters.AddWithValue("MinAmount", minAmount);
-            cmd.Parameters.AddWithValue("MaxAmount", maxAmount);
+            ObservableCollection<ExpenseItem> expenseList = new();
 
-            using (var reader = cmd.ExecuteReader())
+            ExecuteDbCommand(connectionString, (conn, cmd) =>
             {
-                while (reader.Read())
+                cmd.CommandText = DbQuery.Query;
+
+                cmd.Parameters.AddWithValue("StartDate", startDate);
+                cmd.Parameters.AddWithValue("EndDate", endDate);
+                cmd.Parameters.AddWithValue("Category", category);
+                cmd.Parameters.AddWithValue("MinAmount", minAmount);
+                cmd.Parameters.AddWithValue("MaxAmount", maxAmount);
+
+                using (var reader = cmd.ExecuteReader())
                 {
-                    ExpenseItem expense = new ExpenseItem
+                    while (reader.Read())
                     {
-                        Id = reader.GetString(0),
-                        Date = reader.GetDateTime(1),
-                        Expense = reader.GetString(2),
-                        Category = reader.GetString(3),
-                        Amount = reader.GetDouble(4)
-                    };
+                        ExpenseItem expense = new()
+                        {
+                            Id = reader.GetString(0),
+                            Date = reader.GetDateTime(1),
+                            Expense = reader.GetString(2),
+                            Category = reader.GetString(3),
+                            Amount = reader.GetDouble(4)
+                        };
 
-                    expenseList.Add(expense);
+                        expenseList.Add(expense);
+                    }
                 }
-            }
-        });
+            });
 
-        return expenseList;
-    }
+            return expenseList;
+        }
 
-    public double LoadTotalExpenses(string connectionString, DbQuery DbQuery, DateTime startDate, DateTime endDate)
-    {
-        double totalExpenses = 0;
-
-        ExecuteDbCommand(connectionString, (conn, cmd) =>
+        public static double LoadTotalExpenses(string connectionString, DbQuery DbQuery, DateTime startDate, DateTime endDate)
         {
-            cmd.CommandText = DbQuery.Query;
-            cmd.Parameters.AddWithValue("StartDate", startDate);
-            cmd.Parameters.AddWithValue("EndDate", endDate);
-            var result = cmd.ExecuteScalar();
+            double totalExpenses = 0;
 
-            if (result != null && result != DBNull.Value)
+            ExecuteDbCommand(connectionString, (conn, cmd) =>
             {
-                totalExpenses = Convert.ToDouble(result);
-            }
-        });
+                cmd.CommandText = DbQuery.Query;
+                cmd.Parameters.AddWithValue("StartDate", startDate);
+                cmd.Parameters.AddWithValue("EndDate", endDate);
 
-        return totalExpenses;
-    }
+                var result = cmd.ExecuteScalar();
 
-    public List<ExpenseByCategory> LoadExpensesByCategory(string connectionString, DbQuery DbQuery, DateTime startDate, DateTime endDate)
-    {
-        List<ExpenseByCategory> expensesByCategory = new List<ExpenseByCategory>();
-
-        ExecuteDbCommand(connectionString, (conn, cmd) =>
-        {
-            cmd.CommandText = DbQuery.Query;
-            cmd.Parameters.AddWithValue("StartDate", startDate);
-            cmd.Parameters.AddWithValue("EndDate", endDate);
-
-            using (var reader = cmd.ExecuteReader())
-            {
-                while (reader.Read())
+                if (result != null && result != DBNull.Value)
                 {
-                    ExpenseByCategory expense = new ExpenseByCategory
-                    {
-                        Category = reader.GetString(0),
-                        TotalAmount = reader.GetDouble(1)
-                    };
-
-                    expensesByCategory.Add(expense);
+                    totalExpenses = Convert.ToDouble(result);
                 }
-            }
-        });
+            });
 
-        return expensesByCategory;
-    }
+            return totalExpenses;
+        }
 
-    public void AddExpense(string connectionString, DbQuery DbQuery, ExpenseItem newExpense)
-    {
-        ExecuteDbCommand(connectionString, (conn, cmd) =>
+        public static List<ExpenseByCategory> LoadExpensesByCategory(string connectionString, DbQuery DbQuery, DateTime startDate, DateTime endDate)
         {
-            cmd.CommandText = DbQuery.Query;
+            List<ExpenseByCategory> expensesByCategory = new();
 
-            cmd.Parameters.AddWithValue("Id", newExpense.Id);
-            cmd.Parameters.AddWithValue("Date", newExpense.Date);
-            cmd.Parameters.AddWithValue("Expense", newExpense.Expense);
-            cmd.Parameters.AddWithValue("Category", newExpense.Category);
-            cmd.Parameters.AddWithValue("Amount", newExpense.Amount);
+            ExecuteDbCommand(connectionString, (conn, cmd) =>
+            {
+                cmd.CommandText = DbQuery.Query;
+                cmd.Parameters.AddWithValue("StartDate", startDate);
+                cmd.Parameters.AddWithValue("EndDate", endDate);
 
-            cmd.ExecuteNonQuery();
-        });
-    }
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        ExpenseByCategory expense = new ExpenseByCategory
+                        {
+                            Category = reader.GetString(0),
+                            TotalAmount = reader.GetDouble(1)
+                        };
 
-    public void UpdateExpense(string connectionString, DbQuery DbQuery, ExpenseItem updatedExpense)
-    {
-        ExecuteDbCommand(connectionString, (conn, cmd) =>
+                        expensesByCategory.Add(expense);
+                    }
+                }
+            });
+
+            return expensesByCategory;
+        }
+
+        public static void AddExpense(string connectionString, DbQuery DbQuery, ExpenseItem newExpense)
         {
-            cmd.CommandText = DbQuery.Query;
+            ExecuteDbCommand(connectionString, (conn, cmd) =>
+            {
+                cmd.CommandText = DbQuery.Query;
 
-            cmd.Parameters.AddWithValue("Id", updatedExpense.Id);
-            cmd.Parameters.AddWithValue("Date", updatedExpense.Date);
-            cmd.Parameters.AddWithValue("Expense", updatedExpense.Expense);
-            cmd.Parameters.AddWithValue("Category", updatedExpense.Category);
-            cmd.Parameters.AddWithValue("Amount", updatedExpense.Amount);
+                cmd.Parameters.AddWithValue("Id", newExpense.Id);
+                cmd.Parameters.AddWithValue("Date", newExpense.Date);
+                cmd.Parameters.AddWithValue("Expense", newExpense.Expense);
+                cmd.Parameters.AddWithValue("Category", newExpense.Category);
+                cmd.Parameters.AddWithValue("Amount", newExpense.Amount);
 
-            cmd.ExecuteNonQuery();
-        });
-    }
+                cmd.ExecuteNonQuery();
+            });
+        }
 
-    public void DeleteExpense(string connectionString, DbQuery DbQuery, ExpenseItem selectedExpense)
-    {
-        ExecuteDbCommand(connectionString, (conn, cmd) =>
+        public static void UpdateExpense(string connectionString, DbQuery DbQuery, ExpenseItem updatedExpense)
         {
-            cmd.CommandText = DbQuery.Query;
+            ExecuteDbCommand(connectionString, (conn, cmd) =>
+            {
+                cmd.CommandText = DbQuery.Query;
 
-            cmd.Parameters.AddWithValue("Id", selectedExpense.Id);
+                cmd.Parameters.AddWithValue("Id", updatedExpense.Id);
+                cmd.Parameters.AddWithValue("Date", updatedExpense.Date);
+                cmd.Parameters.AddWithValue("Expense", updatedExpense.Expense);
+                cmd.Parameters.AddWithValue("Category", updatedExpense.Category);
+                cmd.Parameters.AddWithValue("Amount", updatedExpense.Amount);
 
-            cmd.ExecuteNonQuery();
-        });
+                cmd.ExecuteNonQuery();
+            });
+        }
+
+        public static void DeleteExpense(string connectionString, DbQuery DbQuery, ExpenseItem selectedExpense)
+        {
+            ExecuteDbCommand(connectionString, (conn, cmd) =>
+            {
+                cmd.CommandText = DbQuery.Query;
+                cmd.Parameters.AddWithValue("Id", selectedExpense.Id);
+                cmd.ExecuteNonQuery();
+            });
+        }
     }
 }

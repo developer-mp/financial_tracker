@@ -1,18 +1,20 @@
 ﻿using FinancialTracker.Service;
 using System.Collections.Generic;
-using System.Windows.Controls;
-using System;
 
-public static class ComboBoxHelper
+namespace FinancialTracker.ComboBox
 {
-    public static void PopulateCategoryComboBox(ComboBox comboBox, ConfigService configManager, string selectedCategory = null)
+    using System.Windows.Controls;
+    public static class ComboBoxHelper
     {
-        List<string> categoryNames = configManager.GetCategoryNames();
-        comboBox.ItemsSource = categoryNames;
-
-        if (!string.IsNullOrEmpty(selectedCategory))
+        public static void PopulateCategoryComboBox(ComboBox comboBox, ConfigService configManager, string? selectedCategory = null)
         {
-            comboBox.SelectedItem = selectedCategory;
+            List<string> categoryNames = configManager.GetCategoryNames();
+            comboBox.ItemsSource = categoryNames;
+
+            if (!string.IsNullOrEmpty(selectedCategory))
+            {
+                comboBox.SelectedItem = selectedCategory;
+            }
         }
     }
 }

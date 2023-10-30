@@ -69,4 +69,5 @@
         <Button x:Name="SaveButton" Grid.Row="5" Grid.ColumnSpan="2" Content="Save" Width="80" HorizontalAlignment="Left" Margin="10" Click="SaveButtonClick" Style="{StaticResource SaveButtonStyle}" IsEnabled="False"/>
         <Button Grid.Row="5" Grid.ColumnSpan="2" Content="Cancel" Width="80" HorizontalAlignment="Right" Margin="10" Click="CancelButtonClick" Style="{StaticResource CancelButtonStyle}"/>
     </Grid>
+
 </Window>

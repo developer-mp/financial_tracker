@@ -1,4 +1,5 @@
-﻿using FinancialTracker.Models;
+﻿using FinancialTracker.ComboBox;
+using FinancialTracker.Models;
 using FinancialTracker.Service;
 using System;
 using System.Windows;
@@ -7,8 +8,8 @@ namespace FinancialTracker
 {
     public partial class FilterWindow : Window
     {
-        private ConfigService _configService;
-        private Filter _selectedFilter;
+        private readonly ConfigService _configService;
+        private readonly Filter _selectedFilter;
 
         public FilterWindow(Filter selectedFilter, bool isSummaryTab)
         {
@@ -75,8 +76,8 @@ namespace FinancialTracker
             Close();
         }
 
-        public event EventHandler ApplyFilterRequested;
-        public event EventHandler ClearFilterRequested;
+        public event EventHandler? ApplyFilterRequested;
+        public event EventHandler? ClearFilterRequested;
     }
 }
 

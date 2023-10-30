@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using FinancialTracker.DataLoading;
 using FinancialTracker.Models;
 using FinancialTracker.Service;
 using FinancialTracker.Utils;
@@ -14,19 +15,19 @@ namespace FinancialTracker
 {
     public partial class MainWindow : Window
     {
-        private EnvService _envService;
-        private ConfigService _configService;
-        private DataLoadingService _dataLoadingService;
-        private string _connectionString;
-        public ObservableCollection<ExpenseItem> expenseList = new ObservableCollection<ExpenseItem>();
-        private SortingHandler _sortingHandler;
-        private Filter _selectedFilter;
+        private readonly EnvService _envService;
+        private readonly ConfigService _configService;
+        private readonly DataLoadingService _dataLoadingService;
+        private readonly string _connectionString;
+        public ObservableCollection<ExpenseItem> expenseList = new();
+        private readonly SortingHandler _sortingHandler;
+        private readonly Filter _selectedFilter;
 
-        private DateTime startDate = DateTime.MinValue;
-        private DateTime endDate = DateTime.MaxValue;
-        private string category = "";
-        private double minAmount = 0;
-        private double maxAmount = double.MaxValue;
+        private readonly DateTime startDate = DateTime.MinValue;
+        private readonly DateTime endDate = DateTime.MaxValue;
+        private readonly string category = "";
+        private readonly double minAmount = 0;
+        private readonly double maxAmount = double.MaxValue;
 
         public MainWindow()
         {
@@ -94,7 +95,7 @@ namespace FinancialTracker
             {
                 expenseList.Clear();
                 DbQuery DbQuery = _configService.GetDbQuery("LoadExpenses");
-                ObservableCollection<ExpenseItem> loadedData = _dataLoadingService.LoadExpenses(_connectionString, DbQuery, startDate, endDate, category, minAmount, maxAmount);
+                ObservableCollection<ExpenseItem> loadedData = DataLoadingService.LoadExpenses(_connectionString, DbQuery, startDate, endDate, category, minAmount, maxAmount);
 
                 foreach (var expense in loadedData)
                 {
@@ -113,7 +114,7 @@ namespace FinancialTracker
             try
             {
                 DbQuery DbQuery = _configService.GetDbQuery("LoadTotalExpenses");
-                double totalExpenses = _dataLoadingService.LoadTotalExpenses(_connectionString, DbQuery, startDate, endDate);
+                double totalExpenses = DataLoadingService.LoadTotalExpenses(_connectionString, DbQuery, startDate, endDate);
                 TotalExpensesTextBlock.Text = $"{totalExpenses:N2}";
             }
             catch (FormatException ex)
@@ -129,7 +130,7 @@ namespace FinancialTracker
             {
                 DbQuery DbQuery = _configService.GetDbQuery("LoadExpensesByCategory");
 
-                List<ExpenseByCategory> expensesByCategory = _dataLoadingService.LoadExpensesByCategory(_connectionString, DbQuery, startDate, endDate);
+                List<ExpenseByCategory> expensesByCategory = DataLoadingService.LoadExpensesByCategory(_connectionString, DbQuery, startDate, endDate);
                 return expensesByCategory;
             }
             catch (FormatException ex)
@@ -226,7 +227,7 @@ namespace FinancialTracker
                 List<ExpenseByCategory> expensesByCategory = LoadTotalExpensesByCategory(startDate, endDate);
 
                 ChartGenerator chartGenerator = new ChartGenerator();
-                BitmapImage chartImage = chartGenerator.GenerateChart(expensesByCategory, pythonDllPath, categoryColors);
+                BitmapImage chartImage = ChartGenerator.GenerateChart(expensesByCategory, pythonDllPath, categoryColors);
 
                 if (chartImage != null)
                 {

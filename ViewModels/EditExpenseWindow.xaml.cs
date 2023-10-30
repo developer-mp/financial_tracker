@@ -1,4 +1,7 @@
-﻿using FinancialTracker.Models;
+﻿using FinancialTracker.ButtonState;
+using FinancialTracker.ComboBox;
+using FinancialTracker.DataLoading;
+using FinancialTracker.Models;
 using FinancialTracker.Service;
 using System;
 using System.Windows;
@@ -8,12 +11,12 @@ namespace FinancialTracker
 {
     public partial class EditExpenseWindow : Window
     {
-        private EnvService _envService;
-        private ConfigService _configService;
-        private DataLoadingService _dataLoadingService;
-        private ExpenseItem _selectedExpense;
-        private string _connectionString;
-        private ButtonStateHelper _buttonStateHelper;
+        private readonly EnvService _envService;
+        private readonly ConfigService _configService;
+        private readonly DataLoadingService _dataLoadingService;
+        private readonly ExpenseItem _selectedExpense;
+        private readonly string _connectionString;
+        private ButtonStateHelper? _buttonStateHelper;
 
         public EditExpenseWindow(ExpenseItem selectedExpense)
         {
@@ -35,7 +38,7 @@ namespace FinancialTracker
             AmountTextBox.TextChanged += OnTextChanged;
         }
 
-        public event EventHandler DataUpdated;
+        public event EventHandler? DataUpdated;
 
         private void InitializeComboBox()
         {
@@ -58,7 +61,8 @@ namespace FinancialTracker
 
                 _selectedExpense.Amount = amount;
                 DbQuery updateDbQuery = _configService.GetDbQuery("UpdateExpense");
-                _dataLoadingService.UpdateExpense(_connectionString, updateDbQuery, _selectedExpense);
+                //_dataLoadingService.UpdateExpense(_connectionString, updateDbQuery, _selectedExpense);
+                DataLoadingService.AddExpense(_connectionString, updateDbQuery, _selectedExpense);
                 DataUpdated?.Invoke(this, EventArgs.Empty);
                 Close();
 
@@ -76,7 +80,8 @@ namespace FinancialTracker
             try
             {
                 DbQuery deleteDbQuery = _configService.GetDbQuery("DeleteExpense");
-                _dataLoadingService.DeleteExpense(_connectionString, deleteDbQuery, _selectedExpense);
+                //_dataLoadingService.DeleteExpense(_connectionString, deleteDbQuery, _selectedExpense);
+                DataLoadingService.DeleteExpense(_connectionString, deleteDbQuery, _selectedExpense);
                 DataUpdated?.Invoke(this, EventArgs.Empty);
                 Close();
 

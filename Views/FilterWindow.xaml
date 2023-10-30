@@ -56,6 +56,6 @@
                 </Button.Style>
             </Button>
         </StackPanel>
-        </StackPanel>
+    </StackPanel>
 
 </Window>

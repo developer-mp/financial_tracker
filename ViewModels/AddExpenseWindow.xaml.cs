@@ -1,4 +1,7 @@
-﻿using FinancialTracker.Models;
+﻿using FinancialTracker.ButtonState;
+using FinancialTracker.ComboBox;
+using FinancialTracker.DataLoading;
+using FinancialTracker.Models;
 using FinancialTracker.Service;
 using System;
 using System.Windows;
@@ -8,12 +11,12 @@ namespace FinancialTracker
 {
     public partial class AddExpenseWindow : Window
     {
-        private MainWindow _mainWindow;
-        private EnvService _envService;
-        private ConfigService _configService;
-        private DataLoadingService _dataLoadingService;
-        private string _connectionString;
-        private ButtonStateHelper _buttonStateHelper;
+        private readonly MainWindow _mainWindow;
+        private readonly EnvService _envService;
+        private readonly ConfigService _configService;
+        private readonly DataLoadingService _dataLoadingService;
+        private readonly string _connectionString;
+        private ButtonStateHelper? _buttonStateHelper;
 
         public AddExpenseWindow(MainWindow mainWindow)
         {
@@ -54,7 +57,7 @@ namespace FinancialTracker
                     Id = Guid.NewGuid().ToString(),
                     Date = DatePicker.SelectedDate ?? DateTime.Now,
                     Expense = expenseText,
-                    Category = CategoryComboBox.SelectedItem.ToString(),
+                    Category = CategoryComboBox.SelectedItem.ToString() ?? string.Empty,
                     Amount = amount
                 };
 
@@ -64,7 +67,8 @@ namespace FinancialTracker
                 }
 
                 DbQuery addDbQuery = _configService.GetDbQuery("AddExpense");
-                _dataLoadingService.AddExpense(_connectionString, addDbQuery, newExpense);
+                //_dataLoadingService.AddExpense(_connectionString, addDbQuery, newExpense);
+                DataLoadingService.AddExpense(_connectionString, addDbQuery, newExpense);
                 _mainWindow.expenseList.Add(newExpense);
                 Close();
                 ErrorMessageGenerator.ShowSuccess("AddNewRecord", _configService);

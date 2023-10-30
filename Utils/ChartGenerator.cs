@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Windows.Media.Imaging;
 using FinancialTracker.Models;
@@ -10,7 +9,7 @@ namespace FinancialTracker.Utils
 {
     public class ChartGenerator
     {
-        public BitmapImage GenerateChart(List<ExpenseByCategory> expensesByCategory, string pythonDllPath, List<string> categoryColors)
+        public static BitmapImage GenerateChart(List<ExpenseByCategory> expensesByCategory, string pythonDllPath, List<string> categoryColors)
         {
             if (!string.IsNullOrEmpty(pythonDllPath))
             {
